@@ -1,5 +1,5 @@
-# techmoocher-homelab
-<sub><i>created May 7, 2025</i> by {techmoocher}</sub>
+# Techmoocher Homelab
+<p><i>created May 7, 2025</i> by {techmoocher}</p>
 <p>The following is my experience when building my own homelab as high school junior with two Thinkpads and some old hard drives.</p>
 
 <h1>1. Getting started</h1>
