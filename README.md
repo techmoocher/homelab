@@ -73,5 +73,12 @@ systemctl restart systemd-logind.service
 nano /etc/default/grub
 ```
 
-<p>Now, scroll down to the line <b><mark>GRUB_CMDLINE_LINUX=""</mark></b>. Change it to <b><mark>GRUB_CMDLINE_LINUX="consoleblank=<i>{some value}</i>"</mark></b></p>
+<p>Now, scroll down to the line <b><mark>GRUB_CMDLINE_LINUX=""</mark></b>. Next, change it to <b><mark>GRUB_CMDLINE_LINUX="consoleblank=<i>{some value}</i>"</mark></b></p>
 <p><i><b>Note:</b> Change the <mark>{some value}</mark> to your desired timeout value (e.g: 300) (the unit for {some value} is seconds).</i></p>
+<p>Finally, all you need to do is exit and save changes with <mark>Ctrl+X</mark> and enter the following commands in the <b>Shell</b></p>
+
+```bash
+grub-update
+```
+
+<p>If it shows the success message then you're done in this step! (most of the time it does)</p>
