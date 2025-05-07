@@ -1,11 +1,8 @@
 # techmoocher-homelab
-<p><i>Created May 7, 2025</i> by {techmoocher}</p>
-<br>
+<sub><i>created May 7, 2025</i> by {techmoocher}</sub>
 <p>The following is my experience when building my own homelab as high school junior with two Thinkpads and some old hard drives.</p>
-<br>
+
 <h1>1. Getting started</h1>
-
-
 <br>
 <h1>2. Preparing Proxmox</h1>
 <h3>1. Updating repos</h3>
