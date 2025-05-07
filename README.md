@@ -28,7 +28,6 @@
 ```bash
 apt update && apt upgrade
 ```
-<p>Take a break while the machine running it updates. When it's done with no error and/or warning, it's done!</p>
 
 <h3>3. Deleting local-lvm <i>(optional)</i></h3>
 <p><i>Skip this step if you would like to use the LVM (Logical Volume Management) created by default by Proxmox</i></p>
@@ -44,22 +43,20 @@ resize2fs /dev/mapper/pve-root
 <p>To check whether you have your full hard drive in the `local` storage, navigate to `local` and check <b>Usage</b></p>
 
 <h3>4. Keeping your server awake ☕ <i>(optional)</i></h3>
-<p><i>Skip this step as your demand</i></p>
-<p><i>Recommended for servers running laptops</i></p>
-<p>For me, I would love to have my laptop awake even when I close the lid. Also, I don't want my screen to get broken. To achieve that, follow the steps below.</p>
+<p><i>Skip this step as your demand. Highly recommended for servers running on laptops</i></p>
+<p>For me, I would love to have my laptop awake even when I close the lid. Also, I don't want my screen to get burnt due to constant workload. That's the reason why I highly recommend doing the following steps.</p>
 
 <p><b>Keeping the laptop on even when you close the lid</b></p>
 <p>We will edit the <mark>logind.conf</mark> in this section to achieve that.</p>
-<p>First, let's edit the file <mark>/etc/systemd/logind.conf</mark></p>
+<p>First, let's edit the file <mark>/etc/systemd/logind.conf</mark>.</p>
 
 ```bash
 nano /etc/systemd/logind.conf
 ```
 
-<p>Now, scroll down to the line <b><mark>HandleLidSwitch</mark></b>. Uncomment that line and change it to <b><mark>HandleLidSwitch=ignore</mark></b></p>
-<p>Next, scroll down to the line <b><mark>HandleLidSwitchDocked</mark></b>. Uncomment that line and change it to <b><mark>HandleLidSwitchDocked=ignore</mark></b></p>
-<p>Then, close the nano editing with <b>Ctrl+X</b> > <b>Y</b> > <b>Enter</b></p>
-<p>After completing the above steps, we need to restart the <mark>systemd-logind.service</mark> for changes to take effect. To do that, enter the following commands</p>
+<p>You will see the two lines <b><mark>HandleLidSwitch</mark></b> and <b><mark>HandleLidSwitchDocked</mark></b>. Uncomment those and change them to <b><mark>HandleLidSwitch=ignore</mark></b> and <b><mark>HandleLidSwitchDocked=ignore</mark></b>, respective.</p>
+<p>After that, close the nano editing with <b>Ctrl+X</b> > <b>Y</b> > <b>Enter</b>.</p>
+<p>After completing the above steps, we need to restart the <mark>systemd-logind.service</mark> for changes to take effect.</p>
 
 ```bash
 systemctl restart systemd-logind.service
@@ -73,7 +70,7 @@ systemctl restart systemd-logind.service
 nano /etc/default/grub
 ```
 
-<p>Now, scroll down to the line <b><mark>GRUB_CMDLINE_LINUX=""</mark></b>. Next, change it to <b><mark>GRUB_CMDLINE_LINUX="consoleblank=<i>{some value}</i>"</mark></b></p>
+<p>You will see the line <b><mark>GRUB_CMDLINE_LINUX=""</mark></b>. Next, change it to <b><mark>GRUB_CMDLINE_LINUX="consoleblank=<i>{some value}</i>"</mark></b></p>
 <p><i><b>Note:</b> Change the <mark>{some value}</mark> to your desired timeout value (e.g: 300) (the unit for {some value} is seconds).</i></p>
 <p>Finally, all you need to do is exit and save changes with <mark>Ctrl+X</mark> and enter the following commands in the <b>Shell</b></p>
 
@@ -81,5 +78,5 @@ nano /etc/default/grub
 update-grub
 ```
 
-<p>If it shows the success message then you're done in this step! (most of the time it does)</p>
-
+<h3>5. Enabling IOMMU</h3>
+<p>An IOMMU (Input-Output Memory Management Unit) is a hardware component that provides memory management for direct memory access (DMA) capable devices, such as GPUs, network cards, or storage controllers. It translates device-visible virtual addresses to physical memory addresses, similar to how a CPU's MMU works for processes. <i>(read more at <a href="https://en.wikipedia.org/wiki/Input%E2%80%93output_memory_management_unit" target="_blank">Wikipedia</a>)</i></p>
