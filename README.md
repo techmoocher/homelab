@@ -78,7 +78,8 @@ nano /etc/default/grub
 <p>Finally, all you need to do is exit and save changes with <mark>Ctrl+X</mark> and enter the following commands in the <b>Shell</b></p>
 
 ```bash
-grub-update
+update-grub
 ```
 
 <p>If it shows the success message then you're done in this step! (most of the time it does)</p>
+
