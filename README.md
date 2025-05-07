@@ -11,7 +11,7 @@
 <ul>
   <li><i>A computer/laptop with at least 8GB of RAM and preferrably 200GB of hard drive</i></li>
   <li><i>A solid-state 4GB USB</i></li>
-  <li><i>An Ethernet cable (Proxmox will not work well with WiFi)</li>
+  <li><i>An Ethernet cable (Proxmox will not work well with WiFi)</i></li>
 </ul>
 <p>Before we start, remember to </p>
 
