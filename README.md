@@ -32,8 +32,8 @@ apt update && apt upgrade
 
 <h3>3. Deleting local-lvm <i>optional</i></h3>
 <p><i>Skip this step if you would like to use the LVM (Logical Volume Management) created by default by Proxmox</i></p>
-If you check the machine, you will see there is a storage labeled `local-lmv`. This one is created by Proxmox by default. In my case, I don't want to keep it, but I want to have my things (ISO images, containers, backups) in `local` standard directory-based storage.
-<p>To remove the <mark>local-lvm</mark>, first, navigate to <b>Datacenter</b> > <b>Storage</b>. Choose the `local-lvm` option, click <b>Remove</b>, and click <b>Yes</b> to confirm.</p>
+If you check the machine, you will see there is a storage labeled <mark>local-lmv</mark>. This one is created by Proxmox by default. In my case, I don't want to keep it, but I want to have my things (ISO images, containers, backups) in <mark>local</mark> standard directory-based storage.
+<p>To remove the <mark>local-lvm</mark>, first, navigate to <b>Datacenter</b> > <b>Storage</b>. Choose the <mark>lvm-local</mark> option, click <b>Remove</b>, and click <b>Yes</b> to confirm.</p>
 <p>Next, navigate to <b>Node</b> > <b>Shell</b> and enter the following commands</p>
 
 ```bash
