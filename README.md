@@ -93,3 +93,21 @@ nano /etc/default/grub
 update-grub
 reboot
 ```
+
+<p>To make sure the changes you made are working properly, use the following commands to check.</p>
+
+```bash
+dmesg | grep -e DMAR -e IOMMU
+dmesg | grep 'remapping'
+```
+<p>If you don't see any errors or unknowns, it's a good sign that your system is working properly. If you happen to get any erros, reference to the wiki for troubleshooting.</p>
+<p>For the second command, you should get something like</p>
+
+```bash
+DMAR-IR: Enabled IRQ remapping in xapic mode
+```
+<p>or</p>
+
+```bash
+DMAR-IR: Enabled IRQ remapping in x2apic mode
+```
