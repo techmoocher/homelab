@@ -80,3 +80,16 @@ update-grub
 
 <h3>5. Enabling IOMMU</h3>
 <p>An IOMMU (Input-Output Memory Management Unit) is a hardware component that provides memory management for direct memory access (DMA) capable devices, such as GPUs, network cards, or storage controllers. It translates device-visible virtual addresses to physical memory addresses, similar to how a CPU's MMU works for processes. <i>(read more at <a href="https://en.wikipedia.org/wiki/Input%E2%80%93output_memory_management_unit" target="_blank">Wikipedia</a>)</i></p>
+<p>To enable IOMMU, we have to configure our Grub</p>
+
+```bash
+nano /etc/default/grub
+```
+
+<p>Then, you will need to find the line <mark>GRUB_CMDLINE_LINUX_DEFAULT="quiet"</mark>. Change it to <mark>GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on"</mark>. <i><b>Note:</b> If you are using AMD CPU, you should change <mark>intel_iommu</mark> to <mark>amd_iommu</mark>.</i></p>
+<p>After that, you just need to update Grub. A reboot is also recommended to make sure the changes take effect.</p>
+
+```bash
+update-grub
+reboot
+```
