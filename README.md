@@ -2,18 +2,15 @@
 <p><i>created May 7, 2025</i> by {techmoocher}</p>
 <p>The following is my experience when building my own homelab as a high school junior with two Thinkpads and some old hard drives.</p>
 
-<h1>1. Getting started</h1>
-<p>In this project, I'm going to use Proxmox to be my virtual machine's hypervisor.</p>
-
-<h1>2. Setting up Proxmox</h1>
-<h3>1. Download and install Proxmox</h3>
-<p><i><b>Prerequisite:</b></i></p>
+<h1>My hardware setup</h1>
 <ul>
-  <li><i>A computer/laptop with at least 8GB of RAM and preferrably 200GB of hard drive</i></li>
-  <li><i>A solid-state 4GB USB</i></li>
-  <li><i>An Ethernet cable (Proxmox will not work well with WiFi)</i></li>
+  <li><b>ThinkPad T450 (Intel i5-5300U/Intel HD Graphics 5500/8GB RAM/228GB SSD)</b> <i>- Proxmox server</i>.</li>
+  <li><b>HP 200 G4 (Intel i5-10210U/Intel UHD Graphics 620/8GB RAM/228GB SSD)</b> <i>- RedHat server</i>.</li>
+  <li><b>AWS EC2 Free Tier Ubuntu Instance</b> <i>- OpenVPN server</i>.</li>
 </ul>
-<p>Before we start, remember to </p>
+
+<h1>1. Getting started</h1>
+
 
 <h3>2. Updating repos</h3>
 <p>Proxmox has enterprise apt repo by default. Since we're using it for personal usage, we will change it to no-subscription</p>
