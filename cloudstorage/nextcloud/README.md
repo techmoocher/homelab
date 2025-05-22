@@ -32,4 +32,4 @@ mount /dev/sdbX /mnt/pve/nextcloud #Replace X with your partition number
 echo "/dev/sdb2 /mnt/sdb2 ext4 defaults 0 2" | tee -a /etc/fstab
 mount -a #Test if there's any problem with mounting
 ```
-<p>Next, go to Proxmox Web GUI, navigate to <b>Datacenter</b> > <b>Storage</b>. Click <b>Add</b>, enter an ID <i>(e.g nextcloud), enter the path which is <mark>/mnt/pve/nextcloud</mark> in this case.</i></p>
+<p>Next, go to Proxmox Web GUI, navigate to <b>Datacenter</b> > <b>Storage</b>. Click <b>Add</b>, enter an ID <i>(e.g nextcloud)</i>, enter the path which is <mark>/mnt/pve/nextcloud</mark> in this case.</i></p>
