@@ -1,8 +1,9 @@
 # Nextcloud in LXC
 
-<h1>Preparing your storage</h1>
+<h2>Preparing your storage</h2>
 <p>This step really varies depending in your setup. For me, I'm gonna partition my 2TB HDD and use 128GB for Nextcloud data. The following is what I did.</p>
-<h2>1. Partitioning and Mounting</h2>
+
+<h3>1. Partitioning and Mounting</h2>
 <p>Check if the server recognize the target disk</p>
 
 ```bash
@@ -33,3 +34,5 @@ echo "/dev/sdb2 /mnt/sdb2 ext4 defaults 0 2" | tee -a /etc/fstab
 mount -a #Test if there's any problem with mounting
 ```
 <p>Next, go to Proxmox Web GUI, navigate to <b>Datacenter</b> > <b>Storage</b>. Click <b>Add</b>, enter an ID <i>(e.g nextcloud)</i>, enter the path which is <mark>/mnt/pve/nextcloud</mark> in this case.</i></p>
+
+<h3>2. Setting up container</h3>
