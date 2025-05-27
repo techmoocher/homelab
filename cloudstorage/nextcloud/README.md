@@ -44,7 +44,7 @@ mount -a #Test if there's any problem with mounting
   <li>Click on <b>Create CT</b>. Choose the node to install the CT on, choose a number for <mark>CT ID</mark>, and give it a <mark>Hostname</mark> <i>(e.g. nextcloud, personal-storage, etc.)</i>.Set a <mark>Password</mark> for your CT. Add <mark>Tags</mark> as needed.</li>
   ![image](https://github.com/user-attachments/assets/5f53a9b0-1276-4e14-a325-10f666a3423f)
   
-  <li>Choose a <mark>Storage</mark> and choose your <mark>CT template</mark>. <i><b>Note:</b> If you haven't got a CT template, you do get one by go to a storage such as <b>local</b>, navigate to <b>CT Templates</b> > <b>Templates</b> and choose one (preferably Ubuntu 24.04/22.04)</i>.</li>
+  <li>Choose a <mark>Storage</mark> and choose your <mark>CT template</mark>.<br><i><b>Note:</b> If you haven't got a CT template, you do get one by go to a storage such as <b>local</b>, navigate to <b>CT Templates</b> > <b>Templates</b> and choose one (preferably Ubuntu 24.04/22.04)</i>.</li>
   ![image](https://github.com/user-attachments/assets/0bdff1ad-1f13-4cda-81a9-1920d2acacb9)
 
   <li>Set up your disks. Choose a place for your CT root files, in my case, is <b>local</b>. Give the storage a size. Personally, since we will dedicate this CT only to Nextcloud, 20GiB would be enough. The below is my set up.</li>
