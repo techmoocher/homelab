@@ -47,9 +47,8 @@ mount -a #Test if there's any problem with mounting
   <li>Choose a <mark>Storage</mark> and choose your <mark>CT template</mark>. <i><b>Note:</b> If you haven't got a CT template, you do get one by go to a storage such as <b>local</b>, navigate to <b>CT Templates</b> > <b>Templates</b> and choose one (preferably Ubuntu 24.04/22.04)</i>.</li>
   ![image](https://github.com/user-attachments/assets/0bdff1ad-1f13-4cda-81a9-1920d2acacb9)
 
-  <li>Set up your disks. Choose a place for your CT root files, in my case, is <b>local</b>. Give the storage a size. Personally, since we will dedicate this CT only to Nextcloud, 20GiB would be enough. Click <b>Add</b> to add another mountpoint. Adjust the values depending on your setup. The below is mine.</li>
+  <li>Set up your disks. Choose a place for your CT root files, in my case, is <b>local</b>. Give the storage a size. Personally, since we will dedicate this CT only to Nextcloud, 20GiB would be enough. The below is my set up.</li>
   ![image](https://github.com/user-attachments/assets/fda3cf31-1697-486e-86d5-957938f9bb85)
-  ![image](https://github.com/user-attachments/assets/09d5038a-6c1a-4fc0-addd-db781e5f762d)
 
   <li>Assign how many <b>CPU cores</b> the CT can use. Since my server only has 4 cores, I will assign 2 for Nextcloud.</li>
   ![image](https://github.com/user-attachments/assets/ebbcae8f-c8e0-41e0-b93d-be835f7a153a)
