@@ -41,27 +41,27 @@ mount -a #Test if there's any problem with mounting
 <h3>2. Setting up container</h3>
 <p>Assuming that you've got your directory set up. Let's create a container (CT) for our Nextcloud. Follow the below steps if you're struggling with CT.</p>
 <uL>
-  <li>1. Click on <b>Create CT</b>. Choose the node to install the CT on, choose a number for <mark>CT ID</mark>, and give it a <mark>Hostname</mark> <i>(e.g. nextcloud, personal-storage, etc.)</i>.Set a <mark>Password</mark> for your CT. Add <mark>Tags</mark> as needed.</li>
+  <li>Click on <b>Create CT</b>. Choose the node to install the CT on, choose a number for <mark>CT ID</mark>, and give it a <mark>Hostname</mark> <i>(e.g. nextcloud, personal-storage, etc.)</i>.Set a <mark>Password</mark> for your CT. Add <mark>Tags</mark> as needed.</li>
   ![image](https://github.com/user-attachments/assets/5f53a9b0-1276-4e14-a325-10f666a3423f)
   
-  <li>2. Choose a <mark>Storage</mark> and choose your <mark>CT template</mark>. <i><b>Note:</b> If you haven't got a CT template, you do get one by go to a storage such as <b>local</b>, navigate to <b>CT Templates</b> > <b>Templates</b> and choose one (preferably Ubuntu 24.04/22.04)</i>.</li>
+  <li>Choose a <mark>Storage</mark> and choose your <mark>CT template</mark>. <i><b>Note:</b> If you haven't got a CT template, you do get one by go to a storage such as <b>local</b>, navigate to <b>CT Templates</b> > <b>Templates</b> and choose one (preferably Ubuntu 24.04/22.04)</i>.</li>
   ![image](https://github.com/user-attachments/assets/0bdff1ad-1f13-4cda-81a9-1920d2acacb9)
 
-  <li>3. Set up your disks. Choose a place for your CT root files, in my case, is <b>local</b>. Give the storage a size. Personally, since we will dedicate this CT only to Nextcloud, 20GiB would be enough. Click <b>Add</b> to add another mountpoint. Adjust the values depending on your setup. The below is mine.</li>
+  <li>Set up your disks. Choose a place for your CT root files, in my case, is <b>local</b>. Give the storage a size. Personally, since we will dedicate this CT only to Nextcloud, 20GiB would be enough. Click <b>Add</b> to add another mountpoint. Adjust the values depending on your setup. The below is mine.</li>
   ![image](https://github.com/user-attachments/assets/fda3cf31-1697-486e-86d5-957938f9bb85)
   ![image](https://github.com/user-attachments/assets/09d5038a-6c1a-4fc0-addd-db781e5f762d)
 
-  <li>4. Assign how many <b>CPU cores</b> the CT can use. Since my server only has 4 cores, I will assign 2 for Nextcloud.</li>
+  <li>Assign how many <b>CPU cores</b> the CT can use. Since my server only has 4 cores, I will assign 2 for Nextcloud.</li>
   ![image](https://github.com/user-attachments/assets/ebbcae8f-c8e0-41e0-b93d-be835f7a153a)
 
-  <li>5. Assign how much <b>Memory</b> the CT can use. Personally I prefer is 1024 MiB (1 GiB) of RAM and 2048 MiB (2 GiB) of swap.</li>
+  <li>Assign how much <b>Memory</b> the CT can use. Personally, I prefer 1024 MiB (1 GiB) of RAM and 2048 MiB (2 GiB) of swap.</li>
   ![image](https://github.com/user-attachments/assets/f1e4981f-e32c-44c5-b432-efa9e52621c1)
 
-  <li>6. Adjust the values in <b>Network</b> tab as needed. I recommend setting a <b>static IP</b> for your server so you won't need to check its IP address every time you connect to it. About the default gateway, you can find it out with <mark>ipconfig</mark> for <b>Windows</b> and <mark>ip route</mark> on <b>Linux</b>. Below is my setup.</li>
+  <li>Adjust the values in <b>Network</b> tab as needed. I recommend setting a <b>static IP</b> for your server so you won't need to check its IP address every time you connect to it. About the default gateway, you can find it out with <mark>ipconfig</mark> for <b>Windows</b> and <mark>ip route</mark> on <b>Linux</b>. Below is my setup.</li>
   ![image](https://github.com/user-attachments/assets/a18f736e-cd82-48db-9b00-45dabc105d93)
 
-  <li>7. If you want to use a specific DNS server, adjust the values as needed. Otherwise, leave them blank.</li>
-  <li>8. Finally, double-check the config in the <b>Confirm</b> tab and click <b>Finish</b>. Proxmox will do the rest for you. If you will see <mark>Task OK</mark> in the log popup, you've successfully created a CT for Nextcloud.</li>
+  <li> To use a specific DNS server, adjust the values as needed. Otherwise, leave them blank.</li>
+  <li>Finally, double-check the config in the <b>Confirm</b> tab and click <b>Finish</b>. Proxmox will do the rest for you. If you will see <mark>Task OK</mark> in the log popup, you've successfully created a CT for Nextcloud.</li>
 </uL>
 
 <h3>3. Installing dependencies</h3>
@@ -89,8 +89,8 @@ nano /etc/locale.gen
 locale-gen
 ```
 
-<h4>3.1 Installing <b>Apache2</b>, <b>MariaDB</b>, and <b>PHP</b></h4>
-<h5>Apache2</h5>
+<h3>3.1 Installing <b>Apache2</b>, <b>MariaDB</b>, and <b>PHP</b></h3>
+<h3>Apache2</h3>
 <p>Enter the following commands to install Apache2</p>
 
 ```bash
@@ -112,7 +112,7 @@ systemctl status apache2
 <p>If Apache2 is running properly, you should see something like this</p>
 ![image](https://github.com/user-attachments/assets/007d7f6b-e712-415e-82c0-4cad5eabf7c3)
 
-<h5>MariaDB</h5>
+<h3>MariaDB</h3>
 <p>Enter the following commands to install MariaDB</p>
 
 ```bash
@@ -125,7 +125,7 @@ apt install mariadb-server
 mariadb_secure_installation
 ```
 
-<h5>PHP</h5>
+<h3>PHP</h3>
 <p>Enter the following commands to install PHP</p>
 
 ```bash
