@@ -22,8 +22,8 @@ fdisk /dev/sdb
   <li>Enter <mark>g</mark> for creating a new GPT table.</li>
   <li>Enter <mark>n</mark> to create a new partition.</li>
   <li>Type in your desired partition number.</li>
-  <li>Enter your desired start block (in most case you just press <mark>Enter</mark> for the default start block).</li>
-  <li>Enter <mark>+<i>desired-size</i>G</mark> to set the partition to the desired size. Refer to the instructions on the screen for further personalization.</li>
+  <li>Enter your desired start block (in most case you just press <b>Enter</b> for the default start block).</li>
+  <li>Enter <b>+<i><desired-value></i>G</b> to set the partition to the desired size. Refer to the instructions on the screen for further personalization.</li>
   <li>Enter <mark>w</mark> to exit and write changes.</li>
 </ul>
 
@@ -41,10 +41,10 @@ mount -a #Test if there's any problem with mounting
 <h3>2. Setting up container</h3>
 <p>Assuming that you've got your directory set up. Let's create a container (CT) for our Nextcloud. Follow the below steps if you're struggling with CT.</p>
 <uL>
-  <li>Click on <b>Create CT</b>. Choose the node to install the CT on, choose a number for <mark>CT ID</mark>, and give it a <mark>Hostname</mark> <i>(e.g. nextcloud, personal-storage, etc.)</i>.Set a <mark>Password</mark> for your CT. Add <mark>Tags</mark> as needed.</li>
+  <li>Click on <b>Create CT</b>. Choose the node to install the CT on, choose a number for <b>CT ID</b>, and give it a <b>Hostname</b> <i>(e.g. nextcloud, personal-storage, etc.)</i>.Set a <b>Password</b> for your CT. Add <mark>Tags</mark> as needed.</li>
   ![image](https://github.com/user-attachments/assets/5f53a9b0-1276-4e14-a325-10f666a3423f)
   
-  <li>Choose a <mark>Storage</mark> and choose your <mark>CT template</mark>.<br><i><b>Note:</b> If you haven't got a CT template, you do get one by go to a storage such as <b>local</b>, navigate to <b>CT Templates</b> > <b>Templates</b> and choose one (preferably Ubuntu 24.04/22.04)</i>.</li>
+  <li>Choose a <b>Storage</b> and choose your <b>CT template</b>.<br><i><b>Note:</b> If you haven't got a CT template, you do get one by go to a storage such as <b>local</b>, navigate to <b>CT Templates</b> > <b>Templates</b> and choose one (preferably Ubuntu 24.04/22.04)</i>.</li>
   ![image](https://github.com/user-attachments/assets/0bdff1ad-1f13-4cda-81a9-1920d2acacb9)
 
   <li>Set up your disks. Choose a place for your CT root files, in my case, is <b>local</b>. Give the storage a size. Personally, since we will dedicate this CT only to Nextcloud, 20GiB would be enough. The below is my set up.</li>
@@ -82,7 +82,7 @@ apt update && apt upgrade
 ```bash
 nano /etc/locale.gen
 ```
-<p>Scroll down to <mark>en_US.UTF-8 UTF-8</mark>. Uncomment that line, exit and save changes with Ctrl + X. Finally, update locale choice with</p>
+<p>Scroll down to <mark>en_US.UTF-8 UTF-8</mark>. Uncomment that line, save changes and exit with Ctrl + X. Finally, update locale with</p>
 
 ```bash
 locale-gen
@@ -140,5 +140,5 @@ apt install phpX.x libapache2-mod-phpX.x # Replace X.x with your desired PHP ver
 <p>Enter the following commands to install necessary PHP modules</p>
 
 ```bash
-apt install phpX.x-{curl,gd,zip,xml,mbstring,mysql}
+apt install phpX.x-{curl,gd,zip,xml,mbstring,mysql,intl,imagick,imap}
 ```
