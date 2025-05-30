@@ -8,7 +8,7 @@
   <li>CentOS 9</li>
 </ul>
 
-<h2>For Debian</h2>
+<h2>Debian</h2>
 <p><b>Installing using <mark>apt</mark> repository</b></p>
 
 ```bash
@@ -49,7 +49,7 @@ newgrp docker
 docker run hello-world
 ```
 
-<h2>For Ubuntu</h2>
+<h2>Ubuntu</h2>
 <p><b>Installing using <mark>apt</mark> repository</b></p>
 
 ```bash
@@ -90,3 +90,42 @@ newgrp docker
 docker run hello-world
 ```
 
+<h2>Fedora</h2>
+<p>Installing using <mark>rpm</mark> repository</p>
+
+```bash
+sudo dnf remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine \
+                  podman \
+                  runc
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+<p><i><b>Note: </b>If prompted to accept the GPG key, verify that the fingerprint matches <mark>060A 61C5 1B55 8A7F 742B 77AA C52F EB6B 621E 9F35</mark>, and if so, accept it.</i></p>
+
+<p>Start Docker Engine <i>Docker is installed but is not started. A docker group is also created but no users are added to that group by default.</i></p>
+
+```bash
+sudo systemctl enable --now docker
+```
+
+<p>To verify if docker is successfully installed, use this command</p>
+
+```bash
+sudo docker run hello-world
+```
+
+<p><b>(Optional)</b> Run docker commands without sudo</p>
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+groups $USER # To verify your user is in the docker group
+```
