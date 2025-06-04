@@ -170,3 +170,27 @@ sudo usermod -aG docker $USER
 newgrp docker
 docker run hello-world # To verify that you can run Docker without sudo
 ```
+
+<h3><i>(Optional)</i> Connect a CT with Docker to Portainer</h3>
+<p>First, make sure that you have Docker installed on your CT and a Portainer server.</p>
+<p>Before connecting Portainer to the Environment on our CT, we need to have port 2375 open so we can connect to our daemon.</p>
+
+```bash
+sudo systemctl edit docker.service
+```
+<p>Add the following lines, then save and exit.</p>
+
+```bash
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375
+```
+
+<p>In order to apply the changes we've just made, enter the following commands</p>
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+<p>Now, go to Portainer Web GUI and click on <b>Add environemt</b>. Choose <b>Docker Standalone</b> and then click on <b>Start Wizard</b>. In <b>Environment Wizard</b>, choose a <b>Name</b> for your environment, then enter the IP Address of your CT, following by <mark>:2375</mark> <i>(e.g. 192.168.1.100:2375)</i>. You may want to adjust other settings depending on your needs. Click <b>Connect</b> to create a connection. If you receive a notification saying "Environment created", you're all set.</p>
