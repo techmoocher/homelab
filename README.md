@@ -4,9 +4,8 @@
 
 <h1>My hardware setup</h1>
 <ul>
-  <li><b>ThinkPad T450 (Intel i5-5300U/Intel HD Graphics 5500/8GB RAM/228GB SSD)</b> <i>- Proxmox server</i>.</li>
-  <li><b>HP 200 G4 (Intel i5-10210U/Intel UHD Graphics 620/8GB RAM/228GB SSD)</b> <i>- RedHat server</i>.</li>
-  <li><b>AWS EC2 Free Tier Ubuntu Instance</b> <i>- OpenVPN server</i>.</li>
+  <li>ThinkPad T450 (Intel i5-5300U/Intel HD Graphics 5500/8GB RAM/228GB SSD) <i>- Proxmox server</i>.</li>
+  <li>Western Digital Purple 2TB</li>
 </ul>
 
 <h1>1. Getting started</h1>
