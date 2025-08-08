@@ -13,8 +13,6 @@ A simple and robust Python script to automate the process of updating all Debian
 
 ## Requirements
 
-* A Proxmox VE host.
-* LXC containers based on Debian or Ubuntu.
 * Python 3 (`python3`).
 * Pip for Python 3 (`python3-pip`).
 * The following Python libraries:
@@ -25,11 +23,20 @@ A simple and robust Python script to automate the process of updating all Debian
 
 ### 1. Place Files
 
-Ensure the following files are in your project directory (e.g., `/root/helper/lxcs/update/`):
+Make a folder for your script (e.g., `/usr/helper/lxcs/update/`) and download the script.
+
+```bash
+mkdir /path/to/lxcs/update # Replace '/path/to/...' with your actual path
+cd /path/to/lxcs/update
+curl -L -o update-lxcs.py https://raw.githubusercontent.com/techmoocher/homelab/main/helper-scripts/lxcs/update/update-lxcs.py
+```
+
+Ensure the following files are in your project directory:
 
 ```
 /update/
 ├── update-lxcs.py
+├── lxcs-updater.log
 └── .env
 ```
 
@@ -50,7 +57,7 @@ python3 -m pip install requests python-dotenv
 
 ### 3. Configure Slack Webhook
 
-Edit the `.env` file and add your Slack Incoming Webhook URL.
+Create the `.env` file and add your Slack Incoming Webhook URL.
 
 **`.env`**
 
@@ -58,7 +65,7 @@ Edit the `.env` file and add your Slack Incoming Webhook URL.
 SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
 ```
 
-If you leave this blank, the script will still run but will skip sending notifications.
+If you don't have this, the script will still run but won't send notifications.
 
 ## 🚀 Usage
 
@@ -66,7 +73,7 @@ You can run the script manually for testing or one-off updates.
 
 ```bash
 # Navigate to the script's directory
-cd /path/to/your/project/update/
+cd /path/to/lxcs/update/
 
 # Run the script
 python3 update-lxcs.py
@@ -82,7 +89,7 @@ This will create a symbolic link, allowing you to run the script from anywhere w
 
 ```bash
 # 1. Make the script executable
-chmod +x /path/to//lxcs/update/update-lxcs.py
+chmod +x /path/to/lxcs/update/update-lxcs.py
 
 # 2. Create a symbolic link in /usr/local/bin
 sudo ln -s /path/to/lxcs/update/update-lxcs.py /usr/local/bin/update-lxcs
