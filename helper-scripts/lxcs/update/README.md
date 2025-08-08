@@ -1,4 +1,4 @@
-Proxmox LXC Updater Script
+# Proxmox LXC Updater Script
 A simple Python script to automate the process of updating Debian-based LXC containers on a Proxmox host. The script handles reboots, logs, and sends status notifications to a Slack channel.
 
 Features
