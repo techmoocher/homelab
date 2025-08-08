@@ -1,6 +1,6 @@
 # Techmoocher Homelab
 <p><i>created May 7, 2025</i> by {techmoocher}</p>
-<p>The following is my experience when building my own homelab as a high school junior with two Thinkpads and some old hard drives.</p>
+<p>The following is my experience when building my own homelab as a high school junior with an old Thinkpad and a HDD.</p>
 
 <h1>My hardware setup</h1>
 <ul>
