@@ -33,7 +33,7 @@ echo "services/glance/" >> .git/info/sparse-checkout
 git pull origin main
 ```
 
-edit the following files as desired:
+Now, edit the following files as desired:
 * `docker-compose.yml` to configure the port, volumes and other containery things
 * `config/home.yml` to configure the widgets or layout of the home page
 * `config/glance.yml` if you want to change the theme or add more pages
