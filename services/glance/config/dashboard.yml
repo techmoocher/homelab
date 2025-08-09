@@ -1,0 +1,117 @@
+- name: Dashboard
+  # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
+  # hide-desktop-navigation: true
+  columns:
+    - size: small
+      widgets:
+        - type: search
+          search-engine: duckduckgo
+          new-tab: true
+          bangs:
+            - title: Youtube
+              shortcut: "!youtube"
+              url: https://www.youtube.com/results?search_query={QUERY}
+            - title: Souncloud
+              shortcut: "!soundcloud"
+              url: https://www.soundcloud.com/results?q={QUERY}
+            - title: Reddit
+              shortcut: "!reddit"
+              url: https://www.reddit.com/search?q={QUERY}
+
+        - type: clock
+          hour-format: 12h
+          timezones:
+            - timezone: Asia/Ho_Chi_Minh
+              label: Ho Chi Minh city
+            - timezone: America/New_York
+              label: New York
+
+        - type: weather
+          location: Ho Chi Minh, Vietnam
+          units: metric # or "imperial"
+          hour-format: 12h
+          #hide-location: true
+
+        - type: calendar
+          first-day-of-week: monday
+
+    - size: full
+      widgets:
+        - type: split-column
+          widgets:
+            - type: monitor
+              cache: 1m
+              title: Monitoring & Management
+              sites:
+                - title: Proxmox
+                  url: https://proxmox.techmoocher.com/
+                  icon: di:proxmox
+                - title: Portainer
+                  url: https://portainer.techmoocher.com/
+                  icon: di:portainer
+                - title: Uptime Kuma
+                  url: https://uptime-kuma.techmoocher.com/
+                  icon: di:uptime-kuma
+                - title: Prometheus
+                  url: https://prometheus.techmoocher.com/
+                  icon: di:prometheus
+                - title: Grafana
+                  url: https://grafana.techmoocher.com/
+                  icon: di:grafana
+                - title: Nginx Proxy Manager
+                  url: https://nginxpm.techmoocher.com/
+                  icon: di:nginx
+
+            - type: monitor
+              cache: 1m
+              title: Services
+              sites:
+                - title: Nextcloud
+                  url: https://nextcloud.techmoocher.com/
+                  icon: di:nextcloud
+                - title: Immich
+                  url: https://immich.techmoocher.com/
+                  icon: di:immich
+                - title: Navidrome
+                  url: https://navidrome.techmoocher.com/
+                  icon: di:navidrome
+                - title: Vaultwarden
+                  url: https://vaultwarden.techmoocher.com/
+                  icon: di:vaultwarden
+                - title: n8n
+                  url: https://n8n.techmoocher.com/
+                  icon: di:n8n
+                - title: OpenVPN (EC2)
+                  url: https://openvpn-aws.techmoocher.com/
+                  icon: di:openvpn
+
+    - size: small
+      widgets:
+        - type: to-do
+
+        - type: bookmarks
+          groups:
+            - title: General
+              links:
+                - title: Gmail
+                  url: https://gmail.com/
+                - title: Github
+                  url: https://github.com/
+                - title: YouTube
+                  url: https://www.youtube.com/
+            - title: Social
+              links:
+                - title: Facebook
+                  url: https://www.facebook.com/
+                - title: Instagram
+                  url: https://www.instagram.com/
+                - title: Reddit
+                  url: https://www.reddit.com/
+            - title: Education
+              links:
+                - title: TryHackMe
+                  url: https://tryhackme.com/
+                - title: Coursera
+                  url: https://www.coursera.org/
+                - title: Schoolhouse
+                  url: https://schoolhouse.world/
