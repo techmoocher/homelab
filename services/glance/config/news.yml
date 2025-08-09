@@ -1,0 +1,83 @@
+- name: News
+  # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
+  # hide-desktop-navigation: true
+  columns:
+    - size: small
+      widgets:
+        - type: search
+          search-engine: duckduckgo
+          new-tab: true
+          bangs:
+            - title: Youtube
+              shortcut: "!youtube"
+              url: https://www.youtube.com/results?search_query={QUERY}
+            - title: Souncloud
+              shortcut: "!soundcloud"
+              url: https://www.soundcloud.com/results?q={QUERY}
+            - title: Reddit
+              shortcut: "!reddit"
+              url: https://www.reddit.com/search?q={QUERY}
+
+        - type: clock
+          hour-format: 12h
+          timezones:
+            - timezone: Asia/Ho_Chi_Minh
+              label: Ho Chi Minh city
+            - timezone: America/New_York
+              label: New York
+
+        - type: calendar
+          first-day-of-week: monday
+
+        - type: group
+          widgets:
+          - type: reddit
+            subreddit: selfhosted
+            show-thumbnails: true
+          - type: reddit
+            subreddit: unixporn
+            show-thumbnails: true
+          - type: reddit
+            subreddit: linuxquestions
+            show-thumbnails: true
+          - type: reddit
+            subreddit: technology
+            show-thumbnails: true
+
+    - size: full
+      widgets:
+        - type: rss
+          collapse-after: 10
+          preserve-order: true
+          style: detailed-list
+          cache: 12h
+          feeds:
+            - url: https://vnexpress.net/rss/tin-moi-nhat.rss
+              title: VNExpress - News
+              limit: 10
+            - url: https://vnexpress.net/rss/khoa-hoc-cong-nghe.rss
+              title: VNExpress - Tech
+              limit: 5
+            - url: https://news.ycombinator.com/rss
+              title: Hacker News
+              limit: 3
+            - url: https://interestingengineering.com/feed
+              title: Interesting Engineering
+              limit: 2
+
+        - type: videos
+          channels:
+            - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
+            - UCJN3Qeec16b5KP2UFxMsxMA # TechHut
+            - UCOuGATIAbd2DvzJmUgXn2IQ # NetworkChuck
+            - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
+
+    - size: small
+      widgets:
+        - type: weather
+          location: Ho Chi Minh, Vietnam
+          units: metric # or "imperial"
+          hour-format: 12h
+          # hide-location: true
+
+        - type: to-do
