@@ -1,0 +1,16 @@
+server:
+  assets-path: /app/assets
+
+theme:
+  # Note: assets are cached by the browser, changes to the CSS file
+  # will not be reflected until the browser cache is cleared (Ctrl+F5)
+  custom-css-file: /assets/user.css
+  contrast-multiplier: 1.2
+  background-color: 247 29 10
+  primary-color: 317 97 73
+
+pages:
+  # It's not necessary to create a new file for each page and include it, you can simply
+  # put its contents here, though multiple pages are easier to manage when separated
+  - $include: dashboard.yml
+  - $include: news.yml
