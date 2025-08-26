@@ -45,21 +45,27 @@
               sites:
                 - title: Proxmox
                   url: https://proxmox.techmoocher.com/
+                  check-url: http://192.168.1.27:8006
                   icon: di:proxmox
                 - title: Portainer
                   url: https://portainer.techmoocher.com/
+                  check-url: http://192.168.1.102:9443
                   icon: di:portainer
                 - title: Uptime Kuma
                   url: https://uptime-kuma.techmoocher.com/
+                  check-url: http://192.168.1.101:3001
                   icon: di:uptime-kuma
                 - title: Prometheus
                   url: https://prometheus.techmoocher.com/
+                  check-url: http://192.168.1.109:9090
                   icon: di:prometheus
                 - title: Grafana
                   url: https://grafana.techmoocher.com/
+                  check-url: http://192.168.1.110:3000
                   icon: di:grafana
                 - title: Nginx Proxy Manager
                   url: https://nginxpm.techmoocher.com/
+                  check-url: http://192.168.1.107:81
                   icon: di:nginx
 
             - type: monitor
@@ -68,18 +74,23 @@
               sites:
                 - title: Nextcloud
                   url: https://nextcloud.techmoocher.com/
+                  check-url: http://192.168.1.100
                   icon: di:nextcloud
                 - title: Immich
                   url: https://immich.techmoocher.com/
+                  check-url: http://192.168.1.28:2283
                   icon: di:immich
                 - title: Navidrome
                   url: https://navidrome.techmoocher.com/
+                  check-url: http://192.168.1.103:4533
                   icon: di:navidrome
                 - title: Vaultwarden
                   url: https://vaultwarden.techmoocher.com/
+                  check-url: http://192.168.1.105
                   icon: di:vaultwarden
                 - title: n8n
                   url: https://n8n.techmoocher.com/
+                  check-url: http://192.168.1.106:5678
                   icon: di:n8n
                 - title: OpenVPN (EC2)
                   url: https://openvpn-aws.techmoocher.com/
