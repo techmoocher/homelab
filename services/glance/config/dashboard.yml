@@ -45,7 +45,6 @@
               sites:
                 - title: Proxmox
                   url: https://proxmox.techmoocher.com/
-                  check-url: http://192.168.1.27:8006
                   icon: di:proxmox
                 - title: Portainer
                   url: https://portainer.techmoocher.com/
