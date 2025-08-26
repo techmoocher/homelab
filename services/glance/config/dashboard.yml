@@ -48,7 +48,8 @@
                   icon: di:proxmox
                 - title: Portainer
                   url: https://portainer.techmoocher.com/
-                  check-url: http://192.168.1.102:9443
+                  check-url: https://192.168.1.102:9443
+                  allow-insecure: true
                   icon: di:portainer
                 - title: Uptime Kuma
                   url: https://uptime-kuma.techmoocher.com/
