@@ -5,7 +5,7 @@
 <h1>My hardware setup</h1>
 <ul>
   <li>ThinkPad T450 (Intel i5-5300U/Intel HD Graphics 5500/8GB RAM/228GB SSD) <i>- Proxmox server</i>.</li>
-  <li>Western Digital Purple 2TB</li>
+  <li>A 2TB WD Purple</li>
 </ul>
 
 <h1>1. Getting started</h1>
