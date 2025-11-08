@@ -121,7 +121,7 @@ apt install mariadb-server
 <p>To start MariaDB installation, enter the following commands</p>
 
 ```bash
-mariadb_secure_installation
+mysql_secure_installation
 ```
 
 <h3>PHP</h3>
@@ -135,6 +135,7 @@ apt update && apt upgrade
 # Installing PHP
 apt install phpX.x libapache2-mod-phpX.x # Replace X.x with your desired PHP version (e.g. 8.2, 8.3, 8.4, etc.)
 ```
+
 <i>Check out <a href="https://docs.nextcloud.com/server/latest/admin_manual/installation/php_configuration.html" target="_blank">PHP Modules & Configuration</a> for more details</i>
 
 <p>Enter the following commands to install necessary PHP modules</p>
