@@ -83,7 +83,7 @@ nano /etc/default/grub
 ```
 
 <p>Then, you will need to find the line <mark>GRUB_CMDLINE_LINUX_DEFAULT="quiet"</mark>. Change it to <mark>GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on"</mark>. <i><b>Note:</b> If you are using AMD CPU, you should change <mark>intel_iommu</mark> to <mark>amd_iommu</mark>.</i></p>
-<p>After that, you just need to update Grub. A reboot is also recommended to make sure the changes take effect.</p>
+<p>After that, you need to update GRUB. A reboot is also recommended to make sure the changes take effect.</p>
 
 ```bash
 update-grub
