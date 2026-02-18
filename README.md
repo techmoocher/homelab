@@ -33,7 +33,7 @@ Before we start, make sure you have a bootable USB drive with Proxmox on it. You
 
 After you have successfully installed Proxmox and accessed the web interface, you will be prompted to log in. Use the username `root` and the password you set during the installation process to log in. Once you are logged in, you will see the Proxmox dashboard where you can manage your virtual machines, containers, storage, and more.
 
-[Proxmox dashboard](.github/images/proxmox-dashboard.png)
+![Proxmox dashboard](.github/images/proxmox-dashboard.png)
 
 <h3>2. Updating repos</h3>
 <p>Proxmox has enterprise apt repo by default. Since we're using it for personal usage, we will change it to no-subscription</p>
