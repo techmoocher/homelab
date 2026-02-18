@@ -1,15 +1,39 @@
-# Techmoocher Homelab
-<p><i>created May 7, 2025</i> by {techmoocher}</p>
-<p>The following is my experience when building my own homelab as a high school junior with an old Thinkpad and a HDD.</p>
+# A Journey of a Hobbyist
 
-<h1>My hardware setup</h1>
-<ul>
-  <li>ThinkPad T450 (Intel i5-5300U/Intel HD Graphics 5500/8GB RAM/228GB SSD) <i>- Proxmox server</i>.</li>
-  <li>A 2TB WD Purple</li>
-</ul>
+<div align="center">
+    <h1>【 techmoocher's homelab 】</h1>
+</div>
 
-<h1>1. Getting started</h1>
+---
 
+<div align="center">
+    <img src="https://img.shields.io/github/last-commit/techmoocher/homelab?&style=for-the-badge&color=87FFAF&logo=git&logoColor=D9E0EE&labelColor=1E202B" />
+    <img src="https://img.shields.io/github/stars/techmoocher/homelab?style=for-the-badge&logo=andela&color=FFFF7D&logoColor=D9E0EE&labelColor=1E202B" />
+    <img src="https://img.shields.io/github/repo-size/techmoocher/homelab?color=A5E1FF&label=SIZE&logo=protondrive&style=for-the-badge&logoColor=D9E0EE&labelColor=1E202B" />
+</div>
+
+---
+
+You are reading my personal notes on setting up a self-hosted server (a.k.a homelab) using Proxmox. This is not a tutorial, but more of an anecdotal documentation of my own experience. My main reason for writing this is to log my journey in self-hosting and to share my experience with hobbyists who are interested in self-hosting but don't know where to start. I know that there are already many good tutorials on setting up a homelab, but I hope this can be a good starting point for you to get into self-hosting and have fun with it!
+
+## My Hardware
+
+As a full-time student and part-time hobbyist, I have a limited budget for my homelab. Thus, I digged into the pile of old tech gadgets in my dad's garage and decided to utilized the following as my set up:
+
+- **ThinkPad T450 (Intel i5-5300U/Intel HD Graphics 5500/8GB RAM/228GB SSD)** *(Proxmox server)*
+- **A 2TB WD Purple** *(storage)*
+
+## Getting Started
+
+### 1. Installing Proxmox
+
+Before we start, make sure you have a bootable USB drive with Proxmox on it. You can follow the [official Proxmox installation guide](https://proxmox.com/en/products/proxmox-virtual-environment/get-started) to create one. Once you have your bootable USB drive ready, insert it into your machine and boot from it. Follow the on-screen instructions to install Proxmox on your machine. After the installation is complete, you can access the Proxmox web interface by navigating to `https://<your-node-ip>:8006` in your web browser.
+
+### 2. First login
+
+After you have successfully installed Proxmox and accessed the web interface, you will be prompted to log in. Use the username `root` and the password you set during the installation process to log in. Once you are logged in, you will see the Proxmox dashboard where you can manage your virtual machines, containers, storage, and more.
+
+[Proxmox dashboard](.github/images/proxmox-dashboard.png)
 
 <h3>2. Updating repos</h3>
 <p>Proxmox has enterprise apt repo by default. Since we're using it for personal usage, we will change it to no-subscription</p>
@@ -107,3 +131,4 @@ DMAR-IR: Enabled IRQ remapping in xapic mode
 ```bash
 DMAR-IR: Enabled IRQ remapping in x2apic mode
 ```
+
