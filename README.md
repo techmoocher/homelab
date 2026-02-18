@@ -35,6 +35,10 @@ After you have successfully installed Proxmox and accessed the web interface, yo
 
 ![Proxmox dashboard](.github/images/proxmox-dashboard.png)
 
+#### Updating Repos
+
+
+
 <h3>2. Updating repos</h3>
 <p>Proxmox has enterprise apt repo by default. Since we're using it for personal usage, we will change it to no-subscription</p>
 <p>To get started, navigate to your node (aka click on the button that labeled your <b><i>hostname</i></b>)</p>
