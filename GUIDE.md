@@ -49,7 +49,7 @@ You should see that the `local-lvm` storage is removed and the root partition is
 
 ### 4. Keeping your server awake (optional)
 
-> Skip this step as your demand. Highly recommended for servers running on laptops.
+> Skip this step at your demand. Highly recommended for servers running on laptops.
 
 For me, due to availabibility purposes, I want to have my server awake even the lid is accidentially closed. To achieve that, we will need to edit the `logind.conf` file.
 
@@ -73,7 +73,7 @@ systemctl restart systemd-logind.service
 
 ### 5. Setting screen timeout (optional)
 
-> Skip this step as your demand. Highly recommended for servers running on laptops.
+> Skip this step at your demand. Highly recommended for servers running on laptops.
 
 To protect your screen from getting burnt due to constant workload, you may want to set a screen timeout to turn off the display after a certain period of inactivity. To do that, we will need to edit the GRUB configuration file.
 
@@ -98,6 +98,8 @@ update-grub
 ```
 
 ### 6. Enabling IOMMU
+
+> Skip this step at your demand. Highly recommended if you plan to use hardware passthrough in the future.
 
 An Input-Output Memory Management Unit (IOMMU) is a hardware component that allows the system to manage memory for I/O devices, such as graphics cards, network cards, and storage controllers. It provides a way for the system to map device memory to physical memory, which can improve performance and security. Enabling IOMMU can be beneficial for virtualization and hardware passthrough, as it allows virtual machines to directly access hardware resources without going through the hypervisor. You can learn more about IOMMU at its [Wikipedia page](https://en.wikipedia.org/wiki/Input%E2%80%93output_memory_management_unit).
 
@@ -125,19 +127,13 @@ reboot
 When your system is back up, you can check if IOMMU is enabled with the following command.
 
 ```bash
-dmesg | grep -e DMAR -e IOMMU
-```
-
-<p>To make sure the changes you made are working properly, use the following commands to check.</p>
-
-```bash
 dmesg | grep -e IOMMU
 dmesg | grep 'remapping'
 ```
 
 If you don't see any errors, it's a good sign that your system is working properly. If you happen to get any errors, reference to the [wiki](https://pve.proxmox.com/wiki/PCI_Passthrough) for more information.
 
-You should see something like this in the output of the above commands, which indicates that IOMMU is enabled and working properly.
+You should see something like this, which indicates that IOMMU is enabled and working properly.
 
 ```bash
 DMAR: IOMMU enabled
@@ -145,7 +141,11 @@ DMAR: IOMMU enabled
 DMAR-IR: Enabled IRQ remapping in xapic mode    # x2apic mode in some systems
 ```
 
-### 7. 
+### 7. Setting up firewall (optional)
+
+> Skip this step at your demand. Highly recommended for security purposes.
+
+Proxmox has a built-in firewall that you can use to secure your server. To enable the firewall, navigate to **Datacenter** > **Firewall** and click on the **Enable** button. This will enable the firewall for your Proxmox server.
 
 ---
 
