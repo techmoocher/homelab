@@ -1,5 +1,7 @@
 # A Journey of a Hobbyist
 
+---
+
 <div align="center">
     <h1>【 techmoocher's homelab 】</h1>
 </div>
@@ -25,19 +27,37 @@ As a full-time student and part-time hobbyist, I have a limited budget for my ho
 
 ## My Softwares
 
-- **Proxmox VE** *(virtualization platform)*
-- **Portainer** *(Docker management)*
-- **Nextcloud** *(file hosting service)*
-- **AdGuard Home** *(network-wide ad blocker)*
-- **Immich** *(personal photo backu)*
-- **Navidrome** *(personal music server)*
-- **Jellyfin** *(personal media server)*
-- **Vaultwarden** *(password manager)*
-- **Nginx Proxy Manager** *(reverse proxy)*
-- **Grafana/Prometheus** *(monitoring and alerting)*
-- **n8n** *(workflow automation)*
+- **[Proxmox VE][proxmox-ve]** *(virtualization platform)*
+- **[Portainer][portainer]** *(Docker management)*
+- **[Nextcloud][nextcloud]** *(personal cloud storage)*
+- **[AdGuard Home][adguard-home]** *(network-wide ad blocker)*
+- **[Immich][immich]** *(self-hosted photo management)*
+- **[Navidrome][navidrome]** *(self-hosted music streaming server)*
+- **[Jellyfin][jellyfin]** *(self-hosted media server)*
+- **[Vaultwarden][vaultwarden]** *(self-hosted password manager)*
+- **[Nginx Proxy Manager][nginx-proxy-manager]** *(reverse proxy management)*
+- **[Prometheus][prometheus]** *(monitoring and alerting toolkit)*
+- **[Grafana][grafana]** *(analytics and monitoring platform)*
+- **[n8n][n8n]** *(workflow automation)*
+
+## How to use
+
+- **[Installation and initial setup](./GUIDE.md)**: My step-by-step walkthrough of installing Proxmox and setting up the initial configuration.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 You are free to use, modify, and distribute this project for any purpose, as long as you include the original license and copyright notice in any copies or substantial portions of the software.
+
+[proxmox-ve]: https://www.proxmox.com/en/proxmox-ve
+[portainer]: https://www.portainer.io/
+[nextcloud]: https://nextcloud.com/
+[adguard-home]: https://adguard.com/en/adguard-home/overview.html
+[immich]: https://immich.app/
+[navidrome]: https://www.navidrome.org/
+[jellyfin]: https://jellyfin.org/
+[vaultwarden]: https://github.com/dani-garcia/vaultwarden
+[nginx-proxy-manager]: https://nginxproxymanager.com/
+[prometheus]: https://prometheus.io/
+[grafana]: https://grafana.com/
+[n8n]: https://n8n.io/
