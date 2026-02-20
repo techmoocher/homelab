@@ -262,6 +262,8 @@ You should see the following messages, which indicates that the tunnel is succes
 
 ***Note:*** *Make sure to replace `<tunnel-token>` with the actual tunnel token that you can get from the Cloudflare dashboard when you create a new tunnel. After running the command, it will automatically create a systemd service for your tunnel and start it.*
 
+Please note that this is not the only way to securely expose your Proxmox server to the Internet, but it's one of the easiest and trusted ways to do it without having to deal with port forwarding and DDNS. There are many options out there like [Ngrok](https://ngrok.com/), [Tailscale](https://tailscale.com/), [NetBird](https://netbird.io/), and more, so feel free to explore and choose the one that suits your needs the best.
+
 ---
 
-Now, you have successfully installed Proxmox and done some basic configurations. You can now start creating virtual machines, containers, and more to explore the capabilities of Proxmox. In the next sections, we will go through some of the basic configurations and setups that you can do with Proxmox to get your homelab up and running.
+Now, you have successfully installed Proxmox and done some basic configurations. You can now start creating virtual machines, containers, and more to explore the capabilities of Proxmox. You can check out the [How To Use This Repo](../README.md#how-to-use-this-repo) section in the README for more guides on setting up different applications and services in your Proxmox server.
