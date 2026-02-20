@@ -225,6 +225,43 @@ pve-firewall status
 
 You should see that the firewall is active and running without any errors. You can also check the logs to see if any traffic is being blocked or allowed according to your rules.
 
+### 8. Connecting to Cloudflare Tunnel *(optional)*
+
+> Skip this step at your demand. Highly recommended for remote access to your Proxmox server.
+
+Cloudflare Tunnel is a service that allows you to securely expose your local server to the internet without having to open any ports on your router. It creates a secure tunnel between your local server and Cloudflare's network, allowing you to access your server from anywhere in the world using a unique URL provided by Cloudflare. You can learn more about Cloudflare Tunnel at its [official documentation](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/).
+
+> Before we start, make sure you have a Cloudflare account and a domain name that you can use for your tunnel.
+
+To connect your Proxmox server to Cloudflare Tunnel, we need to install the `cloudflared` daemon on your Proxmox server.
+
+```bash
+# Add cloudflare gpg key
+mkdir -p --mode=0755 /usr/share/keyrings
+curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | tee /usr/share/keyrings/cloudflare-public-v2.gpg >/dev/null
+
+# Add this repo to your apt repositories
+echo 'deb [signed-by=/usr/share/keyrings/cloudflare-public-v2.gpg] https://pkg.cloudflare.com/cloudflared any main' | tee /etc/apt/sources.list.d/cloudflared.list
+
+# Install cloudflared
+apt-get update && apt-get install cloudflared -y
+```
+
+After you have installed `cloudflared`, you can install a service to automatically run your tunnel whenever your machine starts with the following command.
+
+```bash
+cloudflared service install <tunnel-token>
+```
+
+You should see the following messages, which indicates that the tunnel is successfully installed and running.
+
+```bash
+<date-time> INF Using Systemd
+<date-time> INF Linux service for cloudflared installed successfully
+```
+
+***Note:*** *Make sure to replace `<tunnel-token>` with the actual tunnel token that you can get from the Cloudflare dashboard when you create a new tunnel. After running the command, it will automatically create a systemd service for your tunnel and start it.*
+
 ---
 
 Now, you have successfully installed Proxmox and done some basic configurations. You can now start creating virtual machines, containers, and more to explore the capabilities of Proxmox. In the next sections, we will go through some of the basic configurations and setups that you can do with Proxmox to get your homelab up and running.
