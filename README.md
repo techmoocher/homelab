@@ -18,6 +18,10 @@
 
 You are reading my personal notes on setting up a self-hosted server (a.k.a homelab) using Proxmox. This is not a tutorial, but more of an anecdotal documentation of my own experience. My main reason for writing this is to log my journey in self-hosting and to share my experience with hobbyists who are interested in self-hosting but don't know where to start. I know that there are already many good tutorials on setting up a homelab, but I hope this can be a good starting point for you to get into self-hosting and have fun with it!
 
+## How To Use This Repo
+
+- **[Installation and Initial setup](./GUIDE.md)**: My step-by-step walkthrough of installing Proxmox and setting up the initial configuration.
+
 ## My Hardware
 
 As a full-time student and part-time hobbyist, I have a limited budget for my homelab. Thus, I digged into the pile of old tech gadgets in my dad's garage and decided to utilized the following as my set up:
@@ -25,7 +29,13 @@ As a full-time student and part-time hobbyist, I have a limited budget for my ho
 - **ThinkPad T450 (Intel i5-5300U/Intel HD Graphics 5500/8GB RAM/228GB SSD)** *(Proxmox server)*
 - **A 2TB WD Purple** *(storage)*
 
+![My homelab setup](./.github/assets/images/homelab-setup.png)
+
 ## My Softwares
+
+After a few months of tinkering and experimenting, I decided to settle on the following softwares for my homelab. However, as a hobbyist, I am always open to trying out new softwares and tools, so this list is not exhaustive and may change in the future. You are welcome to suggest anything you think is worth trying out!
+
+For the time being, I am using the following in my homelab.
 
 - **[Proxmox VE][proxmox-ve]** *(virtualization platform)*
 - **[Portainer][portainer]** *(Docker management)*
@@ -40,14 +50,13 @@ As a full-time student and part-time hobbyist, I have a limited budget for my ho
 - **[Grafana][grafana]** *(analytics and monitoring platform)*
 - **[n8n][n8n]** *(workflow automation)*
 
-## How to use
-
-- **[Installation and initial setup](./GUIDE.md)**: My step-by-step walkthrough of installing Proxmox and setting up the initial configuration.
-
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
+
 You are free to use, modify, and distribute this project for any purpose, as long as you include the original license and copyright notice in any copies or substantial portions of the software.
+
+For more details, please refer to the [LICENSE](./LICENSE) file.
 
 [proxmox-ve]: https://www.proxmox.com/en/proxmox-ve
 [portainer]: https://www.portainer.io/
