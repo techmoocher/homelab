@@ -270,4 +270,8 @@ Please note that this is not the only way to securely expose your Proxmox server
 
 ---
 
-Now, you have successfully installed Proxmox and done some basic configurations. You can now start creating virtual machines, containers, and more to explore the capabilities of Proxmox. You can check out the [How To Use This Repo](../README.md#how-to-use-this-repo) in the README for more guides on setting up different applications and services in your Proxmox server.
+Now, you have successfully installed Proxmox and done some basic configurations. You can now start creating virtual machines, containers, and more to explore the capabilities of Proxmox. You can check out the [How To Use This Repo](../README.md#how-to-use-this-repo) in the [README](../README.md) for more.
+
+I hope this guide is helpful for you in your homelab journey. If you have any questions or suggestions, feel free to reach out to me through email or opening an issue in this repository.
+
+**HAPPY SELF-HOSTING!!!**
