@@ -36,12 +36,12 @@ apt update && apt upgrade -y
 
 ## 3. Deleting local-lvm *(optional)*
 
-> Skip this step if you would like to use the LVM (Logical Volume Management) created by default by Proxmox
+> **WARNING:**
+> This assumes a fresh installation without advanced storage settings during the installation, such as ZFS. These steps are only recommended if you have a small boot drive and you need to reclaim space.
+>
+> Skip this step at your demand.
 
 You may have noticed that there is a storage labeled `local-lvm` in your Proxmox dashboard. This storage is created by Proxmox by default and uses LVM to manage the storage. In my case, I don't want to keep it, and I want to have my things (ISO images, containers, backups) in `local` (a.k.a the standard directory-based storage).
-
-> **WARNING:**
-> This action is destructive and irreversible. Make sure no VM or CT is using local-lvm before removing it.
 
 To remove the `local-lvm`, first, navigate to **Datacenter** > **Storage**. Choose the `local-lvm` option, click **Remove**, and click **Yes** to confirm. This will remove the `local-lvm` storage from your Proxmox. However, it will not delete the LVM itself, so we need to do that manually. To do that, navigate to **Node** > **Shell** and enter the following commands to remove the LVM and resize the root partition to use the full disk space.
 
