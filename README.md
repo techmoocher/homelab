@@ -20,7 +20,7 @@ You are reading my personal notes on setting up a self-hosted server (a.k.a home
 
 ## How To Use This Repo
 
-- **[Installation and Initial setup](./GUIDE.md)**: My step-by-step walkthrough of installing Proxmox and setting up the initial configuration.
+- **[Installation and Initial setup](./proxmox/README.md)**: My step-by-step walkthrough of installing Proxmox and setting up the initial configuration.
 
 ## My Hardware
 
