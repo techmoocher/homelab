@@ -239,44 +239,44 @@ To create your first container, navigate to **Node** > **Create CT**. This will 
 
 ### a. General
 
-- Set CT ID *(e.g. 100)*.
-- Set Hostname *(e.g. nextcloud)*.
-- Set Password or Upload an SSH key for authentication.
+- Set **CT ID** *(e.g. 100)*.
+- Set **Hostname** *(e.g. nextcloud)*.
+- Create a **Password** or Upload an **SSH key** for authentication.
 - Set `unprivileged` to `true` *(optional, but highly recommended for security purposes)*.
 
 ### b. Template
 
-- Choose a Linux distro template *(e.g. Debian 12)*.
+- Choose a Linux distro **Template** *(e.g. Debian 12)*.
 
 ### c. Disks
 
-- Set Disk size (8 GB is enough).
-- Choose storage location (preferably SSD/NVME).
+- Choose the **Storage** location *(e.g. `local`)*.
+- Set **Disk size** *(usually 8 GiB is enough; adjust at your demand)*.
 
 ### d. CPU
 
-- Set the number of CPU cores (1-2 is enough).
+- Set the number of **CPU Cores** *(usually 1 to 2 cores are engouh; adjust at your demand)*.
 
 ### e. Memory
 
-- Set Memory size (1024 MB is enough).
-- Set Swap size as needed (512 MB is recommended).
+- Set **Memory** size *(1024 MiB is (more than) enough for most cases; adjust at your demand)*.
+- Set **Swap** size as needed *(512 MiB is recommended; adjust at your demand)*.
 
 ### f. Network
 
 - Configure the network settings:
-  - Set Bridge to `vmbr0` (or your default bridge).
-  - Set Firewall to `enabled` if you want to use Proxmox's firewall features.
-  - Set VLAN tag if needed (optional).
-- Set IP address to DHCP (managed by your router) or a static IP (e.g. `192.168.1.100/24`).
+  - Set **Bridge** to `vmbr0` (or your default bridge).
+  - Set **Firewall** to `enabled` if you want to use Proxmox's firewall features.
+  - Set **VLAN Tag** if needed (optional).
+- Set **a static IP address** *(e.g. `192.168.1.100/24`)* or leave it to **DHCP** (managed by your router) *(IPv4 is recommended for simplicity; you may choose IPv6 as needed)*.
 
 ### g. DNS
 
-- Configure DNS servers at your demand.
+- Configure DNS servers at your demand. *(recommended to leave it as `use host settings` unless you know what you're doing)*.
 
 ### h. Confirm
 
-- Review the settings and click "Finish" to create the container.
+- Review the settings and click **Finish** to create the container.
 
 A container will be created. Enable `start-on-boot` so that it starts automatically when the Proxmox server boots up.
 
