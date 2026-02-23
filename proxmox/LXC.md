@@ -1,2 +1,0 @@
-# LXC Setup Guide
-

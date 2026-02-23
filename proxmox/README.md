@@ -2,7 +2,7 @@
 
 ---
 
-[Proxmox Virtual Environment](https://www.proxmox.com/en/proxmox-ve) (a.k.a Proxmox VE) is an open-source server virtualization management platform that allows you to easily create and manage virtual machines and containers. It is based on Debian Linux and uses KVM (Kernel-based Virtual Machine) for virtualization. Proxmox VE provides a web-based UI for managing your virtual environment, making it easy to create, configure, and monitor your virtual machines and containers. It also supports features like high availability, live migration, and storage management, making it a powerful tool for both homelabs and enterprise environments.
+[Proxmox Virtual Environment](https://www.proxmox.com/en/proxmox-ve) (Proxmox VE) is an open-source server virtualization management platform that allows you to easily create and manage virtual machines and containers. It is based on Debian Linux and uses KVM (Kernel-based Virtual Machine) for virtualization. Proxmox VE provides a web-based UI for managing your virtual environment, making it easy to create, configure, and monitor your virtual machines and containers. It also supports features like high availability, live migration, and storage management, making it a powerful tool for both homelabs and enterprise environments.
 
 ---
 
