@@ -229,44 +229,56 @@ pve-firewall status
 
 You should see that the firewall is active and running without any errors. You can also check the logs to see if any traffic is being blocked or allowed according to your rules.
 
-## 8. Connecting to Cloudflare Tunnel *(optional)*
+## 8. Creating your first container *(optional)*
 
-> Skip this step at your demand. Highly recommended for remote access to your Proxmox server.
+> Skip this step at your demand. Highly recommended if you want to get familiar with Proxmox and start self-hosting.
 
-Cloudflare Tunnel is a service that allows you to securely expose your local server to the internet without having to open any ports on your router. It creates a secure tunnel between your local server and Cloudflare's network, allowing you to access your server from anywhere in the world using a unique URL provided by Cloudflare. You can learn more about Cloudflare Tunnel at its [official documentation](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/).
+A Linux Container (LXC) is a lightweight virtualization technology that allows you to run multiple isolated Linux systems (containers) on a single host. It is similar to Docker but provides a more complete Linux environment. LXC containers share the same kernel as the host system, which makes them more efficient and faster than traditional virtual machines. You can learn more about LXC at its [Wikipedia page](https://en.wikipedia.org/wiki/LXC).
 
-> Before we start, make sure you have a Cloudflare account and a domain name that you can use for your tunnel.
+To create your first container, navigate to **Node** > **Create CT**. This will open a wizard that will guide you through the process of creating a new container.
 
-To connect your Proxmox server to Cloudflare Tunnel, we need to install the `cloudflared` daemon on your Proxmox server.
+### a. General
 
-```bash
-# Add cloudflare gpg key
-mkdir -p --mode=0755 /usr/share/keyrings
-curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | tee /usr/share/keyrings/cloudflare-public-v2.gpg >/dev/null
+- Set CT ID *(e.g. 100)*.
+- Set Hostname *(e.g. nextcloud)*.
+- Set Password or Upload an SSH key for authentication.
+- Set `unprivileged` to `true` *(optional, but highly recommended for security purposes)*.
 
-# Add this repo to your apt repositories
-echo 'deb [signed-by=/usr/share/keyrings/cloudflare-public-v2.gpg] https://pkg.cloudflare.com/cloudflared any main' | tee /etc/apt/sources.list.d/cloudflared.list
+### b. Template
 
-# Install cloudflared
-apt-get update && apt-get install cloudflared -y
-```
+- Choose a Linux distro template *(e.g. Debian 12)*.
 
-After you have installed `cloudflared`, you can install a service to automatically run your tunnel whenever your machine starts with the following command.
+### c. Disks
 
-```bash
-cloudflared service install <tunnel-token>
-```
+- Set Disk size (8 GB is enough).
+- Choose storage location (preferably SSD/NVME).
 
-You should see the following messages, which indicates that the tunnel is successfully installed and running.
+### d. CPU
 
-```bash
-<date-time> INF Using Systemd
-<date-time> INF Linux service for cloudflared installed successfully
-```
+- Set the number of CPU cores (1-2 is enough).
 
-***Note:*** *Make sure to replace `<tunnel-token>` with the actual tunnel token that you can get from the Cloudflare dashboard when you create a new tunnel. After running the command, it will automatically create a systemd service for your tunnel and start it.*
+### e. Memory
 
-Please note that this is not the only way to securely expose your Proxmox server to the Internet, but it's one of the easiest and trusted ways to do it without having to deal with port forwarding and DDNS. There are many options out there like [Ngrok](https://ngrok.com/), [Tailscale](https://tailscale.com/), [NetBird](https://netbird.io/), and more, so feel free to explore and choose the one that suits your needs the best.
+- Set Memory size (1024 MB is enough).
+- Set Swap size as needed (512 MB is recommended).
+
+### f. Network
+
+- Configure the network settings:
+  - Set Bridge to `vmbr0` (or your default bridge).
+  - Set Firewall to `enabled` if you want to use Proxmox's firewall features.
+  - Set VLAN tag if needed (optional).
+- Set IP address to DHCP (managed by your router) or a static IP (e.g. `192.168.1.100/24`).
+
+### g. DNS
+
+- Configure DNS servers at your demand.
+
+### h. Confirm
+
+- Review the settings and click "Finish" to create the container.
+
+A container will be created. Enable `start-on-boot` so that it starts automatically when the Proxmox server boots up.
 
 ---
 

@@ -45,50 +45,9 @@ NetBird can also be installed on an LXC container. This method is more complex t
 
 ### 1. Container Setup
 
-First, we need to create an LXC container for NetBird. You can do this using the Proxmox web UI or the command line. In this example, we will use the web UI.
+First, we need to create an LXC container for NetBird. You can do this using the Proxmox web UI or the command line. Check the [LXC Setup Guide](../proxmox/README.md#8-creating-your-first-container-optional) for detailed instructions on how to create a container.
 
-#### a. General
-
-- Set CT ID (e.g. 100).
-- Set Hostname (e.g. netbird).
-- Set Password or SSH key for authentication.
-- Set `unprivileged` to `true`.
-
-#### b. Template
-
-- Choose a Linux distro template (e.g. Debian 12).
-
-#### c. Disks
-
-- Set Disk size (8 GB is enough).
-- Choose storage location (preferably SSD/NVME).
-
-#### d. CPU
-
-- Set the number of CPU cores (1-2 is enough).
-
-#### e. Memory
-
-- Set Memory size (1024 MB is enough).
-- Set Swap size as needed (512 MB is recommended).
-
-#### f. Network
-
-- Configure the network settings:
-  - Set Bridge to `vmbr0` (or your default bridge).
-  - Set Firewall to `enabled` if you want to use Proxmox's firewall features.
-  - Set VLAN tag if needed (optional).
-- Set IP address to DHCP (managed by your router) or a static IP (e.g. `192.168.1.100/24`).
-
-#### g. DNS
-
-- Configure DNS servers at your demand.
-
-#### h. Confirm
-
-- Review the settings and click "Finish" to create the container.
-
-A container will be created. Enable `start-on-boot` so that it starts automatically when the Proxmox server boots up.
+***Note:*** *For NetBird, I would recommend allocating at least **1 CPU** and **2 GB of memory** to the container.*
 
 ### 2. /dev/tun Passthrough
 

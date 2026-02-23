@@ -1,5 +1,22 @@
 # Nextcloud in LXC
 
+---
+
+[Nextcloud](https://nextcloud.com) is a popular open-source self-hosted cloud storage solution. It allows you to store and access your files, calendars, contacts, and more from any device.
+
+**Why Nextcloud?**
+
+- **Privacy**: Nextcloud gives you full control over your data. You can host it on your own server, ensuring that your files are not stored on third-party servers.
+- **Customization**: Nextcloud offers a wide range of apps and plugins that allow you to customize your cloud storage experience. You can add features such as file sharing, calendar integration, and more.
+- **Collaboration**: Nextcloud allows you to collaborate with others by sharing files and folders. You can set permissions for each user, ensuring that your data is secure.
+- **Accessibility**: Nextcloud can be accessed from any device with an internet connection. You can use the web interface, desktop clients, or mobile apps to access your files and data.
+
+---
+
+## 1. LXC Setup
+
+Before we start installing Nextcloud, we need to set up an LXC container to host our Nextcloud instance. Follow the instructions in the [LXC Setup](../proxmox/LXC.md) guide to create a new container for Nextcloud.
+
 <h2>Preparing your storage</h2>
 <p>This step really varies depending in your setup. For me, I'm gonna partition my 2TB HDD and use 128GB for Nextcloud data. The following is what I did.</p>
 
