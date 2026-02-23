@@ -10,9 +10,9 @@ You can learn more about NetBird and its features on the [official website](http
 
 ## NetBird on VM
 
-This is the quickest and most straightforward way to set up NetBird. It is also the recommended way for most users, especially if you are new to self-hosting and don't have much experience with Linux. If you already have a VM set up and a registered domain name, it should take you less than 10 minutes to get NetBird up and running.
+This is the quickest and most straightforward way to set up NetBird. It is also the recommended way for most users, especially if you are new to self-hosting and don't have much experience with Linux. If you already have a VM set up and a registered domain name, it should take you less than 10 minutes to get NetBird up and running. Check out the [official documentation](https://docs.netbird.io/selfhosted/selfhosted-quickstart) for more details.
 
-Learn more at the [official documentation](https://docs.netbird.io/selfhosted/selfhosted-quickstart).
+***Note:*** *If you want to set up NetBird on an LXC container, please refer to the [next section](#netbird-on-lxc).*
 
 ### 1. Prerequisites
 
@@ -38,6 +38,78 @@ curl -fsSL https://github.com/netbirdio/netbird/releases/latest/download/getting
 ```
 
 Once the script is finished, it will prompt you to enter your domain name and email address for SSL certificate generation. After you provide the required information, the script will set up NetBird using Docker and docker-compose. You can configure the installation by editing the `docker-compose.yml`. Check out the [official documentation](https://docs.netbird.io/selfhosted/configuration-files) for more details.
+
+#### Reverse Proxy Setup
+
+The script will prompt you to set up a reverse proxy.
+
+```bash
+Which reverse proxy will you use?
+  [0] Traefik (recommended - automatic TLS, included in Docker Compose)
+  [1] Existing Traefik (labels for external Traefik instance)
+  [2] Nginx (generates config template)
+  [3] Nginx Proxy Manager (generates config + instructions)
+  [4] External Caddy (generates Caddyfile snippet)
+  [5] Other/Manual (displays setup documentation)
+
+Enter choice [0-5] (default: 0):
+```
+
+For the simplicity of this guide, I will recommend selecting option `[0] (Traefik)`. This option includes a Traefik container in the Docker Compose that handles TLS certificates automatically via Let's Encrypt, requires no additional configuration, and makes it easy to enable the NetBird Proxy in the next step.
+
+> ***Note:*** *If you already have a reverse proxy set up, you can select the appropriate option and follow the instructions provided by the installation script to configure it for NetBird.*
+>
+> Check out the [official documentation](https://docs.netbird.io/selfhosted/reverse-proxy) for more details on reverse proxy configuration.
+
+If you selected Traefik, the script will ask whether you want to enable the NetBird Proxy feature.
+
+```bash
+Do you want to enable the NetBird Proxy service?
+The proxy allows you to selectively expose internal NetBird network resources
+to the internet. You control which resources are exposed through the dashboard.
+Enable proxy? [y/N]:
+```
+
+If you select `y`, the script will ask for a **proxy domain**.
+
+```bash
+NOTE: The proxy domain must be different from the management domain (netbird.example.com)
+to avoid TLS certificate conflicts.
+
+You also need to add two CNAME records with one wildcard for the proxy domain,
+e.g. proxy.example.com and *.proxy.example.com pointing to the same server IP as netbird.example.com.
+
+Enter the domain for the NetBird Proxy (e.g. proxy.netbird.example.com):
+```
+
+The proxy domain must be different from your NetBird management domain to avoid TLS certificate conflicts. The script then automatically generates a proxy access token, creates a proxy.env configuration file, and starts the proxy container alongside the other services. Point a wildcard DNS record (e.g. `*.proxy.netbird.example.com`) to your server's IP address so that service subdomains resolve correctly.
+
+#### CNAME Records for Proxy Domain
+
+For certificates to work properly, ensure you have the proper records set with your domain name registrar. The first A record below should already be setup prior to starting the quick start script.
+
+| TYPE  | NAME    | CONTENT                | PROXY STATUS (CLOUDFLARE) |
+|-------|---------|------------------------|---------------------------|
+| A     | @       | YOUR.SERVER.IP.ADDRESS | DNS Only                  |
+| CNAME | proxy   | netbird.example.com    | DNS Only                  |
+| CNAME | *.proxy | netbird.example.com    | DNS Only                  |
+
+### 3. Onboarding
+
+Once the installation is complete, you can access the NetBird dashboard by navigating to your domain (e.g. `https://netbird.example.com`) in a web browser. By default, the script installs NetBird without any pre-configured users, so you will need to create an account and set up your network before you can start using it.
+
+1. In your browser, go to `https://netbird.example.com`, which will redirect you to the `/setup` page.
+2. Create your administrator account.
+  a. Enter your email address.
+  b. Enter your name.
+  c. Create a password.
+  d. Click on *Create Account*.
+
+You will then be able to log in with your email and password.
+
+Now that you have access to the dashboard, you can start adding devices to your network and configuring your settings. For more information on how to use NetBird and its features, check out the [official documentation](https://docs.netbird.io/selfhosted/selfhosted-quickstart) for more details.
+
+---
 
 ## NetBird on LXC
 
@@ -77,7 +149,7 @@ ls /dev/net
 
 If you see `tun` is listed, you're ready to proceed to the next step.
 
-### 3. LXC Nameserver Configuration
+### 3. LXC Nameserver Configuration *(optional)*
 
 The TUN passthrough may cause DNS resolution issues in the container. To fix this, we need to configure the nameservers manually. Open the `/etc/pve/lxc/100.conf` file on your host and add the following line:
 
@@ -124,4 +196,4 @@ You should see a message confirming that the connection was successful. You can 
 
 ---
 
-Now that you have NetBird installed and configured, you can start adding devices to your network and enjoy secure and private connectivity between them. For more information on how to use NetBird and its features, check out the [official documentation](https://docs.netbird.io/).
+Now that you have NetBird installed and configured, you can start adding devices to your network and enjoy secure and private connectivity between them. Be sure to check out the [official documentation](https://docs.netbird.io/selfhosted/selfhosted-quickstart) for more information on how to use NetBird and its features.
