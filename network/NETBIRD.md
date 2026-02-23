@@ -37,6 +37,8 @@ First, you need to download the NetBird installation script and run it on your V
 curl -fsSL https://github.com/netbirdio/netbird/releases/latest/download/getting-started.sh | bash
 ```
 
+Once the script is finished, it will prompt you to enter your domain name and email address for SSL certificate generation. After you provide the required information, the script will set up NetBird using Docker and docker-compose. You can configure the installation by editing the `docker-compose.yml`. Check out the [official documentation](https://docs.netbird.io/selfhosted/configuration-files) for more details.
+
 ## NetBird on LXC
 
 NetBird can also be installed on an LXC container. This method is more complex than installing on a VM, but it can be more efficient in terms of resource usage. If you are comfortable with Linux and have experience with LXC containers, this may be a good option for you.
@@ -116,6 +118,51 @@ ls /dev/net
 
 If you see `tun` is listed, you're ready to proceed to the next step.
 
-### 3. NetBird Installation
+### 3. LXC Nameserver Configuration
 
+The TUN passthrough may cause DNS resolution issues in the container. To fix this, we need to configure the nameservers manually. Open the `/etc/pve/lxc/100.conf` file on your host and add the following line:
 
+```bash
+nameserver: <your_dns_server_ip>
+```
+
+***Note:*** *Replace `<your_dns_server_ip>` with the IP address of your DNS server (e.g. `1.1.1.1` or your router's IP address).*
+
+### 4. NetBird Setup Key
+
+> Skip this step if you already have a setup key from a previous installation. You can reuse the same key for multiple installations.
+
+Before we can install NetBird, we need to generate a setup key. This key is used to authenticate the installation and link it to your NetBird account. You can generate a setup key from the NetBird web UI.
+
+To generate a setup key, follow these steps:
+
+1. Go to your [NetBird Dashboard](https://app.netbird.io/).
+2. Navigate to the **Setup Keys** section.
+3. Click on **Create Setup Key**.
+4. Enter a name for the setup key (e.g. "Proxmox LXC").
+5. Set an expiration date for the key *(optional, recommended for enhanced security)*.
+6. Add the key to group(s) *(optional)*.
+7. Click on **Create** to generate the key.
+8. Copy the key and store it securely, as you will need it for the installation process.
+
+### 5. NetBird Installation
+
+To install NetBird on the LXC container, you can use the same installation script as for the VM. On the container's shell, run the following command:
+
+```bash
+apt update && apt upgrade -y
+apt install curl -y
+curl -fsSL https://pkgs.netbird.io/install.sh | sh
+```
+
+Once the installation is complete, connect the LXC to your NetBird account using the setup key you generated earlier.
+
+```bash
+netbird up --setup-key <your_setup_key>
+```
+
+You should see a message confirming that the connection was successful. You can now manage your NetBird network from the web UI.
+
+---
+
+Now that you have NetBird installed and configured, you can start adding devices to your network and enjoy secure and private connectivity between them. For more information on how to use NetBird and its features, check out the [official documentation](https://docs.netbird.io/).
