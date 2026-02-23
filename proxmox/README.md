@@ -6,6 +6,21 @@
 
 ---
 
+## Table of Contents
+
+1. **[Installing Proxmox](#1-installing-proxmox)**
+2. **[Updating Repos](#2-updating-repos)**
+3. **[Deleting local-lvm *(optional)*](#3-deleting-local-lvm-optional)**
+4. **[Enabling IOMMU *(optional)*](#4-enabling-iommu-optional)**
+5. **[Keeping your server awake *(optional)*](#5-keeping-your-server-awake-optional)**
+6. **[Setting screen timeout *(optional)*](#6-setting-screen-timeout-optional)**
+7. **[Setting up firewall *(optional)*](#7-setting-up-firewall-optional)**
+8. **[Adding your first storage *(optional)*](#9-adding-your-first-storage-optional)**
+9. **[Creating your first container *(optional)*](#8-creating-your-first-container-optional)**
+
+---
+
+
 ## 1. Installing Proxmox
 
 Before we start, make sure you have a bootable USB drive with Proxmox on it. You can follow the [official Proxmox installation guide](https://proxmox.com/en/products/proxmox-virtual-environment/get-started) to create one. Once you have your bootable USB drive ready, insert it into your machine and boot from it. Follow the on-screen instructions to install Proxmox on your machine.
@@ -37,7 +52,7 @@ apt update && apt upgrade -y
 ## 3. Deleting local-lvm *(optional)*
 
 > **WARNING:**
-> This assumes a fresh installation without advanced storage settings during the installation, such as ZFS. These steps are only recommended if you have a small boot drive and you need to reclaim space.
+> This assumes a fresh installation without advanced storage settings during the installation, such as ZFS. These steps are recommended if you have a small boot drive and you need to reclaim space.
 >
 > Skip this step at your demand.
 
@@ -229,7 +244,95 @@ pve-firewall status
 
 You should see that the firewall is active and running without any errors. You can also check the logs to see if any traffic is being blocked or allowed according to your rules.
 
-## 8. Creating your first container *(optional)*
+## 8. Adding your first storage *(optional)*
+
+> Skip this step at your demand. Highly recommended if you want to have a separate storages for different purposes (e.g: one for ISO images, one for containers, etc.).
+
+Proxmox supports various types of storage, such as local storage, network storage, and more. In this guide, we will add a new storage for our Nextcloud data. You can follow the same steps to add other storages for different purposes. This will include [preparing](#preparing-the-disk), [partitioning](#partitioning-the-disk), and [mounting](#mounting-the-disk) the disk, and then [adding the storage to Proxmox](#adding-storage-to-proxmox).
+
+### Preparing the disk
+
+First, we need to prepare the disk. In this example, we will clear the disk, partition it, and mount it to a directory. You can adjust the steps according to your needs and preferences.
+
+> **Note:** For the simplicity of this guide, we will use `dev/sdX` as the target disk. Make sure to replace `X` with the actual letter of your target disk (e.g., `dev/sdb`, `dev/sdc`, etc.). Also, we will use `dev/sdXn` to refer to the partition we will create on the target disk. Replace `n` with your actual partition number (e.g., `dev/sdb1`, `dev/sdb2`, etc.).
+>
+> You can identify your target disk with the `lsblk` command.
+>
+> **WARNING:** Some of the following commands are destructive and irreversible. Make sure to double-check the target disk before executing the commands to avoid unwanted data loss.
+
+To wipe a disk, enter the following command.
+
+```bash
+wipefs /dev/sdX
+```
+
+#### OR
+
+```bash
+sudo dd if=/dev/zero of=/dev/sdX bs=1M status=progress  # Completely overwrite the disk with zeros (may take a "long" while)
+```
+
+### Partitioning the disk
+
+Next, we need to partition the disk. We will use `fdisk` for this task, but you can use other tools depending on your preference.
+
+```bash
+fdisk /dev/sdX
+```
+
+On the `fdisk` interface, follow the instructions on the screen to create a new partition.
+
+- Enter `g` for creating a new GPT table.
+- Enter `n` to create a new partition.
+- Type in your desired partition number.
+- Enter your desired start block (in most case you just press `Enter` for the default start block).
+- Enter `+<desired-value>G` to set the partition to the desired size.
+- Refer to the instructions on the screen for further personalization (use `m` for help).
+- Once you're done, enter `w` to exit and write changes.
+
+Now, you should have a new partition on your disk. You can check it with the `lsblk` command. To format the partition with the `ext4` filesystem, enter the following command.
+
+```bash
+mkfs.ext4 /dev/sdXn   # Replace {X} with your target disk letter, and {n} with your partition number
+```
+
+> You can also use other filesystems such as `xfs`, `btrfs`, etc. depending on your needs and preferences.
+
+### Mounting the disk
+
+Next, we need to mount the partition to a directory. In this example, we will mount it to `/srv/nextcloud-data`, but you can choose any directory you like.
+
+```bash
+mkdir -p /srv/nextcloud-data
+mount /dev/sdXn /srv/nextcloud-data
+echo "/dev/sdXn /srv/nextcloud-data ext4 defaults 0 2" | tee -a /etc/fstab   # For automatic mounting on boot
+mount -a    # Test if there's any problem with mounting
+```
+
+Besides, you can also mount the partition with its UUID for better reliability. To do that, first, get the UUID of the partition with the following command.
+
+```bash
+blkid /dev/sdXn
+```
+
+Then, use the UUID to mount the partition.
+
+```bash
+echo "UUID=<your-uuid> /srv/nextcloud-data ext4 defaults 0 2" | tee -a /etc/fstab   # Replace <your-uuid> with your actual UUID
+mount -a    # Test if there's any problem with mounting
+```
+
+### Adding storage to Proxmox
+
+To add the new storage to Proxmox, navigate to **Datacenter** > **Storage**. Click on the **Add** button, choose the storage type (e.g., `Directory`), and fill in the details:
+
+- **ID**: Enter a unique ID for the storage (e.g., `nextcloud`).
+- **Directory**: Enter the path to the directory where the partition is mounted (e.g., `/srv/nextcloud-data`).
+- Configure other options as needed (e.g., content types, nodes, etc.).
+
+After filling in the details, click **Add** to add the storage to Proxmox. You should now see the new storage in the list of storages. You can use this storage for your virtual machines, containers, backups, and more.
+
+## 9. Creating your first container *(optional)*
 
 > Skip this step at your demand. Highly recommended if you want to get familiar with Proxmox and start self-hosting.
 
