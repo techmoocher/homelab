@@ -15,8 +15,8 @@
 5. **[Keeping your server awake *(optional)*](#5-keeping-your-server-awake-optional)**
 6. **[Setting screen timeout *(optional)*](#6-setting-screen-timeout-optional)**
 7. **[Setting up firewall *(optional)*](#7-setting-up-firewall-optional)**
-8. **[Adding your first storage *(optional)*](#9-adding-your-first-storage-optional)**
-9. **[Creating your first container *(optional)*](#8-creating-your-first-container-optional)**
+8. **[Adding your first storage *(optional)*](#8-adding-your-first-storage-optional)**
+9. **[Creating your first container *(optional)*](#9-creating-your-first-container-optional)**
 
 ---
 
