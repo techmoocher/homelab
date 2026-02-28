@@ -26,7 +26,7 @@ Before we start, make sure you have a bootable USB drive with Proxmox on it. You
 
 After the installation is complete, you can access the Proxmox web interface by navigating to `https://<your-node-ip>:8006` in your web browser. Now, you will be prompted to log in. Use the username `root` and the password you set during the installation process to log in. Once you are logged in, you will see the Proxmox dashboard where you can manage your virtual machines, containers, storage, and more.
 
-![Proxmox dashboard](../.github/assets/images/proxmox-dashboard.png)
+![Proxmox dashboard](./images/proxmox-dashboard.png)
 
 ## 2. Updating Repos
 
@@ -34,11 +34,11 @@ By default, Proxmox uses the enterprise apt repository which requires a subscrip
 
 To get started, in your Proxmox web interface, navigate to **Your node** > **Updates** > **Repositories**. You will see a warning that says `"The enterprise repository is enabled, but there is no active subscription!"`
 
-![Proxmox Updates Repositories](../.github/assets/images/updates-repos.png)
+![Proxmox Updates Repositories](./images/updates-repos.png)
 
 In the **APT Repositories** section, navigate to the options that have **Components** labeled `enterprise` (those that have URIs starting with `https://enterprise.proxmox.com/`), and click on the **Disable** button to disable it. You will see the pop-up warning, click **OK** to skip it.
 
-![Disable enterprise repository](../.github/assets/images/disabling-enterprise.png)
+![Disable enterprise repository](./images/disabling-enterprise.png)
 
 After that, click on the **Add** button to add a new repository. In the pop-up window, in the **Repository** line, click on the toggle-list and choose **No-Subscription**. Then, click **Add** to add the no-subscription repository. The URI should now be `https://download.proxmox.com/debian/pve`, and the components should be `pve-no-subscription`.
 
