@@ -78,7 +78,7 @@ mysql_secure_installation
 
 This will guide you through a series of prompts to secure your MariaDB installation. You will be asked to set a root password, remove anonymous users, disallow remote root login, and remove the test database. If this is your first time installing MariaDB and you have no idea what to do, follow the instructions in the video below:
 
-[![MariaDB Security Installation](./assets/mariadb-secure-installation-thumbnail.png)](./assets/mariadb-secure-installation.mkv)
+[![MariaDB Security Installation](https://raw.githubusercontent.com/techmoocher/homelab/main/storage/nextcloud/assets/mariadb-secure-installation-thumbnail.png)](https://raw.githubusercontent.com/techmoocher/homelab/main/storage/nextcloud/assets/mariadb-secure-installation.mkv)
 
 Once you have completed the security installation process, you're good to go.
 
