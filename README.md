@@ -58,9 +58,9 @@ You are free to use, modify, and distribute this project for any purpose, as lon
 
 For more details, please refer to the [LICENSE](./LICENSE) file.
 
-[proxmox-ve]: https://www.proxmox.com/en/proxmox-ve
+[proxmox-ve]: ./proxmox/
 [portainer]: https://www.portainer.io/
-[nextcloud]: https://nextcloud.com/
+[nextcloud]: ./storage/nextcloud/
 [adguard-home]: https://adguard.com/en/adguard-home/overview.html
 [immich]: https://immich.app/
 [navidrome]: https://www.navidrome.org/
