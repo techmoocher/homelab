@@ -52,7 +52,7 @@ systemctl status apache2
 
 If Apache2 is running properly, you should see an output indicating that the service is active and running. You can also open a web browser and navigate to your server's IP address to see the default Apache2 welcome page.
 
-![Apache2 Welcome Page](./images/apache2-welcome-page.png)
+![Apache2 Welcome Page](./assets/apache2-welcome-page.png)
 
 ### MariaDB Server
 
