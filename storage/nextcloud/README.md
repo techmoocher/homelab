@@ -15,19 +15,7 @@
 
 ## 1. LXC Setup
 
-Before we start installing Nextcloud, we need to set up an LXC container to host our Nextcloud instance. Follow the instructions in the [LXC Setup](../../proxmox/README.md#8-creating-your-first-container-optional) guide to create a new container for Nextcloud. I recommend allocating at least **2 CPU cores**, **2GB of RAM *(1-2GB of SWAP at your demand)***, and **16GB of storage** for the container. You may also add mounpoints for your Nextcloud data if you want to keep them separate from the container's root filesystem.
-
-To do so, on your Proxmox host, enter the following commands:
-
-```bash
-# Preparing disk
-mkdir -p /srv/nextcloud-data
-mount /dev/sdbX /srv/nextcloud-data     # Replace X with your partition number
-echo "/dev/sdbX /srv/nextcloud-data ext4 defaults 0 2" | tee -a /etc/fstab
-mount -a                                # Test if there's any problem with mounting
-
-
-```
+Before we start installing Nextcloud, we need to set up an LXC container to host our Nextcloud instance. Follow the instructions in the [LXC Setup](../../proxmox/README.md#8-creating-your-first-container-optional) guide to create a new container for Nextcloud. I recommend allocating at least **2 CPU cores**, **2GB of RAM *(1-2GB of SWAP at your demand)***, and **16GB of storage** for the container. You may also add mounpoints for your Nextcloud data if you want to keep them separate from the container's root filesystem (refer to the [guide](../../proxmox/README.md#) for more details).
 
 <h2>Preparing your storage</h2>
 <p>This step really varies depending in your setup. For me, I'm gonna partition my 2TB HDD and use 128GB for Nextcloud data. The following is what I did.</p>

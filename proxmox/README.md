@@ -382,6 +382,18 @@ To create your first container, navigate to **Node** > **Create CT**. This will 
 
 A container will be created. Enable `start-on-boot` so that it starts automatically when the Proxmox server boots up.
 
+### Adding mountpoint(s) for additional data storage *(optional)*
+
+If you want to have additional storage for your container (e.g., for Nextcloud data), you can add a mountpoint to the container. To do that, on your Proxmox host, create a directory for the container's data (e.g., `/srv/nextcloud-data`), mount the desired partition to that directory (if applicable), and set the appropriate permissions.
+
+Then, in the host's Shell, enter the following command to add a mountpoint to the container.
+
+```bash
+pct set <ct-id> -mp0 /path/to/your/directory,mp=/path/in/container
+```
+
+***Note:*** *Replace `<ct-id>` with your container ID, `/path/to/your/directory` with the actual path to the directory on the host, and `/path/in/container` with the desired path inside the container where you want to mount the directory.*
+
 ---
 
 Now, you have successfully installed Proxmox and done some basic configurations. You can now start creating virtual machines, containers, and more to explore the capabilities of Proxmox. You can check out the [How To Use This Repo](../README.md#how-to-use-this-repo) in the [README](../README.md) for more.
