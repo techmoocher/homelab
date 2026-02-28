@@ -19,44 +19,48 @@ Before we start installing Nextcloud, we need to set up an LXC container to host
 
 ## 2. Installing Dependencies
 
-Nextcloud requires a web server, a database server, and PHP to run. In this guide, we will be using **Apache2** as our web server, **MariaDB** as our database server, and PHP as our scripting language. To learn more about the installation process, check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html).
+Nextcloud requires a web server, a database server, and a runtime environment. In this guide, we will be using **Nginx** as our web server, **MariaDB** as our database server, and **PHP** as our runtime environment. To learn more about the installation process, check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html).
 
 Before we start installing the dependencies, make sure to update your package list and upgrade your system by running the following commands:
 
 ```bash
-apt update && apt upgrade -y
+apt update && apt upgrade -y && apt install -y curl wget unzip ffmpeg imagemagick
 ```
 
 ### Apache2
 
-[Apache2](https://httpd.apache.org/) is a popular open-source web server that is widely used to host websites and web applications. It is known for its stability, security, and flexibility, making it a great choice for hosting Nextcloud.
+[Nginx](https://www.nginx.com/) is a popular open-source web server that is widely used to serve web applications. It is known for its high performance, scalability, and security. In this guide, we will be using **Nginx 1.24**. You can install other versions of Nginx if you prefer, but make sure to check the official documentation before doing so.
 
-To install Apache2, run the following command:
-
-```bash
-apt install apache2 -y
-```
-
-Once the installation is complete, you can start Apache2 and enable it to run on boot with the following commands:
+To install Nginx, run the following command:
 
 ```bash
-systemctl start apache2
-systemctl enable apache2
+apt install nginx -y
 ```
 
-To check if Apache2 is running properly, you can use the following command:
+Once the installation is complete, you can start Nginx and enable it to run on boot with the following commands:
 
 ```bash
-systemctl status apache2
+systemctl start nginx
+systemctl enable nginx
 ```
 
-If Apache2 is running properly, you should see an output indicating that the service is active and running. You can also open a web browser and navigate to your server's IP address to see the default Apache2 welcome page.
+To check if Nginx is running properly, you can use the following command:
 
-![Apache2 Welcome Page](./assets/apache2-welcome-page.png)
+```bash
+systemctl status nginx
+```
+
+#### AND
+
+```bash
+curl http://localhost
+```
+
+which should return the content of the [default Nginx welcome page](./assets/index.nginx-debian.html)
 
 ### MariaDB Server
 
-[MariaDB](https://mariadb.org/) is a popular open-source relational database management system that is widely used to store data for web applications. It is a fork of MySQL and is known for its performance, reliability, and security.
+[MariaDB](https://mariadb.org/) is a popular open-source relational database management system that is widely used to store data for web applications. It is a fork of MySQL and is known for its performance, reliability, and security. In this guide, we will be using **MariaDB 10.11**. You can install other versions of MariaDB if you prefer, but make sure to check the official documentation before doing so.
 
 To install MariaDB, run the following command:
 
@@ -86,16 +90,74 @@ Once you have completed the security installation process, you're good to go.
 
 [PHP](https://www.php.net/) is a popular server-side scripting language that is widely used to develop web applications. Nextcloud is operated using PHP, so we need to install it along with the necessary PHP modules to run Nextcloud smoothly.
 
-We will be using **PHP 8.3**, as recommended by the Nextcloud documentation. To install it, use the following command
+For the simplicity of this guide, we will use **PHP 8.3**, which is the version recommended by Nextcloud at the time of writing. You can install other versions of PHP if you prefer. Check out the [System Requirements](https://docs.nextcloud.com/server/latest/admin_manual/installation/system_requirements.html) and [PHP Modules & Configuration](https://docs.nextcloud.com/server/latest/admin_manual/installation/php_configuration.html) documentation for more details.
+
+To install PHP, run the following command:
 
 ```bash
-apt install php8.3 -y
+apt install -y php8.3 libapache2-mod-php8.3
 ```
 
-<i>Check out <a href="https://docs.nextcloud.com/server/latest/admin_manual/installation/php_configuration.html" target="_blank">PHP Modules & Configuration</a> for more details</i>
-
-<p>Enter the following commands to install necessary PHP modules</p>
+We will also need some PHP modules for Nextcloud to function properly. The below command will install the necessary PHP modules for Nextcloud
 
 ```bash
-apt install phpX.x-{curl,gd,zip,xml,mbstring,mysql,intl,imagick,imap}
+apt install -y php-{curl,dom,gd,mbstring,posix,xml,json,zip,mysql,intl,imagick,exif,avconv,imap,opcache,ldap,fpm}
+```
+
+#### Caching Configuration *(optional)*
+
+Nextcloud can use caching to improve performance. We will be using **APCu** for local caching and **Redis** for distributed caching. To install these caching modules, run the following command:
+
+```bash
+apt install -y php-{apcu,redis} redis-server
+```
+
+Once the installation is complete, you can start the Redis server and enable it to run on boot with the following commands:
+
+```bash
+systemctl start redis-server
+systemctl enable redis-server
+```
+
+To check if the Redis server is running properly, you can use the following command:
+
+```bash
+systemctl status redis-server
+```
+
+You can also test the Redis server by running the following command:
+
+```bash
+redis-cli ping
+```
+
+which should return
+
+```bash
+PONG
+```
+
+#### PHP Configuration
+
+By default, the configuration files for PHP are located in the `/etc/php/X.x/` directory *(`X.x` is the PHP version which, in this case, is `8.3`)*. The configuration for the web server (which is what we will use) lives in `/etc/php/8.3/apache2/php.ini`.
+
+To optimize PHP for Nextcloud, we need to make some changes to the `php.ini` file. Open the file with your preferred text editor:
+
+```bash
+nano /etc/php/8.3/apache2/php.ini
+```
+
+Then, make the following changes:
+
+```ini
+memory_limit = 1024M
+max_execution_time = 360
+upload_max_filesize = 2048M
+post_max_size = 2048M
+
+opcache.enable=1
+opcache.memory_consumption=256
+opcache.interned_strings_buffer=16
+opcache.max_accelerated_files=20000
+opcache.revalidate_freq=60
 ```
