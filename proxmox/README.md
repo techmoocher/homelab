@@ -386,7 +386,7 @@ A container will be created. Enable `start-on-boot` so that it starts automatica
 
 If you want to have additional storage for your container (e.g., for Nextcloud data), you can add a mountpoint to the container. To do that, on your Proxmox host, create a directory for the container's data (e.g., `/srv/nextcloud-data`), mount the desired partition to that directory (if applicable), and set the appropriate permissions.
 
-Then, in the host's Shell, enter the following command to add a mountpoint to the container.
+Then, in the host's shell, enter the following command to add a mountpoint to the container.
 
 ```bash
 pct set <ct-id> -mp0 /path/to/your/directory,mp=/path/in/container
