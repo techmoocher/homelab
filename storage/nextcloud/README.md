@@ -19,7 +19,7 @@ Before we start installing Nextcloud, we need to set up an LXC container to host
 
 ## 2. Installing Dependencies
 
-Nextcloud requires a web server, a database server, and a runtime environment. In this guide, we will be using **Nginx** as our web server, **MariaDB** as our database server, and **PHP** as our runtime environment. To learn more about the installation process, check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html).
+Nextcloud requires a web server, a database server, and a runtime environment. In this guide, we will be using **Apache2** as our web server, **MariaDB** as our database server, and **PHP** as our runtime environment. To learn more about the installation process, check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html).
 
 Before we start installing the dependencies, make sure to update your package list and upgrade your system by running the following commands:
 
@@ -29,34 +29,30 @@ apt update && apt upgrade -y && apt install -y curl wget unzip ffmpeg imagemagic
 
 ### Apache2
 
-[Nginx](https://www.nginx.com/) is a popular open-source web server that is widely used to serve web applications. It is known for its high performance, scalability, and security. In this guide, we will be using **Nginx 1.24**. You can install other versions of Nginx if you prefer, but make sure to check the official documentation before doing so.
+[Apache2](https://httpd.apache.org/) is a popular open-source web server that is widely used to serve web applications. It is known for its stability, security, and flexibility. In this guide, we will be using **Apache 2.4**. You can install other versions if you prefer, but make sure to check the official documentation before doing so.
 
-To install Nginx, run the following command:
-
-```bash
-apt install nginx -y
-```
-
-Once the installation is complete, you can start Nginx and enable it to run on boot with the following commands:
+To install Apache2, run the following command:
 
 ```bash
-systemctl start nginx
-systemctl enable nginx
+apt install apache2 -y
 ```
 
-To check if Nginx is running properly, you can use the following command:
+Once the installation is complete, you can start Apache2 and enable it to run on boot with the following commands:
 
 ```bash
-systemctl status nginx
+systemctl start apache2
+systemctl enable apache2
 ```
 
-#### AND
+To check if Apache2 is running properly, you can use the following command:
 
 ```bash
-curl http://localhost
+systemctl status apache2
 ```
 
-which should return the content of the [default Nginx welcome page](./assets/index.nginx-debian.html)
+You can also check if Apache2 is serving content by navigating to `http://<your-container-ip>` in your web browser. You should see the default Apache2 welcome page.
+
+![Apache2 Welcome Page](./assets/apache2-welcome-page.png)
 
 ### MariaDB Server
 
@@ -82,9 +78,35 @@ mysql_secure_installation
 
 This will guide you through a series of prompts to secure your MariaDB installation. You will be asked to set a root password, remove anonymous users, disallow remote root login, and remove the test database. If this is your first time installing MariaDB and you have no idea what to do, follow the instructions in the video below:
 
-[![MariaDB Security Installation](https://raw.githubusercontent.com/techmoocher/homelab/main/storage/nextcloud/assets/mariadb-secure-installation-thumbnail.png)](https://raw.githubusercontent.com/techmoocher/homelab/main/storage/nextcloud/assets/mariadb-secure-installation.mp4)
+[![MariaDB Security Installation](./assets/mariadb-secure-installation-thumbnail.png)](./assets/mariadb-secure-installation.mp4)
 
-Once you have completed the security installation process, you're good to go.
+#### Setting Up Database and User
+
+Nextcloud requires a database and a user to connect to that database. You can create a new database and user for Nextcloud by running the following commands:
+
+```bash
+mysql -u root -p
+```
+
+This will open the MariaDB shell. Then, run the following commands to create a new database and user for Nextcloud:
+
+```sql
+CREATE DATABASE nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE USER 'nextclouduser'@'localhost' IDENTIFIED BY 'strongpassword';
+GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextclouduser'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+***Note:*** Make sure to replace `nextclouduser` with a username of your choice and `strongpassword` with a strong password of your choice. You will need this password later when you configure Nextcloud.
+
+To check if the database and user were created successfully, you can run the following command:
+
+```bash
+mysql -u root -p -e "SHOW DATABASES; SHOW GRANTS FOR 'nextclouduser'@'localhost';"
+```
+
+You should see the `nextcloud` listed in the databases and the appropriate privileges for the `nextclouduser`.
 
 ### PHP
 
@@ -139,7 +161,7 @@ PONG
 
 #### PHP Configuration
 
-By default, the configuration files for PHP are located in the `/etc/php/X.x/` directory *(`X.x` is the PHP version which, in this case, is `8.3`)*. The configuration for the web server (which is what we will use) lives in `/etc/php/8.3/apache2/php.ini`.
+By default, the configuration files for PHP are located in the `/etc/php/X.x/` directory *(`X.x` is the PHP version which, in this case, is `8.3`)*. The configuration for the web server (in this case, Apache2) lives in `/etc/php/8.3/apache2/php.ini`.
 
 To optimize PHP for Nextcloud, we need to make some changes to the `php.ini` file. Open the file with your preferred text editor:
 
