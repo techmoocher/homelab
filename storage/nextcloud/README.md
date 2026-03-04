@@ -13,6 +13,17 @@
 
 ---
 
+## Table of Contents
+
+1. [LXC Setup](#1-lxc-setup)
+2. [Installing Dependencies](#2-installing-dependencies)
+    - [Apache2](#apache2)
+    - [MariaDB Server](#mariadb-server)
+    - [PHP](#php)
+3. [Installing Nextcloud](#3-installing-nextcloud)
+
+---
+
 ## 1. LXC Setup
 
 Before we start installing Nextcloud, we need to set up an LXC container to host our Nextcloud instance. Follow the instructions in the [LXC Setup](../../proxmox/README.md#9-creating-your-first-container-optional) guide to create a new container for Nextcloud. I recommend choosing **Ubuntu 24.04 LTS** as the operating system for your container, and allocating allocating at least **2 CPU cores**, **2GB of RAM *(1-2GB of SWAP at your demand)***, and **16GB of storage** for the container. We would recommend adding a mount point for your Nextcloud data if you have additional storage available. This will allow you to store your Nextcloud data on a separate partition or disk, which can improve performance and make it easier to manage your data.
@@ -189,6 +200,13 @@ opcache.revalidate_freq=60
 Now that we have all the dependencies installed and configured, we can proceed to install Nextcloud. The latest version of Nextcloud can be downloaded from the [Nextcloud website](https://nextcloud.com/install/). You can also use the following command to download the latest version of Nextcloud:
 
 ```bash
-cd /var/www/html    # Change to the web root directory
+mkdir -p /var/cache/nextcloud && cd /var/cache/nextcloud
 wget https://download.nextcloud.com/server/releases/latest.zip
+```
+
+Once the download is complete, you can unzip the file and move the Nextcloud files to the Apache2 web root directory:
+
+```bash
+unzip latest.zip
+mv nextcloud /var/www/html/
 ```
