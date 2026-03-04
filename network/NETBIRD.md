@@ -11,17 +11,16 @@ You can learn more about NetBird and its features on the [official website](http
 ## Table of Contents
 
 1. **[NetBird on VM](#netbird-on-vm)**
-
-   - [Prerequisites](#1-prerequisites)
-   - [Installation](#2-installation)
-   - [Onboarding](#3-onboarding)
+    - [Prerequisites](#1-prerequisites)
+    - [Installation](#2-installation)
+    - [Onboarding](#3-onboarding)
 
 2. **[NetBird on LXC](#netbird-on-lxc)**
-   - [Container Setup](#1-container-setup)
-   - [/dev/tun Passthrough](#2-devtun-passthrough)
-   - [LXC Nameserver Configuration](#3-lxc-nameserver-configuration-optional)
-   - [NetBird Setup Key](#4-netbird-setup-key)
-   - [NetBird Installation](#5-netbird-installation)
+    - [Container Setup](#1-container-setup)
+    - [/dev/tun Passthrough](#2-devtun-passthrough)
+    - [LXC Nameserver Configuration](#3-lxc-nameserver-configuration-optional)
+    - [NetBird Setup Key](#4-netbird-setup-key)
+    - [NetBird Installation](#5-netbird-installation)
 
 ---
 
