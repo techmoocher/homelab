@@ -183,3 +183,12 @@ opcache.interned_strings_buffer=16
 opcache.max_accelerated_files=20000
 opcache.revalidate_freq=60
 ```
+
+## 3. Installing Nextcloud
+
+Now that we have all the dependencies installed and configured, we can proceed to install Nextcloud. The latest version of Nextcloud can be downloaded from the [Nextcloud website](https://nextcloud.com/install/). You can also use the following command to download the latest version of Nextcloud:
+
+```bash
+cd /var/www/html    # Change to the web root directory
+wget https://download.nextcloud.com/server/releases/latest.zip
+```
