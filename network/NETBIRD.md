@@ -8,6 +8,23 @@ You can learn more about NetBird and its features on the [official website](http
 
 ---
 
+## Table of Contents
+
+1. **[NetBird on VM](#netbird-on-vm)**
+
+   - [Prerequisites](#1-prerequisites)
+   - [Installation](#2-installation)
+   - [Onboarding](#3-onboarding)
+
+2. **[NetBird on LXC](#netbird-on-lxc)**
+   - [Container Setup](#1-container-setup)
+   - [/dev/tun Passthrough](#2-devtun-passthrough)
+   - [LXC Nameserver Configuration](#3-lxc-nameserver-configuration-optional)
+   - [NetBird Setup Key](#4-netbird-setup-key)
+   - [NetBird Installation](#5-netbird-installation)
+
+---
+
 ## NetBird on VM
 
 This is the quickest and most straightforward way to set up NetBird. It is also the recommended way for most users, especially if you are new to self-hosting and don't have much experience with Linux. If you already have a VM set up and a registered domain name, it should take you less than 10 minutes to get NetBird up and running. Check out the [official documentation](https://docs.netbird.io/selfhosted/selfhosted-quickstart) for more details.
