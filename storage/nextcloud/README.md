@@ -128,7 +128,7 @@ For the simplicity of this guide, we will use **PHP 8.3**, which is the version 
 To install PHP, run the following command:
 
 ```bash
-apt install -y php8.3 libapache2-mod-php8.3
+apt install -y php8.3 libapache2-mod-php
 ```
 
 We will also need some PHP modules for Nextcloud to function properly. The below command will install the necessary PHP modules for Nextcloud
