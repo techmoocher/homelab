@@ -17,16 +17,33 @@
 
 1. [LXC Setup](#1-lxc-setup)
 2. [Installing Dependencies](#2-installing-dependencies)
-    - [Apache2](#apache2)
-    - [MariaDB Server](#mariadb-server)
-    - [PHP](#php)
+    - 2.1. [Apache2](#21-apache2)
+    - 2.2. [MariaDB Server](#22-mariadb-server)
+        - 2.2.1. [MariaDB Installation](#221-mariadb-installation)
+        - 2.2.2. [Database and User Setup](#222-database-and-user-setup)
+        - 2.2.3. [Optimizing MariaDB *(optional)*](#223-optimizing-mariadb-optional)
+    - 2.3. [PHP](#23-php)
+        - 2.3.1. [PHP Installation](#231-php-installation)
+        - 2.3.2. [PHP Configuration](#232-php-configuration)
+        - 2.3.3. [Caching Configuration *(optional)*](#233-caching-configuration-optional)
+        - 2.3.4. [Tuning PHP-FPM Pool *(optional)*](#234-tuning-php-fpm-pool-optional)
 3. [Installing Nextcloud](#3-installing-nextcloud)
+4. [Finalizing Nextcloud Installation](#4-finalizing-nextcloud-installation)
 
 ---
 
 ## 1. LXC Setup
 
-Before we start installing Nextcloud, we need to set up an LXC container to host our Nextcloud instance. Follow the instructions in the [LXC Setup](../../proxmox/README.md#9-creating-your-first-container-optional) guide to create a new container for Nextcloud. I recommend choosing **Ubuntu 24.04 LTS** as the operating system for your container, and allocating allocating at least **2 CPU cores**, **2GB of RAM *(1-2GB of SWAP at your demand)***, and **16GB of storage** for the container. We would recommend adding a mount point for your Nextcloud data if you have additional storage available. This will allow you to store your Nextcloud data on a separate partition or disk, which can improve performance and make it easier to manage your data.
+Before we start installing Nextcloud, we need to set up an LXC container to host our Nextcloud instance. Follow the instructions in the [LXC Setup](../../proxmox/README.md#9-creating-your-first-container-optional) guide to create a new container for Nextcloud. The below specifications are recommended for a smooth Nextcloud experience, but you can adjust them based on your needs and the resources available on your host machine.
+
+### Recommended Specs
+
+- **CPU:** 2 vCPUs
+- **RAM:** 2 GB *(4 if applicable)*
+- **Storage:** 20 GB *(or more depending on your needs)*
+- **Template:** Ubuntu 24.04 LTS
+
+***Note:*** *You can mount additional storage to the container if you want to separate the container's data and Nextcloud's data. Check out the [Mounting Storage](../../proxmox/README.md#10-mounting-storage-to-your-container-optional) guide for instructions on how to do this.*
 
 ## 2. Installing Dependencies
 
@@ -35,10 +52,11 @@ Nextcloud requires a web server, a database server, and a runtime environment. I
 Before we start installing the dependencies, make sure to update your package list and upgrade your system by running the following commands:
 
 ```bash
-apt update && apt upgrade -y && apt install -y curl wget unzip ffmpeg imagemagick
+apt update && apt upgrade -y
+apt install -y curl wget unzip ffmpeg imagemagick
 ```
 
-### Apache2
+### 2.1. Apache2
 
 [Apache2](https://httpd.apache.org/) is a popular open-source web server that is widely used to serve web applications. It is known for its stability, security, and flexibility. In this guide, we will be using **Apache 2.4**. You can install other versions if you prefer, but make sure to check the official documentation before doing so.
 
@@ -65,7 +83,9 @@ You can also check if Apache2 is serving content by navigating to `http://<your-
 
 ![Apache2 Welcome Page](./assets/apache2-welcome-page.png)
 
-### MariaDB Server
+### 2.2. MariaDB Server
+
+#### 2.2.1. MariaDB Installation
 
 [MariaDB](https://mariadb.org/) is a popular open-source relational database management system that is widely used to store data for web applications. It is a fork of MySQL and is known for its performance, reliability, and security. In this guide, we will be using **MariaDB 10.11**. You can install other versions of MariaDB if you prefer, but make sure to check the official documentation before doing so.
 
@@ -81,7 +101,7 @@ Once the installation is complete, you can start the MariaDB security installati
 mariadb-secure-installation
 ```
 
-#### OR
+or
 
 ```bash
 mysql_secure_installation
@@ -91,7 +111,7 @@ This will guide you through a series of prompts to secure your MariaDB installat
 
 [![MariaDB Security Installation](./assets/mariadb-secure-installation-thumbnail.png)](./assets/mariadb-secure-installation.mp4)
 
-#### Setting Up Database and User
+#### 2.2.2. Database and User Setup
 
 Nextcloud requires a database and a user to connect to that database. You can create a new database and user for Nextcloud by running the following commands:
 
@@ -119,25 +139,68 @@ mysql -u root -p -e "SHOW DATABASES; SHOW GRANTS FOR 'nextclouduser'@'localhost'
 
 You should see the `nextcloud` listed in the databases and the appropriate privileges for the `nextclouduser`.
 
-### PHP
+#### 2.2.3. Optimizing MariaDB *(optional)*
+
+To optimize MariaDB, we can make changes to the `etc/mysql/mariadb.conf.d/50-server.cnf` file. Open the file with your preferred text editor, and make the following changes:
+
+```cnf
+[mysqld]
+innodb_file_per_table=1
+innodb_default_row_format=dynamic
+innodb_buffer_pool_size=512M
+```
+
+These settings will enable the `innodb_file_per_table` option, set the default row format to `dynamic`, and allocate 512MB of memory for the InnoDB buffer pool, which can improve performance for Nextcloud.
+
+For the changes to take effect, restart the MariaDB server with the following command:
+
+```bash
+systemctl restart mariadb
+```
+
+### 2.3. PHP
+
+#### 2.3.1. PHP Installation
 
 [PHP](https://www.php.net/) is a popular server-side scripting language that is widely used to develop web applications. Nextcloud is operated using PHP, so we need to install it along with the necessary PHP modules to run Nextcloud smoothly.
 
 For the simplicity of this guide, we will use **PHP 8.3**, which is the version recommended by Nextcloud at the time of writing. You can install other versions of PHP if you prefer. Check out the [System Requirements](https://docs.nextcloud.com/server/latest/admin_manual/installation/system_requirements.html) and [PHP Modules & Configuration](https://docs.nextcloud.com/server/latest/admin_manual/installation/php_configuration.html) documentation for more details.
 
-To install PHP, run the following command:
+To install PHP and necessary modules, run the following command:
 
 ```bash
-apt install -y php8.3 libapache2-mod-php
+apt install -y \
+ php8.3 php8.3-fpm php8.3-cli php-json php-intl php-imagick \
+ php8.3-{common,curl,gd,mbstring,xml,zip,mysql,imap,opcache,ldap}
 ```
 
-We will also need some PHP modules for Nextcloud to function properly. The below command will install the necessary PHP modules for Nextcloud
+#### 2.3.2. PHP Configuration
+
+By default, the configuration files for PHP are located in the `/etc/php/X.x/` directory *(`X.x` is the PHP version which, in this case, is `8.3`)*. The configuration for the web server (in this case, Apache2 + php-fpm) lives in `/etc/php/8.3/fpm/php.ini`.
+
+To optimize PHP for Nextcloud, we need to make some changes to the `php.ini` file. Open the file with your preferred text editor:
 
 ```bash
-apt install -y php-{curl,dom,gd,mbstring,posix,xml,json,zip,mysql,intl,imagick,exif,avconv,imap,opcache,ldap,fpm}
+nano /etc/php/8.3/fpm/php.ini
 ```
 
-#### Caching Configuration *(optional)*
+Then, make the following changes:
+
+```ini
+memory_limit = 1024M
+upload_max_filesize = 2048M
+post_max_size = 2048M
+max_execution_time = 360
+
+opcache.enable=1
+opcache.enable_cli=1
+opcache.memory_consumption=256
+opcache.interned_strings_buffer=16
+opcache.max_accelerated_files=20000
+opcache.revalidate_freq=60
+```
+
+#### 2.3.3. Caching Configuration *(optional)*
 
 Nextcloud can use caching to improve performance. We will be using **APCu** for local caching and **Redis** for distributed caching. To install these caching modules, run the following command:
 
@@ -152,12 +215,6 @@ systemctl start redis-server
 systemctl enable redis-server
 ```
 
-To check if the Redis server is running properly, you can use the following command:
-
-```bash
-systemctl status redis-server
-```
-
 You can also test the Redis server by running the following command:
 
 ```bash
@@ -170,34 +227,43 @@ which should return
 PONG
 ```
 
-#### PHP Configuration
+To configure Redis, we need to make some changes to the `/etc/redis/redis.conf` file. Open the file with your preferred text editor and make the following changes:
 
-By default, the configuration files for PHP are located in the `/etc/php/X.x/` directory *(`X.x` is the PHP version which, in this case, is `8.3`)*. The configuration for the web server (in this case, Apache2) lives in `/etc/php/8.3/apache2/php.ini`.
-
-To optimize PHP for Nextcloud, we need to make some changes to the `php.ini` file. Open the file with your preferred text editor:
-
-```bash
-nano /etc/php/8.3/apache2/php.ini
+```conf
+unixsocket /run/redis/redis.sock
+unixsocketperm 770
 ```
 
-Then, make the following changes:
+Then, we need to add the `www-data` user to the `redis` group to allow Apache2 to access the Redis socket:
 
-```ini
-memory_limit = 1024M
-max_execution_time = 360
-upload_max_filesize = 2048M
-post_max_size = 2048M
+```bash
+usermod -aG redis www-data
+```
 
-opcache.enable=1
-opcache.memory_consumption=256
-opcache.interned_strings_buffer=16
-opcache.max_accelerated_files=20000
-opcache.revalidate_freq=60
+Finally, restart the Redis server for the changes to take effect:
+
+```bash
+systemctl restart redis-server
+```
+
+#### 2.3.4. Tuning PHP-FPM Pool *(optional)*
+
+To optimize PHP-FPM for Nextcloud, we can make some changes to the pool configuration file, which is `/etc/php/8.3/fpm/pool.d/www.conf`. Open the file with your preferred text editor and make the following changes:
+
+```conf
+pm = dynamic
+pm.max_children = 18
+pm.start_servers = 4
+pm.min_spare_servers = 3
+pm.max_spare_servers = 6
+pm.max_requests = 500
 ```
 
 ## 3. Installing Nextcloud
 
-Now that we have all the dependencies installed and configured, we can proceed to install Nextcloud. The latest version of Nextcloud can be downloaded from the [Nextcloud website](https://nextcloud.com/install/). You can also use the following command to download the latest version of Nextcloud:
+### 3.1. Nextcloud Installation
+
+Now that we have all the dependencies installed and configured, we can proceed to install Nextcloud. The latest version of Nextcloud can be downloaded from the [Nextcloud website](https://nextcloud.com/install/). Use the following command to download the latest version of Nextcloud:
 
 ```bash
 mkdir -p /var/cache/nextcloud && cd /var/cache/nextcloud
@@ -208,5 +274,63 @@ Once the download is complete, you can unzip the file and move the Nextcloud fil
 
 ```bash
 unzip latest.zip
-mv nextcloud /var/www/html/
+mv nextcloud /var/www/
 ```
+
+Next, we need to set the correct permissions for the Nextcloud files. Run the following commands to set the ownership and permissions:
+
+```bash
+cd /var/www
+chown -R www-data:www-data /var/www/nextcloud
+chmod -R 755 /var/www/nextcloud
+find /var/www/nextcloud -type d -exec chmod 750 {} \;
+find /var/www/nextcloud -type f -exec chmod 640 {} \;
+```
+
+***Note:*** *If you have mounted additional storage for Nextcloud, you can set the ownership and permissions for that storage as well. For example, if you have mounted a storage at `/srv/nextcloud-data` on your host machine, you can run the following commands:*
+
+```bash
+# On your Proxmox host
+chown -R 100033:100033 /srv/nextcloud-data
+chmod -R 750 /srv/nextcloud-data
+```
+
+### 3.2. Apache2 Configuration
+
+Nextcloud is now installed, but we still need to enable some Apache2 modules. Run the following commands to enable the necessary Apache2 modules:
+
+```bash
+a2enmod rewrite headers env dir mime proxy_fcgi setenvif
+a2enconf php8.3-fpm
+systemctl restart apache2
+```
+
+We will also need an Apache2 virtual host configuration for Nextcloud. Create a new file called `nextcloud.conf` in the `/etc/apache2/sites-available/` directory with the following content:
+
+```conf
+<VirtualHost *:80>
+    ServerName nextcloud.example.com    # Replace example.com with your actual domain
+    DocumentRoot /var/www/nextcloud
+
+    <Directory /var/www/nextcloud/>
+        Require all granted
+        AllowOverride All
+        Options FollowSymLinks MultiViews
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/nextcloud_error.log
+    CustomLog ${APACHE_LOG_DIR}/nextcloud_access.log combined
+</VirtualHost>
+```
+
+and then enable the virtual host and restart Apache2:
+
+```bash
+a2ensite nextcloud.conf
+a2dissite 000-default.conf
+systemctl reload apache2
+```
+
+## 4. Finalizing Nextcloud Installation
+
+Now that we have Nextcloud installed and configured, we can finalize the installation by navigating to `http://<your-container-ip>` in your web browser. You should see the Nextcloud setup page where you can create an admin account and enter the database details that we created earlier.
