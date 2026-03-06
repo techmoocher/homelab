@@ -24,11 +24,12 @@
         - 2.2.3. [Optimizing MariaDB *(optional)*](#223-optimizing-mariadb-optional)
     - 2.3. [PHP](#23-php)
         - 2.3.1. [PHP Installation](#231-php-installation)
-        - 2.3.2. [PHP Configuration](#232-php-configuration)
-        - 2.3.3. [Caching Configuration *(optional)*](#233-caching-configuration-optional)
+        - 2.3.2. [Caching Configuration](#232-caching-configuration)
+        - 2.3.3. [PHP Configuration](#233-php-configuration)
         - 2.3.4. [Tuning PHP-FPM Pool *(optional)*](#234-tuning-php-fpm-pool-optional)
 3. [Installing Nextcloud](#3-installing-nextcloud)
 4. [Finalizing Nextcloud Installation](#4-finalizing-nextcloud-installation)
+5. [Post-Installation](#5-post-installation)
 
 ---
 
@@ -40,10 +41,13 @@ Before we start installing Nextcloud, we need to set up an LXC container to host
 
 - **CPU:** 2 vCPUs
 - **RAM:** 2 GB *(4 if applicable)*
-- **Storage:** 20 GB *(or more depending on your needs)*
+- **Storage:** 16 GB *(or more depending on your needs)*
 - **Template:** Ubuntu 24.04 LTS
+- **Type**: Unprivileged
 
 ***Note:*** *You can mount additional storage to the container if you want to separate the container's data and Nextcloud's data. Check out the [Mounting Storage](../../proxmox/README.md#10-mounting-storage-to-your-container-optional) guide for instructions on how to do this.*
+
+***Note:*** *If you mount external Proxmox storage to an unprivileged container, remember to set host ownership to 100033:100033.*
 
 ## 2. Installing Dependencies
 
@@ -73,6 +77,13 @@ systemctl start apache2
 systemctl enable apache2
 ```
 
+To enable necessary Apache2 modules for Nextcloud, run the following command:
+
+```bash
+a2enmod rewrite headers env dir mime proxy_fcgi setenvif ssl
+systemctl restart apache2
+```
+
 To check if Apache2 is running properly, you can use the following command:
 
 ```bash
@@ -98,13 +109,13 @@ apt install mariadb-server -y
 Once the installation is complete, you can start the MariaDB security installation process by running the following command:
 
 ```bash
-mariadb-secure-installation
+mysql_secure_installation
 ```
 
 or
 
 ```bash
-mysql_secure_installation
+mariadb-secure-installation
 ```
 
 This will guide you through a series of prompts to secure your MariaDB installation. You will be asked to set a root password, remove anonymous users, disallow remote root login, and remove the test database. If this is your first time installing MariaDB and you have no idea what to do, follow the instructions in the video below:
@@ -119,10 +130,16 @@ Nextcloud requires a database and a user to connect to that database. You can cr
 mysql -u root -p
 ```
 
-This will open the MariaDB shell. Then, run the following commands to create a new database and user for Nextcloud:
+or
+
+```bash
+mariadb -u root -p
+```
+
+This will open the MariaDB shell. Run the following commands to create a new database and user for Nextcloud:
 
 ```sql
-CREATE DATABASE nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 CREATE USER 'nextclouduser'@'localhost' IDENTIFIED BY 'strongpassword';
 GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextclouduser'@'localhost';
 FLUSH PRIVILEGES;
@@ -141,20 +158,22 @@ You should see the `nextcloud` listed in the databases and the appropriate privi
 
 #### 2.2.3. Optimizing MariaDB *(optional)*
 
-To optimize MariaDB, we can make changes to the `etc/mysql/mariadb.conf.d/50-server.cnf` file. Open the file with your preferred text editor, and make the following changes:
+To optimize MariaDB, open the file `etc/mysql/mariadb.conf.d/50-server.cnf` with your preferred text editor and make the following changes:
 
 ```cnf
 [mysqld]
 innodb_file_per_table=1
 innodb_default_row_format=dynamic
 innodb_buffer_pool_size=512M
+
+character-set-server=utf8mb4
+collation-server=utf8mb4_bin
 ```
 
-These settings will enable the `innodb_file_per_table` option, set the default row format to `dynamic`, and allocate 512MB of memory for the InnoDB buffer pool, which can improve performance for Nextcloud.
-
-For the changes to take effect, restart the MariaDB server with the following command:
+Then, restart MariaDB with the following command:
 
 ```bash
+systemctl enable mariadb
 systemctl restart mariadb
 ```
 
@@ -171,41 +190,15 @@ To install PHP and necessary modules, run the following command:
 ```bash
 apt install -y \
  php8.3 php8.3-fpm php8.3-cli php-json php-intl php-imagick \
- php8.3-{common,curl,gd,mbstring,xml,zip,mysql,imap,opcache,ldap}
+ php8.3-{common,curl,gd,mbstring,xml,zip,mysql,imap,opcache,ldap,gmp,bz2}
 ```
 
-#### 2.3.2. PHP Configuration
-
-By default, the configuration files for PHP are located in the `/etc/php/X.x/` directory *(`X.x` is the PHP version which, in this case, is `8.3`)*. The configuration for the web server (in this case, Apache2 + php-fpm) lives in `/etc/php/8.3/fpm/php.ini`.
-
-To optimize PHP for Nextcloud, we need to make some changes to the `php.ini` file. Open the file with your preferred text editor:
-
-```bash
-nano /etc/php/8.3/fpm/php.ini
-```
-
-Then, make the following changes:
-
-```ini
-memory_limit = 1024M
-upload_max_filesize = 2048M
-post_max_size = 2048M
-max_execution_time = 360
-
-opcache.enable=1
-opcache.enable_cli=1
-opcache.memory_consumption=256
-opcache.interned_strings_buffer=16
-opcache.max_accelerated_files=20000
-opcache.revalidate_freq=60
-```
-
-#### 2.3.3. Caching Configuration *(optional)*
+#### 2.3.2. Caching Configuration
 
 Nextcloud can use caching to improve performance. We will be using **APCu** for local caching and **Redis** for distributed caching. To install these caching modules, run the following command:
 
 ```bash
-apt install -y php-{apcu,redis} redis-server
+apt install -y redis-server php-{apcu,redis}
 ```
 
 Once the installation is complete, you can start the Redis server and enable it to run on boot with the following commands:
@@ -234,16 +227,35 @@ unixsocket /run/redis/redis.sock
 unixsocketperm 770
 ```
 
-Then, we need to add the `www-data` user to the `redis` group to allow Apache2 to access the Redis socket:
+Finally, add the `www-data` user to the `redis` group to allow PHP-FPM to access the Redis socket:
 
 ```bash
 usermod -aG redis www-data
+systemctl enable redis-server
+systemctl restart redis-server
 ```
 
-Finally, restart the Redis server for the changes to take effect:
+#### 2.3.3. PHP Configuration
 
-```bash
-systemctl restart redis-server
+By default, the configuration files for PHP are located in the `/etc/php/X.x/` directory *(`X.x` is the PHP version which, in this case, is `8.3`)*. The configuration for the web server (in this case, Apache2 + php-fpm) lives in `/etc/php/8.3/fpm/php.ini`.
+
+Open the `php.ini` file with your preferred text editor and make the following changes:
+
+```ini
+memory_limit = 1024M
+upload_max_filesize = 2048M
+post_max_size = 2048M
+max_execution_time = 360
+
+date.timezone = America/New_York    # Replace with your actual timezone
+
+opcache.enable=1
+opcache.enable_cli=1
+opcache.memory_consumption=256
+opcache.interned_strings_buffer=16
+opcache.max_accelerated_files=20000
+opcache.revalidate_freq=60
+opcache.save_comments=1
 ```
 
 #### 2.3.4. Tuning PHP-FPM Pool *(optional)*
@@ -259,6 +271,13 @@ pm.max_spare_servers = 6
 pm.max_requests = 500
 ```
 
+For the changes to take effect, restart the PHP-FPM service:
+
+```bash
+a2enconf php8.3-fpm
+systemctl restart php8.3-fpm apache2
+```
+
 ## 3. Installing Nextcloud
 
 ### 3.1. Nextcloud Installation
@@ -268,13 +287,9 @@ Now that we have all the dependencies installed and configured, we can proceed t
 ```bash
 mkdir -p /var/cache/nextcloud && cd /var/cache/nextcloud
 wget https://download.nextcloud.com/server/releases/latest.zip
-```
-
-Once the download is complete, you can unzip the file and move the Nextcloud files to the Apache2 web root directory:
-
-```bash
 unzip latest.zip
 mv nextcloud /var/www/
+rm -rf /var/cache/nextcloud
 ```
 
 Next, we need to set the correct permissions for the Nextcloud files. Run the following commands to set the ownership and permissions:
@@ -282,7 +297,6 @@ Next, we need to set the correct permissions for the Nextcloud files. Run the fo
 ```bash
 cd /var/www
 chown -R www-data:www-data /var/www/nextcloud
-chmod -R 755 /var/www/nextcloud
 find /var/www/nextcloud -type d -exec chmod 750 {} \;
 find /var/www/nextcloud -type f -exec chmod 640 {} \;
 ```
@@ -293,19 +307,15 @@ find /var/www/nextcloud -type f -exec chmod 640 {} \;
 # On your Proxmox host
 chown -R 100033:100033 /srv/nextcloud-data
 chmod -R 750 /srv/nextcloud-data
+
+# Inside your LXC container
+chown -R www-data:www-data /path/to/mounted/storage
+chmod -R 750 /path/to/mounted/storage
 ```
 
 ### 3.2. Apache2 Configuration
 
-Nextcloud is now installed, but we still need to enable some Apache2 modules. Run the following commands to enable the necessary Apache2 modules:
-
-```bash
-a2enmod rewrite headers env dir mime proxy_fcgi setenvif
-a2enconf php8.3-fpm
-systemctl restart apache2
-```
-
-We will also need an Apache2 virtual host configuration for Nextcloud. Create a new file called `nextcloud.conf` in the `/etc/apache2/sites-available/` directory with the following content:
+Nextcloud is now installed, but we still need an Apache2 virtual host configuration for Nextcloud. Create a new file called `/etc/apache2/sites-available/nextcloud.conf` with the following content:
 
 ```conf
 <VirtualHost *:80>
@@ -316,6 +326,9 @@ We will also need an Apache2 virtual host configuration for Nextcloud. Create a 
         Require all granted
         AllowOverride All
         Options FollowSymLinks MultiViews
+        <IfModule mod_dav.c>
+            Dav off
+        </IfModule>
     </Directory>
 
     ErrorLog ${APACHE_LOG_DIR}/nextcloud_error.log
@@ -334,3 +347,21 @@ systemctl reload apache2
 ## 4. Finalizing Nextcloud Installation
 
 Now that we have Nextcloud installed and configured, we can finalize the installation by navigating to `http://<your-container-ip>` in your web browser. You should see the Nextcloud setup page where you can create an admin account and enter the database details that we created earlier.
+
+There are some fields that you need to fill out:
+
+- **Admin Account**: Create an admin account by entering a username and password of your choice.
+- **Data Folder**: By default, Nextcloud will store its data in the `data` folder inside the Nextcloud directory. You can change this to a different location if you want, but make sure to set the correct permissions for that folder.
+- **Database Configuration**: Select "MySQL/MariaDB" as the database type, and enter the database name, username, and password that we created earlier. The database host should be `localhost`.
+
+Once you have filled out all the fields, click on the **Install** button to complete the installation. Nextcloud will now set up the database and configure itself based on the information you provided. Nextcloud will also ask if you to install recommended apps, which you can choose to do or skip for now. After the installation is complete, you will be redirected to the Nextcloud dashboard where you can start using Nextcloud.
+
+![Nextcloud Dashboard](./assets/nextcloud-homepage.jpg)
+
+## 5. Post-Installation
+
+---
+
+Congratulations! You have successfully installed Nextcloud on an LXC container. You can now start uploading files, creating folders, and using all the features Nextcloud offers. Make sure to keep your Nextcloud instance updated and secured by following the best practices outlined in the [Nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/maintenance/index.html).
+
+**HAPPY SELF-HOSTING!!!**
