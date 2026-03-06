@@ -301,16 +301,16 @@ find /var/www/nextcloud -type d -exec chmod 750 {} \;
 find /var/www/nextcloud -type f -exec chmod 640 {} \;
 ```
 
-***Note:*** *If you have mounted additional storage for Nextcloud, you can set the ownership and permissions for that storage as well. For example, if you have mounted a storage at `/srv/nextcloud-data` on your host machine, you can run the following commands:*
+***Note:*** *If you have mounted additional storage for Nextcloud, you need to set the correct the ownership and permissions for that storage as well.*
 
 ```bash
 # On your Proxmox host
-chown -R 100033:100033 /srv/nextcloud-data
-chmod -R 750 /srv/nextcloud-data
+chown -R 100033:100033 /path/to/mounted/storage/on/host
+chmod -R 750 /path/to/mounted/storage/on/host
 
 # Inside your LXC container
-chown -R www-data:www-data /path/to/mounted/storage
-chmod -R 750 /path/to/mounted/storage
+chown -R www-data:www-data /path/to/mounted/storage/on/lxc
+chmod -R 750 /path/to/mounted/storage/on/lxc
 ```
 
 ### 3.2. Apache2 Configuration
@@ -389,8 +389,6 @@ and add the following line to the bottom:
 ```cron
 */5 * * * * php -f /var/www/nextcloud/cron.php
 ```
-
-
 
 ---
 
