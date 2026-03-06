@@ -1,4 +1,4 @@
-# Nextcloud in LXC
+# Nextcloud on LXC
 
 ---
 
@@ -223,7 +223,7 @@ PONG
 To configure Redis, we need to make some changes to the `/etc/redis/redis.conf` file. Open the file with your preferred text editor and make the following changes:
 
 ```conf
-unixsocket /run/redis/redis.sock
+unixsocket /run/redis/redis-server.sock
 unixsocketperm 770
 ```
 
@@ -352,13 +352,45 @@ There are some fields that you need to fill out:
 
 - **Admin Account**: Create an admin account by entering a username and password of your choice.
 - **Data Folder**: By default, Nextcloud will store its data in the `data` folder inside the Nextcloud directory. You can change this to a different location if you want, but make sure to set the correct permissions for that folder.
-- **Database Configuration**: Select "MySQL/MariaDB" as the database type, and enter the database name, username, and password that we created earlier. The database host should be `localhost`.
+- **Database Configuration**: Select "MySQL/MariaDB" as the database type, and enter the database name, username, password that we created earlier. The database host should be `localhost`.
 
 Once you have filled out all the fields, click on the **Install** button to complete the installation. Nextcloud will now set up the database and configure itself based on the information you provided. Nextcloud will also ask if you to install recommended apps, which you can choose to do or skip for now. After the installation is complete, you will be redirected to the Nextcloud dashboard where you can start using Nextcloud.
 
 ![Nextcloud Dashboard](./assets/nextcloud-homepage.jpg)
 
 ## 5. Post-Installation
+
+### 5.1. Enabling Caching
+
+Open the config file `/var/www/nextcloud/config/config.php` with your preferred text editor and add the following lines before the closing `);` to enable caching with APCu and Redis:
+
+```php
+  'memcache.local' => '\OC\Memcache\APCu',
+  'memcache.distributed' => '\OC\Memcache\Redis',
+  'memcache.locking' => '\OC\Memcache\Redis',
+  'redis' => 
+  array (
+    'host' => '127.0.0.1',
+    'port' => 6379,
+    'timeout' => 0.0,
+  ),
+```
+
+### 5.2 Enabling Background Cron
+
+By default, Nextcloud uses AJAX to run background tasks, but it is recommended to use the system cron for better performance and reliability. To enable the system cron, run the following command:
+
+```bash
+crontab -u www-data -e
+```
+
+and add the following line to the bottom:
+
+```cron
+*/5 * * * * php -f /var/www/nextcloud/cron.php
+```
+
+
 
 ---
 
