@@ -1,4 +1,4 @@
-// PHP CONFIG FILE FOR NEXTCLOUD
+// PHP CONFIGURATION FILE FOR NEXTCLOUD
 //
 // /var/www/nextcloud/config/config.php
 
