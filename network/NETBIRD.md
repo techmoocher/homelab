@@ -10,17 +10,102 @@ You can learn more about NetBird and its features on the [official website](http
 
 ## Table of Contents
 
-1. **[NetBird on VM](#netbird-on-vm)**
-    - [Prerequisites](#1-prerequisites)
-    - [Installation](#2-installation)
-    - [Onboarding](#3-onboarding)
-
-2. **[NetBird on LXC](#netbird-on-lxc)**
+1. **[NetBird on LXC](#netbird-on-lxc)**
     - [Container Setup](#1-container-setup)
     - [/dev/tun Passthrough](#2-devtun-passthrough)
     - [LXC Nameserver Configuration](#3-lxc-nameserver-configuration-optional)
     - [NetBird Setup Key](#4-netbird-setup-key)
     - [NetBird Installation](#5-netbird-installation)
+
+2. **[NetBird on VM](#netbird-on-vm)**
+    - [Prerequisites](#1-prerequisites)
+    - [Installation](#2-installation)
+    - [Onboarding](#3-onboarding)
+
+---
+
+## NetBird on LXC
+
+NetBird can also be installed on an LXC container. This method is more complex than installing on a VM, but it can be more efficient in terms of resource usage. If you are comfortable with Linux and have experience with LXC containers, this may be a good option for you.
+
+### 1. Container Setup
+
+First, we need to create an LXC container for NetBird. You can do this using the Proxmox web UI or the command line. Check the [LXC Setup Guide](../proxmox/README.md#8-creating-your-first-container-optional) for detailed instructions on how to create a container.
+
+***Note:*** *For NetBird, I would recommend allocating at least **1 CPU** and **2 GB of memory** to the container.*
+
+### 2. /dev/tun Passthrough
+
+Network TUNnel (or TUN) is a virtual network kernel device that provides an interface for user applications, such as NetBird, to deal with the raw network traffic. Since we set our container up as an unprivileged container, there is no access to this interface. Therefore, we have to add some lines manually to the configuration for this container. Under your main node, access the shell. Find your container number, like 100. Use nano or another text editor to open the configuration.
+
+```bash
+nano /etc/pve/lxc/100.conf
+```
+
+Add the following lines to the end of the file:
+
+```bash
+lxc.cgroup2.devices.allow: c 10:200 rwm
+lxc.mount.entry: /dev/net dev/net none bind,create=dir
+lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file
+```
+
+Now, start the container and check if the TUN device is available.
+
+```bash
+# On the Proxmox host
+pct start 100
+
+# On the container
+ls /dev/net
+```
+
+If you see `tun` is listed, you're ready to proceed to the next step.
+
+### 3. LXC Nameserver Configuration *(optional)*
+
+The TUN passthrough may cause DNS resolution issues in the container. To fix this, we need to configure the nameservers manually. Open the `/etc/pve/lxc/100.conf` file on your host and add the following line:
+
+```bash
+nameserver: <your_dns_server_ip>
+```
+
+***Note:*** *Replace `<your_dns_server_ip>` with the IP address of your DNS server (e.g. `1.1.1.1` or your router's IP address).*
+
+### 4. NetBird Setup Key
+
+> Skip this step if you already have a setup key from a previous installation. You can reuse the same key for multiple installations.
+
+Before we can install NetBird, we need to generate a setup key. This key is used to authenticate the installation and link it to your NetBird account. You can generate a setup key from the NetBird web UI.
+
+To generate a setup key, follow these steps:
+
+1. Go to your [NetBird Dashboard](https://app.netbird.io/).
+2. Navigate to the **Setup Keys** section.
+3. Click on **Create Setup Key**.
+4. Enter a name for the setup key (e.g. "Proxmox LXC").
+5. Set an expiration date for the key *(optional, recommended for enhanced security)*.
+6. Add the key to group(s) *(optional)*.
+7. Click on **Create** to generate the key.
+8. Copy the key and store it securely, as you will need it for the installation process.
+
+### 5. NetBird Installation
+
+To install NetBird on the LXC container, you can use the same installation script as for the VM. On the container's shell, run the following command:
+
+```bash
+apt update && apt upgrade -y
+apt install curl -y
+curl -fsSL https://pkgs.netbird.io/install.sh | sh
+```
+
+Once the installation is complete, connect the LXC to your NetBird account using the setup key you generated earlier.
+
+```bash
+netbird up --setup-key <your_setup_key>
+```
+
+You should see a message confirming that the connection was successful. You can now manage your NetBird network from the web UI.
 
 ---
 
@@ -124,91 +209,6 @@ Once the installation is complete, you can access the NetBird dashboard by navig
 You will then be able to log in with your email and password.
 
 Now that you have access to the dashboard, you can start adding devices to your network and configuring your settings. For more information on how to use NetBird and its features, check out the [official documentation](https://docs.netbird.io/selfhosted/selfhosted-quickstart) for more details.
-
----
-
-## NetBird on LXC
-
-NetBird can also be installed on an LXC container. This method is more complex than installing on a VM, but it can be more efficient in terms of resource usage. If you are comfortable with Linux and have experience with LXC containers, this may be a good option for you.
-
-### 1. Container Setup
-
-First, we need to create an LXC container for NetBird. You can do this using the Proxmox web UI or the command line. Check the [LXC Setup Guide](../proxmox/README.md#8-creating-your-first-container-optional) for detailed instructions on how to create a container.
-
-***Note:*** *For NetBird, I would recommend allocating at least **1 CPU** and **2 GB of memory** to the container.*
-
-### 2. /dev/tun Passthrough
-
-Network TUNnel (or TUN) is a virtual network kernel device that provides an interface for user applications, such as NetBird, to deal with the raw network traffic. Since we set our container up as an unprivileged container, there is no access to this interface. Therefore, we have to add some lines manually to the configuration for this container. Under your main node, access the shell. Find your container number, like 100. Use nano or another text editor to open the configuration.
-
-```bash
-nano /etc/pve/lxc/100.conf
-```
-
-Add the following lines to the end of the file:
-
-```bash
-lxc.cgroup2.devices.allow: c 10:200 rwm
-lxc.mount.entry: /dev/net dev/net none bind,create=dir
-lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file
-```
-
-Now, start the container and check if the TUN device is available.
-
-```bash
-# On the Proxmox host
-pct start 100
-
-# On the container
-ls /dev/net
-```
-
-If you see `tun` is listed, you're ready to proceed to the next step.
-
-### 3. LXC Nameserver Configuration *(optional)*
-
-The TUN passthrough may cause DNS resolution issues in the container. To fix this, we need to configure the nameservers manually. Open the `/etc/pve/lxc/100.conf` file on your host and add the following line:
-
-```bash
-nameserver: <your_dns_server_ip>
-```
-
-***Note:*** *Replace `<your_dns_server_ip>` with the IP address of your DNS server (e.g. `1.1.1.1` or your router's IP address).*
-
-### 4. NetBird Setup Key
-
-> Skip this step if you already have a setup key from a previous installation. You can reuse the same key for multiple installations.
-
-Before we can install NetBird, we need to generate a setup key. This key is used to authenticate the installation and link it to your NetBird account. You can generate a setup key from the NetBird web UI.
-
-To generate a setup key, follow these steps:
-
-1. Go to your [NetBird Dashboard](https://app.netbird.io/).
-2. Navigate to the **Setup Keys** section.
-3. Click on **Create Setup Key**.
-4. Enter a name for the setup key (e.g. "Proxmox LXC").
-5. Set an expiration date for the key *(optional, recommended for enhanced security)*.
-6. Add the key to group(s) *(optional)*.
-7. Click on **Create** to generate the key.
-8. Copy the key and store it securely, as you will need it for the installation process.
-
-### 5. NetBird Installation
-
-To install NetBird on the LXC container, you can use the same installation script as for the VM. On the container's shell, run the following command:
-
-```bash
-apt update && apt upgrade -y
-apt install curl -y
-curl -fsSL https://pkgs.netbird.io/install.sh | sh
-```
-
-Once the installation is complete, connect the LXC to your NetBird account using the setup key you generated earlier.
-
-```bash
-netbird up --setup-key <your_setup_key>
-```
-
-You should see a message confirming that the connection was successful. You can now manage your NetBird network from the web UI.
 
 ---
 

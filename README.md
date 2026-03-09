@@ -20,7 +20,12 @@ You are reading my personal notes on setting up a self-hosted server (a.k.a home
 
 ## How To Use This Repo
 
-- **[Installation and Initial setup](./proxmox/README.md)**: My step-by-step walkthrough of installing Proxmox and setting up the initial configuration.
+- **[Installation and Initial Setup](./proxmox/)**: My step-by-step walkthrough of installing Proxmox and setting up the initial configuration.
+- **[Networking Configuration](./networking/)**: My guide on setting up a home network for my homelab, including port forwarding and dynamic DNS.
+
+### Apps
+
+- **[Nextcloud](./storage/nextcloud/README.md)**: My guide on setting up Nextcloud for personal cloud storage.
 
 ## My Hardware
 
