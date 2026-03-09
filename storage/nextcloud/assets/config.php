@@ -1,6 +1,10 @@
-// PHP CONFIGURATION FILE FOR NEXTCLOUD
-//
-// /var/www/nextcloud/config/config.php
+### PHP CONFIGURATION FILE FOR NEXTCLOUD
+#
+### This is a sample configuration file for Nextcloud. You should copy this file to
+### /var/www/nextcloud/config/config.php and adjust the settings according to
+### your environment.
+#
+### /var/www/nextcloud/config/config.php
 
 <?php
 $CONFIG = array (
@@ -16,22 +20,22 @@ $CONFIG = array (
   ),
   ### Uncomment the following line and adjust the config according to
   ### your reverse proxy setup (if applicable)
-  # 'overwritecondaddr' => '^your\.reverse\.proxy\.ip$',
-  # 'overwriteprotocol' => 'https',
-  # 'overwrite.cli.url' => 'https://nextcloud.example.com',
+  // 'overwritecondaddr' => '^your\.reverse\.proxy\.ip$',
+  // 'overwriteprotocol' => 'https',
+  // 'overwrite.cli.url' => 'https://nextcloud.example.com',
   'trusted_proxies' => 
   array (
     0 => '127.0.0.1',
     1 => '::1',
     ## Add the IP addresses of your reverse proxy server
-    # according to your reverse proxy setup (if applicable)
-    # 2 => 'your-reverse-proxy-ip',
+    ## according to your reverse proxy setup (if applicable)
+    // 2 => 'your-reverse-proxy-ip',
   ),
   'forwarded_for_headers' => 
   array (
     0 => 'HTTP_X_FORWARDED_FOR',
     ## Add additional headers according to your reverse proxy setup (if applicable)
-    # 1 => 'HTTP_CF_CONNECTING_IP',
+    // 1 => 'HTTP_CF_CONNECTING_IP',
   ),
 
   ### Database Configuration ###
@@ -52,10 +56,18 @@ $CONFIG = array (
   'memcache.locking' => '\OC\Memcache\Redis',
   'redis' => 
   array (
-    'host' => '127.0.0.1',
-    'port' => 6379,
-    'timeout' => 0.0,
+    'host' => '/run/redis/redis-server.sock',
+    'port' => 0,
   ),
+  ## If you are using Redis with TCP instead of a Unix socket,
+  ## use the following configuration instead (uncomment and adjust accordingly).
+  ## Make sure to comment out the previous 'redis' configuration if you do this.
+  // 'redis' => 
+  // array (
+  //   'host' => '127.0.0.1',
+  //   'port' => 6379,
+  //   'timeout' => 0.0,
+  // ),
 
   ### Region and Maintenance Configuration ###
   'default_phone_region' => 'US',   # Adjust to your actual region (e.g., 'US', 'DE', 'FR')
