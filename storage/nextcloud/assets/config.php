@@ -14,8 +14,8 @@ $CONFIG = array (
     0 => 'your-container-ip',
     1 => 'nextcloud.example.com',
   ),
-  # Uncomment the following line and adjust the config according to
-  # your reverse proxy setup (if applicable)
+  ### Uncomment the following line and adjust the config according to
+  ### your reverse proxy setup (if applicable)
   # 'overwritecondaddr' => '^your\.reverse\.proxy\.ip$',
   # 'overwriteprotocol' => 'https',
   # 'overwrite.cli.url' => 'https://nextcloud.example.com',
@@ -23,14 +23,14 @@ $CONFIG = array (
   array (
     0 => '127.0.0.1',
     1 => '::1',
-    # Add the IP addresses of your reverse proxy server
+    ## Add the IP addresses of your reverse proxy server
     # according to your reverse proxy setup (if applicable)
     # 2 => 'your-reverse-proxy-ip',
   ),
   'forwarded_for_headers' => 
   array (
     0 => 'HTTP_X_FORWARDED_FOR',
-    # Add additional headers according to your reverse proxy setup (if applicable)
+    ## Add additional headers according to your reverse proxy setup (if applicable)
     # 1 => 'HTTP_CF_CONNECTING_IP',
   ),
 
