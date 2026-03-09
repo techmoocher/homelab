@@ -202,16 +202,11 @@ Nextcloud can use caching to improve performance. We will be using **APCu** for 
 
 ```bash
 apt install -y redis-server php-{apcu,redis}
-```
-
-Once the installation is complete, you can start the Redis server and enable it to run on boot with the following commands:
-
-```bash
 systemctl start redis-server
 systemctl enable redis-server
 ```
 
-You can also test the Redis server by running the following command:
+You can test the Redis server by running the following command:
 
 ```bash
 redis-cli ping
@@ -234,7 +229,6 @@ Finally, add the `www-data` user to the `redis` group to allow PHP-FPM to access
 
 ```bash
 usermod -aG redis www-data
-systemctl enable redis-server
 systemctl restart redis-server
 systemctl restart php8.3-fpm apache2
 ```
