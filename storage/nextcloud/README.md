@@ -30,6 +30,9 @@
 3. [Installing Nextcloud](#3-installing-nextcloud)
 4. [Finalizing Nextcloud Installation](#4-finalizing-nextcloud-installation)
 5. [Post-Installation](#5-post-installation)
+    - 5.1. [Enabling Caching](#51-enabling-caching)
+    - 5.2. [Enabling Background Cron](#52-enabling-background-cron)
+    - 5.3. [Reverse Proxy Configuration *(optional)*](#53-reverse-proxy-configuration-optional)
 
 ---
 
@@ -92,7 +95,7 @@ systemctl status apache2
 
 You can also check if Apache2 is serving content by navigating to `http://<your-container-ip>` in your web browser. You should see the default Apache2 welcome page.
 
-![Apache2 Welcome Page](./assets/apache2-welcome-page.png)
+![Apache2 Welcome Page](./assets/images/apache2-welcome-page.png)
 
 ### 2.2. MariaDB Server
 
@@ -120,7 +123,7 @@ mariadb-secure-installation
 
 This will guide you through a series of prompts to secure your MariaDB installation. You will be asked to set a root password, remove anonymous users, disallow remote root login, and remove the test database. If this is your first time installing MariaDB and you have no idea what to do, follow the instructions in the video below:
 
-[![MariaDB Security Installation](./assets/mariadb-secure-installation-thumbnail.png)](./assets/mariadb-secure-installation.mp4)
+[![MariaDB Security Installation](./assets/images/mariadb-secure-installation-thumbnail.png)](./assets/videos/mariadb-secure-installation.mp4)
 
 #### 2.2.2. Database and User Setup
 
@@ -190,7 +193,7 @@ To install PHP and necessary modules, run the following command:
 ```bash
 apt install -y \
  php8.3 php8.3-fpm php8.3-cli php-json php-intl php-imagick \
- php8.3-{common,curl,gd,mbstring,xml,zip,mysql,imap,opcache,ldap,gmp,bz2}
+ php8.3-{common,curl,gd,mbstring,xml,zip,mysql,imap,opcache,ldap,gmp,bcmath,bz2}
 ```
 
 #### 2.3.2. Caching Configuration
@@ -233,6 +236,7 @@ Finally, add the `www-data` user to the `redis` group to allow PHP-FPM to access
 usermod -aG redis www-data
 systemctl enable redis-server
 systemctl restart redis-server
+systemctl restart php8.3-fpm apache2
 ```
 
 #### 2.3.3. PHP Configuration
@@ -356,7 +360,7 @@ There are some fields that you need to fill out:
 
 Once you have filled out all the fields, click on the **Install** button to complete the installation. Nextcloud will now set up the database and configure itself based on the information you provided. Nextcloud will also ask if you to install recommended apps, which you can choose to do or skip for now. After the installation is complete, you will be redirected to the Nextcloud dashboard where you can start using Nextcloud.
 
-![Nextcloud Dashboard](./assets/nextcloud-homepage.jpg)
+![Nextcloud Dashboard](./assets/images/nextcloud-homepage.jpg)
 
 ## 5. Post-Installation
 
@@ -370,13 +374,14 @@ Open the config file `/var/www/nextcloud/config/config.php` with your preferred 
   'memcache.locking' => '\OC\Memcache\Redis',
   'redis' => 
   array (
-    'host' => '127.0.0.1',
-    'port' => 6379,
-    'timeout' => 0.0,
+    'host' => '/run/redis/redis-server.sock',
+    'port' => 0,
   ),
 ```
 
-### 5.2 Enabling Background Cron
+***Note:*** *You can also use Redis with TCP instead of a Unix socket. However, it will comes with a slight cost in the performance. Make sure to check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/caching_configuration.html) for more information on caching configuration.*
+
+### 5.2. Enabling Background Cron
 
 By default, Nextcloud uses AJAX to run background tasks, but it is recommended to use the system cron for better performance and reliability. To enable the system cron, run the following command:
 
@@ -384,11 +389,40 @@ By default, Nextcloud uses AJAX to run background tasks, but it is recommended t
 crontab -u www-data -e
 ```
 
-and add the following line to the bottom:
+and add the following line to the bottom (ignore the comment):
 
 ```cron
+# Run Nextcloud cron every 5 minutes
 */5 * * * * php -f /var/www/nextcloud/cron.php
 ```
+
+### 5.3. Reverse Proxy Configuration *(optional)*
+
+If you want to access your Nextcloud instance using a domain name instead of the container's IP address, you can set up a reverse proxy. This is especially useful if you have multiple services running on the same server and want to access them using different subdomains. Be sure to update the `config.php` file to include the trusted domain:
+
+```php
+  'trusted_domains' => 
+  array (
+    0 => 'localhost',
+    1 => 'nextcloud.example.com', // Replace with your actual domain
+  ),
+  'overwrite.cli.url' => 'http://nextcloud.example.com', // Replace with your actual domain
+  'overwriteprotocol' => 'http', // Change to 'https' if you are using SSL
+  'overwritecondaddr' => '^your\.reverse\.proxy\.ip$', // Replace with your reverse proxy IP (if applicable)
+  'trusted_proxies' => 
+  array (
+    0 => '127.0.0.1',
+    1 => '::1',
+    2 => 'your-reverse-proxy-ip', // Replace with your reverse proxy IP (if applicable)
+  ),
+  'forwarded_for_headers' =>
+  array (
+    0 => 'HTTP_X_FORWARDED_FOR',
+    // Add additional headers according to your reverse proxy setup (if applicable)
+  ),
+```
+
+For more information on reverse proxy configuration, check out the [Nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/reverse_proxy_configuration.html). You can also checkout [my configuration file](./assets/config.php) for reference.
 
 ---
 
