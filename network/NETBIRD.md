@@ -1,4 +1,4 @@
-# NetBird Installation and Configuration
+# NetBird Installation and Configuration Guide
 
 ---
 
