@@ -37,6 +37,13 @@ $CONFIG = array (
     ## Add additional headers according to your reverse proxy setup (if applicable)
     // 1 => 'HTTP_CF_CONNECTING_IP',
   ),
+  ## Uncomment the following lines to restrict access to the admin
+  ## interface to specific IP ranges (adjust according to your network setup)
+  // 'allowed_admin_ranges' => 
+  // array (
+  //   0 => '127.0.0.1/8',
+  //   1 => '192.168.50.0/24', // Only allows your specific home router's subnet
+  // ),
 
   ### Database Configuration ###
   'datadirectory' => '/nextcloud-data',
@@ -69,7 +76,9 @@ $CONFIG = array (
   //   'timeout' => 0.0,
   // ),
 
-  ### Region and Maintenance Configuration ###
+  ### OTHERS ###
+  'debug' => false,
+  'loglevel' => 2,
   'default_phone_region' => 'US',   # Adjust to your actual region (e.g., 'US', 'DE', 'FR')
   'maintenance_window_start' => 2,  # Start time for maintenance mode (2 AM - UTC)
 );
