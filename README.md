@@ -25,7 +25,10 @@ You are reading my personal notes on setting up a self-hosted server (a.k.a home
 
 ### Apps
 
+#### Storage
+
 - **[Nextcloud](./storage/nextcloud/README.md)**: My guide on setting up Nextcloud for personal cloud storage.
+
 
 ## My Hardware
 
