@@ -1,4 +1,4 @@
-# Nextcloud on LXC
+# Nextcloud Installation and Configuration Guide
 
 ---
 
@@ -24,15 +24,17 @@
         - 2.2.3. [Optimizing MariaDB *(optional)*](#223-optimizing-mariadb-optional)
     - 2.3. [PHP](#23-php)
         - 2.3.1. [PHP Installation](#231-php-installation)
-        - 2.3.2. [Caching Configuration](#232-caching-configuration)
-        - 2.3.3. [PHP Configuration](#233-php-configuration)
-        - 2.3.4. [Tuning PHP-FPM Pool *(optional)*](#234-tuning-php-fpm-pool-optional)
+        - 2.3.2. [PHP Configuration](#232-php-configuration)
+        - 2.3.3. [Tuning PHP-FPM Pool *(optional)*](#233-tuning-php-fpm-pool-optional)
 3. [Installing Nextcloud](#3-installing-nextcloud)
-4. [Finalizing Nextcloud Installation](#4-finalizing-nextcloud-installation)
-5. [Post-Installation](#5-post-installation)
-    - 5.1. [Enabling Caching](#51-enabling-caching)
-    - 5.2. [Enabling Background Cron](#52-enabling-background-cron)
-    - 5.3. [Reverse Proxy Configuration *(optional)*](#53-reverse-proxy-configuration-optional)
+    - 3.1. [Nextcloud Installation](#31-nextcloud-installation)
+    - 3.2. [Apache2 Configuration](#32-apache2-configuration)
+    - 3.3. [Finalizing Nextcloud Installation](#33-finalizing-nextcloud-installation)
+4. [Post-Installation *(optional)*](#4-post-installation-optional)
+    - 4.1. [Caching Configuration](#41-caching-configuration)
+    - 4.2. [Enabling Background Cron](#42-enabling-background-cron)
+    - 4.3. [Hardening System](#43-hardening-system)
+    - 4.4. [Reverse Proxy Configuration](#44-reverse-proxy-configuration)
 
 ---
 
@@ -196,44 +198,7 @@ apt install -y \
  php8.3-{common,curl,gd,mbstring,xml,zip,mysql,imap,opcache,ldap,gmp,bcmath,bz2}
 ```
 
-#### 2.3.2. Caching Configuration
-
-Nextcloud can use caching to improve performance. We will be using **APCu** for local caching and **Redis** for distributed caching. To install these caching modules, run the following command:
-
-```bash
-apt install -y redis-server php-{apcu,redis}
-systemctl start redis-server
-systemctl enable redis-server
-```
-
-You can test the Redis server by running the following command:
-
-```bash
-redis-cli ping
-```
-
-which should return
-
-```bash
-PONG
-```
-
-To configure Redis, we need to make some changes to the `/etc/redis/redis.conf` file. Open the file with your preferred text editor and make the following changes:
-
-```conf
-unixsocket /run/redis/redis-server.sock
-unixsocketperm 770
-```
-
-Finally, add the `www-data` user to the `redis` group to allow PHP-FPM to access the Redis socket:
-
-```bash
-usermod -aG redis www-data
-systemctl restart redis-server
-systemctl restart php8.3-fpm apache2
-```
-
-#### 2.3.3. PHP Configuration
+#### 2.3.2. PHP Configuration
 
 By default, the configuration files for PHP are located in the `/etc/php/X.x/` directory *(`X.x` is the PHP version which, in this case, is `8.3`)*. The configuration for the web server (in this case, Apache2 + php-fpm) lives in `/etc/php/8.3/fpm/php.ini`.
 
@@ -256,13 +221,13 @@ opcache.revalidate_freq=60
 opcache.save_comments=1
 ```
 
-#### 2.3.4. Tuning PHP-FPM Pool *(optional)*
+#### 2.3.3. Tuning PHP-FPM Pool *(optional)*
 
 To optimize PHP-FPM for Nextcloud, we can make some changes to the pool configuration file, which is `/etc/php/8.3/fpm/pool.d/www.conf`. Open the file with your preferred text editor and make the following changes:
 
 ```conf
 pm = dynamic
-pm.max_children = 18
+pm.max_children = 20
 pm.start_servers = 4
 pm.min_spare_servers = 3
 pm.max_spare_servers = 6
@@ -342,7 +307,7 @@ a2dissite 000-default.conf
 systemctl reload apache2
 ```
 
-## 4. Finalizing Nextcloud Installation
+### 3.3. Finalizing Nextcloud Installation
 
 Now that we have Nextcloud installed and configured, we can finalize the installation by navigating to `http://<your-container-ip>` in your web browser. You should see the Nextcloud setup page where you can create an admin account and enter the database details that we created earlier.
 
@@ -356,11 +321,48 @@ Once you have filled out all the fields, click on the **Install** button to comp
 
 ![Nextcloud Dashboard](./assets/images/nextcloud-homepage.jpg)
 
-## 5. Post-Installation
+## 4. Post-Installation *(optional)*
 
-### 5.1. Enabling Caching
+After you have successfully installed Nextcloud, there are some additional configurations that you can do to optimize and secure your Nextcloud instance. Keep in mind that these configurations are ***optional***, but they can help improve the performance and security of your Nextcloud instance. Check out the [Nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration/index.html) for more information on configuration options. You can also check out [my configuration file](./assets/config.php) for reference.
 
-Open the config file `/var/www/nextcloud/config/config.php` with your preferred text editor and add the following lines before the closing `);` to enable caching with APCu and Redis:
+### 4.1. Caching Configuration
+
+Nextcloud can use caching to improve performance. We will be using **APCu** for local caching and **Redis** for distributed caching. To install these caching modules, run the following command:
+
+```bash
+apt install -y redis-server php-{apcu,redis}
+systemctl start redis-server
+systemctl enable redis-server
+```
+
+You can test the Redis server by running the following command:
+
+```bash
+redis-cli ping
+```
+
+which should return
+
+```bash
+PONG
+```
+
+In this example, we will be using a Unix socket for Redis instead of TCP. Skip this step if you prefer to use TCP. To configure Redis to use a Unix socket, open the Redis configuration file located at `/etc/redis/redis.conf` with your preferred text editor and make the following changes:
+
+```conf
+unixsocket /run/redis/redis-server.sock
+unixsocketperm 770
+```
+
+Then, add the `www-data` user to the `redis` group to allow PHP-FPM to access the Redis socket:
+
+```bash
+usermod -aG redis www-data
+systemctl restart redis-server
+systemctl restart php8.3-fpm apache2
+```
+
+Finally, to enable caching in Nextcloud, open the config file `/var/www/nextcloud/config/config.php` with your preferred text editor and add the following lines before the closing `);`
 
 ```php
   'memcache.local' => '\OC\Memcache\APCu',
@@ -373,9 +375,9 @@ Open the config file `/var/www/nextcloud/config/config.php` with your preferred 
   ),
 ```
 
-***Note:*** *You can also use Redis with TCP instead of a Unix socket. However, it will comes with a slight cost in the performance. Make sure to check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/caching_configuration.html) for more information on caching configuration.*
+***Note:*** *You can also use Redis with TCP instead of a Unix socket. However, it will comes with a slight cost in the performance.Check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/caching_configuration.html) for more information.*
 
-### 5.2. Enabling Background Cron
+### 4.2. Enabling Background Cron
 
 By default, Nextcloud uses AJAX to run background tasks, but it is recommended to use the system cron for better performance and reliability. To enable the system cron, run the following command:
 
@@ -390,7 +392,70 @@ and add the following line to the bottom (ignore the comment):
 */5 * * * * php -f /var/www/nextcloud/cron.php
 ```
 
-### 5.3. Reverse Proxy Configuration *(optional)*
+### 4.3. Hardening System
+
+Nextcloud provides some security recommendations to harden your Nextcloud instance. You can find these recommendations in the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/harden_server.html). The below are some of the recommendations that I have implemented in my Nextcloud instance.
+
+#### 4.3.1. Logging Configuration
+
+To enhance the security of your Nextcloud instance, it is important to configure logging properly. By default, Nextcloud logs are stored in the `data` directory, which may not be ideal for security reasons. It is recommended to store logs in a separate directory with restricted permissions.
+
+First, create a new directory dedicated to Nextcloud logs with the correct permissions:
+
+```bash
+mkdir -p /var/log/nextcloud
+chown www-data:www-data /var/log/nextcloud
+chmod 750 /var/log/nextcloud
+```
+
+Then, to configure Nextcloud to use this new log directory by opening the Nextcloud configuration file `/var/www/nextcloud/config/config.php` with your preferred text editor and add the following lines before the closing `);`
+
+```php
+  'debug' => false,
+  'loglevel' => 2,
+  'log_type' => 'file',
+  'logfile' => '/var/log/nextcloud.log',
+  'logfilemode' => 0640,
+  'log_rotate_size' => 104857600,   # Rotate log file when it reaches 100 MB
+  'log_rotate_keep' => 5,           # Keep the last 5 rotated log files
+  'log_rotate_compress' => true,    # Compress rotated log files to save space
+  'log_timezone' => 'UTC',
+  'default_language' => 'en',
+```
+
+#### 4.3.2. Restricting Admin Actions
+
+For security purposes, it is recommended to restrict admin actions to a specific IP address or range. This can help prevent unauthorized access to the admin interface and reduce the risk of brute-force attacks. To restrict admin actions, open the Nextcloud configuration file `/var/www/nextcloud/config/config.php` with your preferred text editor and add the following lines before the closing `);`
+
+```php
+  'allowed_admin_ranges' => 
+  array (
+    0 => '127.0.0.1/8',     # Allow localhost
+    1 => '192.168.0.0/24',  # Allow local network (adjust to your actual network range)
+    // Add more as needed
+  ),
+```
+
+#### 4.3.3. Enabling Security Headers
+
+To enhance the security of your Nextcloud instance, it is recommended to enable security headers in your web server configuration. These headers can help protect against various types of attacks, such as cross-site scripting (XSS) and clickjacking.
+
+To enable security headers in Apache2, open the Nextcloud virtual host configuration file located at `/etc/apache2/sites-available/nextcloud.conf` with your preferred text editor and add the following lines inside the `<VirtualHost>` block:
+
+```conf
+    Header always set Referrer-Policy "no-referrer"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+```
+
+Then, restart Apache2 for the changes to take effect:
+
+```bash
+systemctl restart apache2
+```
+
+### 4.4. Reverse Proxy Configuration
 
 If you want to access your Nextcloud instance using a domain name instead of the container's IP address, you can set up a reverse proxy. This is especially useful if you have multiple services running on the same server and want to access them using different subdomains. Be sure to update the `config.php` file to include the trusted domain:
 
@@ -415,8 +480,6 @@ If you want to access your Nextcloud instance using a domain name instead of the
     // Add additional headers according to your reverse proxy setup (if applicable)
   ),
 ```
-
-For more information on reverse proxy configuration, check out the [Nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/reverse_proxy_configuration.html). You can also checkout [my configuration file](./assets/config.php) for reference.
 
 ---
 
