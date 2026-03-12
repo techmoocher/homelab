@@ -585,6 +585,12 @@ You will also need to adjust some other settings as needed. The below is my exam
 
 Finally, when you've done the configuration, click on the **Save** button. You can download the harmless EICAR test file from the [EICAR website](https://www.eicar.org/download-anti-malware-testfile/) to test if the antivirus scanning is working properly.
 
+> **Note:** *For resource optimization, you can disable background scanning with occ to only scan files when they are uploaded. To do that, run the following command:*
+>
+> ```bash
+> sudo -E -u www-data php occ config:app:set files_antivirus av_background_scan --value="off"
+> ```
+
 ---
 
 Congratulations! You have successfully installed Nextcloud on an LXC container. You can now start uploading files, creating folders, and using all the features Nextcloud offers. Make sure to keep your Nextcloud instance updated and secured by following the best practices outlined in the [Nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/maintenance/index.html).
