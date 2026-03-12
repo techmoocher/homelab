@@ -36,6 +36,7 @@
     - 4.3. [Hardening System](#43-hardening-system)
     - 4.4. [Reverse Proxy Configuration](#44-reverse-proxy-configuration)
     - 4.5. [Warnings on Admin Page](#45-warnings-on-admin-page)
+    - 4.6. [Antivirus Configuration](#46-antivirus-configuration)
 
 Check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html) for more detailed information.
 
@@ -522,6 +523,67 @@ This warning indicates that the Strict-Transport-Security (HSTS) HTTP header is 
       # Header always set Strict-Transport-Security "max-age=15552000; includeSubDomains; preload"
     </IfModule>
 ```
+
+### 4.6. Antivirus Configuration
+
+Nextcloud server can be configured to use an antivirus software to scan files for malware. This can help protect your Nextcloud instance from malicious files and ensure the security of your data. To configure antivirus scanning in Nextcloud, you can use the ClamAV antivirus software, which is a popular open-source antivirus solution.
+
+To install ClamAV, run the following command:
+
+```bash
+apt install clamav clamav-daemon -y
+systemctl start clamav-daemon
+systemctl enable clamav-daemon
+```
+
+Next, download the latest ClamAV virus definitions by running the following command:
+
+```bash
+systemctl stop clamav-freshclam
+freshclam
+systemctl start clamav-freshclam
+```
+
+We will also need to set the correct permissions for the ClamAV socket to allow Nextcloud to communicate with the ClamAV daemon. Run the following command:
+
+```bash
+usermod -aG clamav www-data
+systemctl restart apache2 php8.3-fpm
+systemctl restart clamav-daemon
+```
+
+You may want to make changes to `etc/clamav/freshclam.conf` (the automated datase update service for ClamAV) as well as `etc/clamav/clamd.conf` (the configuration file for the ClamAV daemon) to optimize the antivirus scanning process. Check out the [ClamAV documentation](https://docs.clamav.net/manual/Usage/Configuration.html) for more information on how to configure ClamAV.
+
+It is worth noting that ClamAV can be resource-intensive. Therefore, I would recommend adding the following changes to `etc/clamav/clamd.conf` to optimize the virus scanning process.
+
+```conf
+MaxThreads 10
+MaxConnectionQueueLength 15
+MaxScanSize 100M
+MaxFileSize 100M
+```
+
+After that, navigate to the Nextcloud admin page. Go to **Apps** > **Security**. Find the app named **Antivirus for files** and click on the **Enable** button.
+
+![Enabling Antivirus for files App](./assets/images/enabling-av.png)
+
+Now, navigate to **Administration Settings** > **Antivirus for files**. You should see the configuration options for the antivirus app. In this example, we use the `ClamAV Daemon Socket`, with the socket path set to `/var/run/clamav/clamd.ctl`. Make sure to adjust the socket path if your ClamAV configuration uses a different path. You can use the following command to identify the correct path if necessary.
+
+```bash
+netstat -a|grep clam    # make sure to have net-tools installed
+```
+
+You should see something like this:
+
+```bash
+unix 2 [ ACC ] STREAM LISTENING 12345 /var/run/clamav/clamd.ctl
+```
+
+You will also need to adjust some other settings as needed. The below is my example configuration for the Antivirus for files app.
+
+![Antivirus for files Configuration](./assets/images/example-av-config.png)
+
+Finally, when you've done the configuration, click on the **Save** button. You can download the harmless EICAR test file from the [EICAR website](https://www.eicar.org/download-anti-malware-testfile/) to test if the antivirus scanning is working properly.
 
 ---
 
