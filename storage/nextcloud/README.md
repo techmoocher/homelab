@@ -506,6 +506,23 @@ This warning indicates that there are mimetype migrations available that have no
 sudo -u www-data php /var/www/nextcloud/occ maintenance:repair --include-expensive
 ```
 
+#### HTTP Access and URLs
+
+This warning indicates that there are issues with the HTTP access and URLs configuration. This can lead to issues with accessing Nextcloud and can also cause security vulnerabilities. To address this warning, you can check your Apache2 configuration and make sure that the `ServerName` directive is set correctly and that the virtual host is configured properly. You can also check the `config.php` file to make sure that the `trusted_domains` and `overwrite.cli.url` settings are configured correctly.
+
+#### Strict-Transport-Security HTTP header is not configured
+
+This warning indicates that the Strict-Transport-Security (HSTS) HTTP header is not configured. HSTS is a security feature that helps protect against man-in-the-middle attacks by enforcing the use of HTTPS. To address this warning, you can add the following line to your Apache2 virtual host configuration file (e.g, `/etc/apache2/sites-available/nextcloud.conf`).
+
+```conf
+    ## Add this right above the </VirtualHost> tag
+    <IfModule mod_headers.c>
+      Header always set Strict-Transport-Security "max-age=15552000; includeSubDomains"
+      ## Use the below line instead if you have a valid SSL certificate and want to enable HSTS preload list
+      # Header always set Strict-Transport-Security "max-age=15552000; includeSubDomains; preload"
+    </IfModule>
+```
+
 ---
 
 Congratulations! You have successfully installed Nextcloud on an LXC container. You can now start uploading files, creating folders, and using all the features Nextcloud offers. Make sure to keep your Nextcloud instance updated and secured by following the best practices outlined in the [Nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/maintenance/index.html).
