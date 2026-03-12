@@ -36,6 +36,8 @@
     - 4.3. [Hardening System](#43-hardening-system)
     - 4.4. [Reverse Proxy Configuration](#44-reverse-proxy-configuration)
 
+Check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html) for more detailed information.
+
 ---
 
 ## 1. LXC Setup
