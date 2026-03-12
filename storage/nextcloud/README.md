@@ -35,6 +35,7 @@
     - 4.2. [Enabling Background Cron](#42-enabling-background-cron)
     - 4.3. [Hardening System](#43-hardening-system)
     - 4.4. [Reverse Proxy Configuration](#44-reverse-proxy-configuration)
+    - 4.5. [Warnings on Admin Page](#45-warnings-on-admin-page)
 
 Check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html) for more detailed information.
 
@@ -481,6 +482,28 @@ If you want to access your Nextcloud instance using a domain name instead of the
     0 => 'HTTP_X_FORWARDED_FOR',
     // Add additional headers according to your reverse proxy setup (if applicable)
   ),
+```
+
+### 4.5. Warnings on Admin Page
+
+There are some warnings that may appear on the Nextcloud admin page after installation. These warnings are usually related to security and performance optimizations. It is recommended to address these warnings to ensure that your Nextcloud instance is secure and performs well. You can find more information about these warnings and how to address them in the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/security_setup_warnings.html).
+
+> The below are just some warnings I have encountered on my Nextcloud admin page and how I addressed them.
+
+#### Database missing indices
+
+This warning indicates that some database tables are missing indices, which can lead to performance issues. To address this warning, you can run the following command to add the missing indices:
+
+```bash
+sudo -u www-data php /var/www/nextcloud/occ db:add-missing-indices
+```
+
+#### Mimetype migrations available
+
+This warning indicates that there are mimetype migrations available that have not been applied. Mimetype migrations are used to update the mimetype database, which can improve performance when uploading and downloading files. To address this warning, you can run the following command to apply the mimetype migrations:
+
+```bash
+sudo -u www-data php /var/www/nextcloud/occ maintenance:repair --include-expensive
 ```
 
 ---
