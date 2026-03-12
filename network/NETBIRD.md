@@ -2,7 +2,7 @@
 
 ---
 
-NetBird is a WireGuard-based VPN solution that allows you to create a secure and private network between your devices. It is designed to be easy to set up and use, and it provides a simple web interface for managing your network. In this guide, I will walk you through the installation and configuration of NetBird on your Proxmox server.
+[NetBird](https://netbird.io/) is a WireGuard-based VPN solution that allows you to create a secure and private network between your devices. It is designed to be easy to set up and use, and it provides a simple web interface for managing your network. In this guide, I will walk you through the installation and configuration of NetBird on your Proxmox server.
 
 You can learn more about NetBird and its features on the [official website](https://netbird.io/).
 
