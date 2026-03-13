@@ -605,12 +605,12 @@ There are also some additional settings that you can configure for previews, suc
   'enable_previews' => true,
   'preview_concurrency_new' => 2,
   'preview_concurrency_all' => 4,
-  'preview_max_x' => 1024,  # in pixels
-  'preview_max_y' => 1024,  # in pixels
-  'preview_max_memory' => 256,  # in MB
-  'preview_max_filesize_image' => 50, # in MB
+  'preview_max_x' => 1024,  // in pixels
+  'preview_max_y' => 1024,  // in pixels
+  'preview_max_memory' => 256,  // in MB
+  'preview_max_filesize_image' => 50,   // in MB
   
-  'preview_ffmpeg_path' > '/usr/bin/ffmpeg',
+  'preview_ffmpeg_path' => '/usr/bin/ffmpeg',
   'preview_ffprobe_path' => '/usr/bin/ffprobe',
   'enabledPreviewProviders' => 
   array (

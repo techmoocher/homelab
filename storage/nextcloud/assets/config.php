@@ -96,7 +96,7 @@ $CONFIG = array (
   'preview_max_memory' => 256,  # in MB
   'preview_max_filesize_image' => 50, # in MB
   
-  'preview_ffmpeg_path' > '/usr/bin/ffmpeg',
+  'preview_ffmpeg_path' => '/usr/bin/ffmpeg',
   'preview_ffprobe_path' => '/usr/bin/ffprobe',
   'enabledPreviewProviders' => 
   array (
