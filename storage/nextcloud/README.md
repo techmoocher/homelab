@@ -37,6 +37,7 @@
     - 4.4. [Reverse Proxy Configuration](#44-reverse-proxy-configuration)
     - 4.5. [Warnings on Admin Page](#45-warnings-on-admin-page)
     - 4.6. [Antivirus Configuration](#46-antivirus-configuration)
+    - 4.7. [Previews Configuration](#47-previews-configuration)
 
 Check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html) for more detailed information.
 
@@ -66,7 +67,7 @@ Before we start installing the dependencies, make sure to update your package li
 
 ```bash
 apt update && apt upgrade -y
-apt install -y curl wget unzip ffmpeg imagemagick
+apt install -y curl wget unzip ffmpeg ffmpegthumbnailer imagemagick
 ```
 
 ### 2.1. Apache2
@@ -421,9 +422,7 @@ Then, to configure Nextcloud to use this new log directory by opening the Nextcl
   'logfile' => '/var/log/nextcloud.log',
   'logfilemode' => 0640,
   'log_rotate_size' => 104857600,   # Rotate log file when it reaches 100 MB
-  'log_rotate_keep' => 5,           # Keep the last 5 rotated log files
-  'log_rotate_compress' => true,    # Compress rotated log files to save space
-  'log_timezone' => 'UTC',
+  'logtimezone' => 'UTC',
   'default_language' => 'en',
 ```
 
@@ -590,6 +589,42 @@ Finally, when you've done the configuration, click on the **Save** button. You c
 > ```bash
 > sudo -E -u www-data php occ config:app:set files_antivirus av_background_scan --value="off"
 > ```
+
+### 4.7. Previews Configuration
+
+Nextcloud can generate previews for various file types, such as images, videos, and documents. This can enhance the user experience by allowing users to see a preview of their files without having to download them. To enable and configure previews in Nextcloud, open the Nextcloud configuration file `/var/www/nextcloud/config/config.php` with your preferred text editor and add the following lines before the closing `);`
+
+```php
+  # PREVIEWS
+  'enable_previews' => true,
+```
+
+There are also some additional settings that you can configure for previews, such as the maximum preview size and the types of files that should have previews generated. You can find more information about these settings in the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_files/previews_configuration.html). Some of the settings I recommend configuring are:
+
+```php
+  'enable_previews' => true,
+  'preview_concurrency_new' => 2,
+  'preview_concurrency_all' => 4,
+  'preview_max_x' => 1024,  # in pixels
+  'preview_max_y' => 1024,  # in pixels
+  'preview_max_memory' => 256,  # in MB
+  'preview_max_filesize_image' => 50, # in MB
+  
+  'preview_ffmpeg_path' > '/usr/bin/ffmpeg',
+  'preview_ffprobe_path' => '/usr/bin/ffprobe',
+  'enabledPreviewProviders' => 
+  array (
+    0 => 'OC\Preview\PNG',
+    1 => 'OC\Preview\JPEG',
+    2 => 'OC\Preview\GIF',
+    3 => 'OC\Preview\BMP',
+    4 => 'OC\Preview\HEIC',
+    5 => 'OC\Preview\WebP',
+    6 => 'OC\Preview\Movie',
+    7 => 'OC\Preview\PDF',
+    8 => 'OC\Preview\TXT',
+  ),
+```
 
 ---
 

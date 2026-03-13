@@ -84,10 +84,32 @@ $CONFIG = array (
   'logfile' => '/var/log/nextcloud.log',
   'logfilemode' => 0640,
   'log_rotate_size' => 104857600,   # Rotate log file when it reaches 100 MB
-  'log_rotate_keep' => 5,           # Keep the last 5 rotated log files
-  'log_rotate_compress' => true,    # Compress rotated log files to save space
   'log_timezone' => 'UTC',
   'default_language' => 'en',
+
+  # PREVIEWS
+  'enable_previews' => true,
+  'preview_concurrency_new' => 2,
+  'preview_concurrency_all' => 4,
+  'preview_max_x' => 1024,
+  'preview_max_y' => 1024,
+  'preview_max_memory' => 256,  # in MB
+  'preview_max_filesize_image' => 50, # in MB
+  
+  'preview_ffmpeg_path' > '/usr/bin/ffmpeg',
+  'preview_ffprobe_path' => '/usr/bin/ffprobe',
+  'enabledPreviewProviders' => 
+  array (
+    0 => 'OC\Preview\PNG',
+    1 => 'OC\Preview\JPEG',
+    2 => 'OC\Preview\GIF',
+    3 => 'OC\Preview\BMP',
+    4 => 'OC\Preview\HEIC',
+    5 => 'OC\Preview\WebP',
+    6 => 'OC\Preview\Movie',
+    7 => 'OC\Preview\PDF',
+    8 => 'OC\Preview\TXT',
+  ),
 
   # MISCELLANEOUS
   'default_phone_region' => 'US',   # Adjust to your actual region (e.g., 'US', 'DE', 'FR')
