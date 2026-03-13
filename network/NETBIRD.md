@@ -16,6 +16,7 @@ You can learn more about NetBird and its features on the [official website](http
     - [LXC Nameserver Configuration](#3-lxc-nameserver-configuration-optional)
     - [NetBird Setup Key](#4-netbird-setup-key)
     - [NetBird Installation](#5-netbird-installation)
+    - [NetBird Post-Installation](#6-netbird-post-installation)
 
 2. **[NetBird on VM](#netbird-on-vm)**
     - [Prerequisites](#1-prerequisites)
@@ -107,13 +108,30 @@ netbird up --setup-key <your_setup_key>
 
 You should see a message confirming that the connection was successful. You can now manage your NetBird network from the web UI.
 
+### 6. NetBird Post-Installation
+
+After the installation, you can start adding devices to your NetBird network and configuring your settings. For more information on how to use NetBird and its features, check out the [official documentation](https://docs.netbird.io/selfhosted/selfhosted-quickstart) for more details.
+
+#### Enabling Forwarding and IP Masquerading
+
+To allow devices on your NetBird network to access the internet through the LXC container, you need to enable IP forwarding and set up IP masquerading. You can do this by running the following commands on the container:
+
+```bash
+# Enable IP forwarding
+echo "net.ipv4.ip_forward=1" | tee -a /etc/sysctl.conf
+sysctl -p
+# Set up IP masquerading
+apt install iptables
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+```
+
+
+
 ---
 
 ## NetBird on VM
 
 This is the quickest and most straightforward way to set up NetBird. It is also the recommended way for most users, especially if you are new to self-hosting and don't have much experience with Linux. If you already have a VM set up and a registered domain name, it should take you less than 10 minutes to get NetBird up and running. Check out the [official documentation](https://docs.netbird.io/selfhosted/selfhosted-quickstart) for more details.
-
-***Note:*** *If you want to set up NetBird on an LXC container, please refer to the [next section](#netbird-on-lxc).*
 
 ### 1. Prerequisites
 
