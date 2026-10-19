@@ -1,7 +1,5 @@
 # NetBird Installation and Configuration Guide
 
----
-
 [NetBird](https://netbird.io/) is a WireGuard-based VPN solution that allows you
 to create a secure and private network between your devices. It is designed to
 be easy to set up and use, and it provides a simple web interface for managing
