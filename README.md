@@ -16,53 +16,57 @@
 
 ---
 
-You are reading my personal notes on setting up a self-hosted server (a.k.a homelab) using Proxmox. This is not a tutorial, but more of an anecdotal documentation of my own experience. My main reason for writing this is to log my journey in self-hosting and to share my experience with hobbyists who are interested in self-hosting but don't know where to start. I know that there are already many good tutorials on setting up a homelab, but I hope this can be a good starting point for you to get into self-hosting and have fun with it!
-
-## How To Use This Repo
-
-- **[Installation and Initial Setup](./proxmox/)**: My step-by-step walkthrough of installing Proxmox and setting up the initial configuration.
-- **[Networking Configuration](./networking/)**: My guide on setting up a home network for my homelab, including port forwarding and dynamic DNS.
-
-### Apps
-
-#### Storage
-
-- **[Nextcloud](./storage/nextcloud/README.md)**: My guide on setting up Nextcloud for personal cloud storage.
-
+You are reading my personal notes on setting up a self-hosted server (a.k.a
+homelab) using Proxmox. This is not a tutorial, but more of an anecdotal
+documentation of my own experience. My main reason for writing this is to log my
+journey in self-hosting and to share my experience with hobbyists who are
+interested in self-hosting but don't know where to start. I know that there are
+already many good tutorials on setting up a homelab, but I hope this can be a
+good starting point for you to get into self-hosting and have fun with it!
 
 ## My Hardware
 
-As a full-time student and part-time hobbyist, I have a limited budget for my homelab. Thus, I digged into the pile of old tech gadgets in my dad's garage and decided to utilized the following as my set up:
+As a full-time student and part-time hobbyist, I have a limited budget for my
+homelab. Thus, I digged into the pile of old tech gadgets in my dad's garage and
+decided to utilized the following as my set up:
 
-- **ThinkPad T450 (Intel i5-5300U/Intel HD Graphics 5500/8GB RAM/228GB SSD)** *(Proxmox server)*
-- **A 2TB WD Purple** *(storage)*
+- **ThinkPad T450 (Intel i5-5300U/Intel HD Graphics 5500/8GB RAM/228GB SSD)**
+  _(Proxmox server)_
+- **A 2TB WD Purple** _(storage)_
 
 ![My homelab setup](./.github/assets/images/homelab-setup.png)
 
 ## My Softwares
 
-After a few months of tinkering and experimenting, I decided to settle on the following softwares for my homelab. However, as a hobbyist, I am always open to trying out new softwares and tools, so this list is not exhaustive and may change in the future. You are welcome to suggest anything you think is worth trying out!
+After a few months of tinkering and experimenting, I decided to settle on the
+following softwares for my homelab. However, as a hobbyist, I am always open to
+trying out new softwares and tools, so this list is not exhaustive and may
+change in the future. You are welcome to suggest anything you think is worth
+trying out!
 
 For the time being, I am using the following in my homelab.
 
-- **[Proxmox VE][proxmox-ve]** *(virtualization platform)*
-- **[Portainer][portainer]** *(Docker management)*
-- **[Nextcloud][nextcloud]** *(personal cloud storage)*
-- **[AdGuard Home][adguard-home]** *(network-wide ad blocker)*
-- **[Immich][immich]** *(self-hosted photo management)*
-- **[Navidrome][navidrome]** *(self-hosted music streaming server)*
-- **[Jellyfin][jellyfin]** *(self-hosted media server)*
-- **[Vaultwarden][vaultwarden]** *(self-hosted password manager)*
-- **[Nginx Proxy Manager][nginx-proxy-manager]** *(reverse proxy management)*
-- **[Prometheus][prometheus]** *(monitoring and alerting toolkit)*
-- **[Grafana][grafana]** *(analytics and monitoring platform)*
-- **[n8n][n8n]** *(workflow automation)*
+- **[Proxmox VE][proxmox-ve]** _(virtualization platform)_
+- **[Portainer][portainer]** _(Docker management)_
+- **[Nextcloud][nextcloud]** _(personal cloud storage)_
+- **[AdGuard Home][adguard-home]** _(network-wide ad blocker)_
+- **[Immich][immich]** _(self-hosted photo management)_
+- **[Navidrome][navidrome]** _(self-hosted music streaming server)_
+- **[Jellyfin][jellyfin]** _(self-hosted media server)_
+- **[Vaultwarden][vaultwarden]** _(self-hosted password manager)_
+- **[Caddy][caddy]** _(reverse proxy management)_
+- **[Prometheus][prometheus]** _(monitoring and alerting toolkit)_
+- **[Grafana][grafana]** _(analytics and monitoring platform)_
+- **[n8n][n8n]** _(workflow automation)_
 
 ## License
 
-This project is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
+This project is licensed under the
+[MIT License](https://en.wikipedia.org/wiki/MIT_License).
 
-You are free to use, modify, and distribute this project for any purpose, as long as you include the original license and copyright notice in any copies or substantial portions of the software.
+You are free to use, modify, and distribute this project for any purpose, as
+long as you include the original license and copyright notice in any copies or
+substantial portions of the software.
 
 For more details, please refer to the [LICENSE](./LICENSE) file.
 
@@ -74,7 +78,7 @@ For more details, please refer to the [LICENSE](./LICENSE) file.
 [navidrome]: https://www.navidrome.org/
 [jellyfin]: https://jellyfin.org/
 [vaultwarden]: https://github.com/dani-garcia/vaultwarden
-[nginx-proxy-manager]: https://nginxproxymanager.com/
+[caddy]: https://caddyserver.com/
 [prometheus]: https://prometheus.io/
 [grafana]: https://grafana.com/
 [n8n]: https://n8n.io/
