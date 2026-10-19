@@ -2,14 +2,24 @@
 
 ---
 
-[Nextcloud](https://nextcloud.com) is a popular open-source self-hosted cloud storage solution. It allows you to store and access your files, calendars, contacts, and more from any device.
+[Nextcloud](https://nextcloud.com) is a popular open-source self-hosted cloud
+storage solution. It allows you to store and access your files, calendars,
+contacts, and more from any device.
 
 **Why Nextcloud?**
 
-- **Privacy**: Nextcloud gives you full control over your data. You can host it on your own server, ensuring that your files are not stored on third-party servers.
-- **Customization**: Nextcloud offers a wide range of apps and plugins that allow you to customize your cloud storage experience. You can add features such as file sharing, calendar integration, and more.
-- **Collaboration**: Nextcloud allows you to collaborate with others by sharing files and folders. You can set permissions for each user, ensuring that your data is secure.
-- **Accessibility**: Nextcloud can be accessed from any device with an internet connection. You can use the web interface, desktop clients, or mobile apps to access your files and data.
+- **Privacy**: Nextcloud gives you full control over your data. You can host it
+  on your own server, ensuring that your files are not stored on third-party
+  servers.
+- **Customization**: Nextcloud offers a wide range of apps and plugins that
+  allow you to customize your cloud storage experience. You can add features
+  such as file sharing, calendar integration, and more.
+- **Collaboration**: Nextcloud allows you to collaborate with others by sharing
+  files and folders. You can set permissions for each user, ensuring that your
+  data is secure.
+- **Accessibility**: Nextcloud can be accessed from any device with an internet
+  connection. You can use the web interface, desktop clients, or mobile apps to
+  access your files and data.
 
 ---
 
@@ -17,53 +27,72 @@
 
 1. [LXC Setup](#1-lxc-setup)
 2. [Installing Dependencies](#2-installing-dependencies)
-    - 2.1. [Apache2](#21-apache2)
-    - 2.2. [MariaDB Server](#22-mariadb-server)
-        - 2.2.1. [MariaDB Installation](#221-mariadb-installation)
-        - 2.2.2. [Database and User Setup](#222-database-and-user-setup)
-        - 2.2.3. [Optimizing MariaDB *(optional)*](#223-optimizing-mariadb-optional)
-    - 2.3. [PHP](#23-php)
-        - 2.3.1. [PHP Installation](#231-php-installation)
-        - 2.3.2. [PHP Configuration](#232-php-configuration)
-        - 2.3.3. [Tuning PHP-FPM Pool *(optional)*](#233-tuning-php-fpm-pool-optional)
+   - 2.1. [Apache2](#21-apache2)
+   - 2.2. [MariaDB Server](#22-mariadb-server)
+     - 2.2.1. [MariaDB Installation](#221-mariadb-installation)
+     - 2.2.2. [Database and User Setup](#222-database-and-user-setup)
+     - 2.2.3.
+       [Optimizing MariaDB _(optional)_](#223-optimizing-mariadb-optional)
+   - 2.3. [PHP](#23-php)
+     - 2.3.1. [PHP Installation](#231-php-installation)
+     - 2.3.2. [PHP Configuration](#232-php-configuration)
+     - 2.3.3.
+       [Tuning PHP-FPM Pool _(optional)_](#233-tuning-php-fpm-pool-optional)
 3. [Installing Nextcloud](#3-installing-nextcloud)
-    - 3.1. [Nextcloud Installation](#31-nextcloud-installation)
-    - 3.2. [Apache2 Configuration](#32-apache2-configuration)
-    - 3.3. [Finalizing Nextcloud Installation](#33-finalizing-nextcloud-installation)
-4. [Post-Installation *(optional)*](#4-post-installation-optional)
-    - 4.1. [Caching Configuration](#41-caching-configuration)
-    - 4.2. [Enabling Background Cron](#42-enabling-background-cron)
-    - 4.3. [Hardening System](#43-hardening-system)
-    - 4.4. [Reverse Proxy Configuration](#44-reverse-proxy-configuration)
-    - 4.5. [Warnings on Admin Page](#45-warnings-on-admin-page)
-    - 4.6. [Antivirus Configuration](#46-antivirus-configuration)
-    - 4.7. [Previews Configuration](#47-previews-configuration)
+   - 3.1. [Nextcloud Installation](#31-nextcloud-installation)
+   - 3.2. [Apache2 Configuration](#32-apache2-configuration)
+   - 3.3.
+     [Finalizing Nextcloud Installation](#33-finalizing-nextcloud-installation)
+4. [Post-Installation _(optional)_](#4-post-installation-optional)
+   - 4.1. [Caching Configuration](#41-caching-configuration)
+   - 4.2. [Enabling Background Cron](#42-enabling-background-cron)
+   - 4.3. [Hardening System](#43-hardening-system)
+   - 4.4. [Reverse Proxy Configuration](#44-reverse-proxy-configuration)
+   - 4.5. [Warnings on Admin Page](#45-warnings-on-admin-page)
+   - 4.6. [Antivirus Configuration](#46-antivirus-configuration)
+   - 4.7. [Previews Configuration](#47-previews-configuration)
 
-Check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html) for more detailed information.
+Check out the
+[Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html)
+for more detailed information.
 
 ---
 
 ## 1. LXC Setup
 
-Before we start installing Nextcloud, we need to set up an LXC container to host our Nextcloud instance. Follow the instructions in the [LXC Setup](../../proxmox/README.md#9-creating-your-first-container-optional) guide to create a new container for Nextcloud. The below specifications are recommended for a smooth Nextcloud experience, but you can adjust them based on your needs and the resources available on your host machine.
+Before we start installing Nextcloud, we need to set up an LXC container to host
+our Nextcloud instance. Follow the instructions in the
+[LXC Setup](../../proxmox/README.md#9-creating-your-first-container-optional)
+guide to create a new container for Nextcloud. The below specifications are
+recommended for a smooth Nextcloud experience, but you can adjust them based on
+your needs and the resources available on your host machine.
 
 ### Recommended Specs
 
 - **CPU:** 2 vCPUs
-- **RAM:** 2 GB *(4 if applicable)*
-- **Storage:** 16 GB *(or more depending on your needs)*
+- **RAM:** 2 GB _(4 if applicable)_
+- **Storage:** 16 GB _(or more depending on your needs)_
 - **Template:** Ubuntu 24.04 LTS
 - **Type**: Unprivileged
 
-***Note:*** *You can mount additional storage to the container if you want to separate the container's data and Nextcloud's data. Check out the [Mounting Storage](../../proxmox/README.md#10-mounting-storage-to-your-container-optional) guide for instructions on how to do this.*
+**_Note:_** _You can mount additional storage to the container if you want to
+separate the container's data and Nextcloud's data. Check out the
+[Mounting Storage](../../proxmox/README.md#10-mounting-storage-to-your-container-optional)
+guide for instructions on how to do this._
 
-***Note:*** *If you mount external Proxmox storage to an unprivileged container, remember to set host ownership to 100033:100033.*
+**_Note:_** _If you mount external Proxmox storage to an unprivileged container,
+remember to set host ownership to 100033:100033._
 
 ## 2. Installing Dependencies
 
-Nextcloud requires a web server, a database server, and a runtime environment. In this guide, we will be using **Apache2** as our web server, **MariaDB** as our database server, and **PHP** as our runtime environment. To learn more about the installation process, check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html).
+Nextcloud requires a web server, a database server, and a runtime environment.
+In this guide, we will be using **Apache2** as our web server, **MariaDB** as
+our database server, and **PHP** as our runtime environment. To learn more about
+the installation process, check out the
+[Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/index.html).
 
-Before we start installing the dependencies, make sure to update your package list and upgrade your system by running the following commands:
+Before we start installing the dependencies, make sure to update your package
+list and upgrade your system by running the following commands:
 
 ```bash
 apt update && apt upgrade -y
@@ -72,7 +101,11 @@ apt install -y curl wget unzip ffmpeg ffmpegthumbnailer imagemagick
 
 ### 2.1. Apache2
 
-[Apache2](https://httpd.apache.org/) is a popular open-source web server that is widely used to serve web applications. It is known for its stability, security, and flexibility. In this guide, we will be using **Apache 2.4**. You can install other versions if you prefer, but make sure to check the official documentation before doing so.
+[Apache2](https://httpd.apache.org/) is a popular open-source web server that is
+widely used to serve web applications. It is known for its stability, security,
+and flexibility. In this guide, we will be using **Apache 2.4**. You can install
+other versions if you prefer, but make sure to check the official documentation
+before doing so.
 
 To install Apache2, run the following command:
 
@@ -80,7 +113,8 @@ To install Apache2, run the following command:
 apt install apache2 -y
 ```
 
-Once the installation is complete, you can start Apache2 and enable it to run on boot with the following commands:
+Once the installation is complete, you can start Apache2 and enable it to run on
+boot with the following commands:
 
 ```bash
 systemctl start apache2
@@ -100,7 +134,9 @@ To check if Apache2 is running properly, you can use the following command:
 systemctl status apache2
 ```
 
-You can also check if Apache2 is serving content by navigating to `http://<your-container-ip>` in your web browser. You should see the default Apache2 welcome page.
+You can also check if Apache2 is serving content by navigating to
+`http://<your-container-ip>` in your web browser. You should see the default
+Apache2 welcome page.
 
 ![Apache2 Welcome Page](./assets/images/apache2-welcome-page.png)
 
@@ -108,7 +144,12 @@ You can also check if Apache2 is serving content by navigating to `http://<your-
 
 #### 2.2.1. MariaDB Installation
 
-[MariaDB](https://mariadb.org/) is a popular open-source relational database management system that is widely used to store data for web applications. It is a fork of MySQL and is known for its performance, reliability, and security. In this guide, we will be using **MariaDB 10.11**. You can install other versions of MariaDB if you prefer, but make sure to check the official documentation before doing so.
+[MariaDB](https://mariadb.org/) is a popular open-source relational database
+management system that is widely used to store data for web applications. It is
+a fork of MySQL and is known for its performance, reliability, and security. In
+this guide, we will be using **MariaDB 10.11**. You can install other versions
+of MariaDB if you prefer, but make sure to check the official documentation
+before doing so.
 
 To install MariaDB, run the following command:
 
@@ -116,7 +157,8 @@ To install MariaDB, run the following command:
 apt install mariadb-server -y
 ```
 
-Once the installation is complete, you can start the MariaDB security installation process by running the following command:
+Once the installation is complete, you can start the MariaDB security
+installation process by running the following command:
 
 ```bash
 mysql_secure_installation
@@ -128,13 +170,18 @@ or
 mariadb-secure-installation
 ```
 
-This will guide you through a series of prompts to secure your MariaDB installation. You will be asked to set a root password, remove anonymous users, disallow remote root login, and remove the test database. If this is your first time installing MariaDB and you have no idea what to do, follow the instructions in the video below:
+This will guide you through a series of prompts to secure your MariaDB
+installation. You will be asked to set a root password, remove anonymous users,
+disallow remote root login, and remove the test database. If this is your first
+time installing MariaDB and you have no idea what to do, follow the instructions
+in the video below:
 
 [![MariaDB Security Installation](./assets/images/mariadb-secure-installation-thumbnail.png)](./assets/videos/mariadb-secure-installation.mp4)
 
 #### 2.2.2. Database and User Setup
 
-Nextcloud requires a database and a user to connect to that database. You can create a new database and user for Nextcloud by running the following commands:
+Nextcloud requires a database and a user to connect to that database. You can
+create a new database and user for Nextcloud by running the following commands:
 
 ```bash
 mysql -u root -p
@@ -146,7 +193,8 @@ or
 mariadb -u root -p
 ```
 
-This will open the MariaDB shell. Run the following commands to create a new database and user for Nextcloud:
+This will open the MariaDB shell. Run the following commands to create a new
+database and user for Nextcloud:
 
 ```sql
 CREATE DATABASE nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
@@ -156,19 +204,24 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
-***Note:*** Make sure to replace `nextclouduser` with a username of your choice and `strongpassword` with a strong password of your choice. You will need this password later when you configure Nextcloud.
+**_Note:_** Make sure to replace `nextclouduser` with a username of your choice
+and `strongpassword` with a strong password of your choice. You will need this
+password later when you configure Nextcloud.
 
-To check if the database and user were created successfully, you can run the following command:
+To check if the database and user were created successfully, you can run the
+following command:
 
 ```bash
 mysql -u root -p -e "SHOW DATABASES; SHOW GRANTS FOR 'nextclouduser'@'localhost';"
 ```
 
-You should see the `nextcloud` listed in the databases and the appropriate privileges for the `nextclouduser`.
+You should see the `nextcloud` listed in the databases and the appropriate
+privileges for the `nextclouduser`.
 
-#### 2.2.3. Optimizing MariaDB *(optional)*
+#### 2.2.3. Optimizing MariaDB _(optional)_
 
-To optimize MariaDB, open the file `etc/mysql/mariadb.conf.d/50-server.cnf` with your preferred text editor and make the following changes:
+To optimize MariaDB, open the file `etc/mysql/mariadb.conf.d/50-server.cnf` with
+your preferred text editor and make the following changes:
 
 ```cnf
 [mysqld]
@@ -191,9 +244,18 @@ systemctl restart mariadb
 
 #### 2.3.1. PHP Installation
 
-[PHP](https://www.php.net/) is a popular server-side scripting language that is widely used to develop web applications. Nextcloud is operated using PHP, so we need to install it along with the necessary PHP modules to run Nextcloud smoothly.
+[PHP](https://www.php.net/) is a popular server-side scripting language that is
+widely used to develop web applications. Nextcloud is operated using PHP, so we
+need to install it along with the necessary PHP modules to run Nextcloud
+smoothly.
 
-For the simplicity of this guide, we will use **PHP 8.3**, which is the version recommended by Nextcloud at the time of writing. You can install other versions of PHP if you prefer. Check out the [System Requirements](https://docs.nextcloud.com/server/latest/admin_manual/installation/system_requirements.html) and [PHP Modules & Configuration](https://docs.nextcloud.com/server/latest/admin_manual/installation/php_configuration.html) documentation for more details.
+For the simplicity of this guide, we will use **PHP 8.3**, which is the version
+recommended by Nextcloud at the time of writing. You can install other versions
+of PHP if you prefer. Check out the
+[System Requirements](https://docs.nextcloud.com/server/latest/admin_manual/installation/system_requirements.html)
+and
+[PHP Modules & Configuration](https://docs.nextcloud.com/server/latest/admin_manual/installation/php_configuration.html)
+documentation for more details.
 
 To install PHP and necessary modules, run the following command:
 
@@ -205,9 +267,13 @@ apt install -y \
 
 #### 2.3.2. PHP Configuration
 
-By default, the configuration files for PHP are located in the `/etc/php/X.x/` directory *(`X.x` is the PHP version which, in this case, is `8.3`)*. The configuration for the web server (in this case, Apache2 + php-fpm) lives in `/etc/php/8.3/fpm/php.ini`.
+By default, the configuration files for PHP are located in the `/etc/php/X.x/`
+directory _(`X.x` is the PHP version which, in this case, is `8.3`)_. The
+configuration for the web server (in this case, Apache2 + php-fpm) lives in
+`/etc/php/8.3/fpm/php.ini`.
 
-Open the `php.ini` file with your preferred text editor and make the following changes:
+Open the `php.ini` file with your preferred text editor and make the following
+changes:
 
 ```ini
 memory_limit = 1024M
@@ -226,9 +292,11 @@ opcache.revalidate_freq=60
 opcache.save_comments=1
 ```
 
-#### 2.3.3. Tuning PHP-FPM Pool *(optional)*
+#### 2.3.3. Tuning PHP-FPM Pool _(optional)_
 
-To optimize PHP-FPM for Nextcloud, we can make some changes to the pool configuration file, which is `/etc/php/8.3/fpm/pool.d/www.conf`. Open the file with your preferred text editor and make the following changes:
+To optimize PHP-FPM for Nextcloud, we can make some changes to the pool
+configuration file, which is `/etc/php/8.3/fpm/pool.d/www.conf`. Open the file
+with your preferred text editor and make the following changes:
 
 ```conf
 pm = dynamic
@@ -250,7 +318,10 @@ systemctl restart php8.3-fpm apache2
 
 ### 3.1. Nextcloud Installation
 
-Now that we have all the dependencies installed and configured, we can proceed to install Nextcloud. The latest version of Nextcloud can be downloaded from the [Nextcloud website](https://nextcloud.com/install/). Use the following command to download the latest version of Nextcloud:
+Now that we have all the dependencies installed and configured, we can proceed
+to install Nextcloud. The latest version of Nextcloud can be downloaded from the
+[Nextcloud website](https://nextcloud.com/install/). Use the following command
+to download the latest version of Nextcloud:
 
 ```bash
 mkdir -p /var/cache/nextcloud && cd /var/cache/nextcloud
@@ -260,7 +331,8 @@ mv nextcloud /var/www/
 rm -rf /var/cache/nextcloud
 ```
 
-Next, we need to set the correct permissions for the Nextcloud files. Run the following commands to set the ownership and permissions:
+Next, we need to set the correct permissions for the Nextcloud files. Run the
+following commands to set the ownership and permissions:
 
 ```bash
 cd /var/www
@@ -269,7 +341,8 @@ find /var/www/nextcloud -type d -exec chmod 750 {} \;
 find /var/www/nextcloud -type f -exec chmod 640 {} \;
 ```
 
-***Note:*** *If you have mounted additional storage for Nextcloud, you need to set the correct the ownership and permissions for that storage as well.*
+**_Note:_** _If you have mounted additional storage for Nextcloud, you need to
+set the correct the ownership and permissions for that storage as well._
 
 ```bash
 # On your Proxmox host
@@ -283,7 +356,9 @@ chmod -R 750 /path/to/mounted/storage/on/lxc
 
 ### 3.2. Apache2 Configuration
 
-Nextcloud is now installed, but we still need an Apache2 virtual host configuration for Nextcloud. Create a new file called `/etc/apache2/sites-available/nextcloud.conf` with the following content:
+Nextcloud is now installed, but we still need an Apache2 virtual host
+configuration for Nextcloud. Create a new file called
+`/etc/apache2/sites-available/nextcloud.conf` with the following content:
 
 ```conf
 <VirtualHost *:80>
@@ -314,25 +389,47 @@ systemctl reload apache2
 
 ### 3.3. Finalizing Nextcloud Installation
 
-Now that we have Nextcloud installed and configured, we can finalize the installation by navigating to `http://<your-container-ip>` in your web browser. You should see the Nextcloud setup page where you can create an admin account and enter the database details that we created earlier.
+Now that we have Nextcloud installed and configured, we can finalize the
+installation by navigating to `http://<your-container-ip>` in your web browser.
+You should see the Nextcloud setup page where you can create an admin account
+and enter the database details that we created earlier.
 
 There are some fields that you need to fill out:
 
-- **Admin Account**: Create an admin account by entering a username and password of your choice.
-- **Data Folder**: By default, Nextcloud will store its data in the `data` folder inside the Nextcloud directory. You can change this to a different location if you want, but make sure to set the correct permissions for that folder.
-- **Database Configuration**: Select "MySQL/MariaDB" as the database type, and enter the database name, username, password that we created earlier. The database host should be `localhost`.
+- **Admin Account**: Create an admin account by entering a username and password
+  of your choice.
+- **Data Folder**: By default, Nextcloud will store its data in the `data`
+  folder inside the Nextcloud directory. You can change this to a different
+  location if you want, but make sure to set the correct permissions for that
+  folder.
+- **Database Configuration**: Select "MySQL/MariaDB" as the database type, and
+  enter the database name, username, password that we created earlier. The
+  database host should be `localhost`.
 
-Once you have filled out all the fields, click on the **Install** button to complete the installation. Nextcloud will now set up the database and configure itself based on the information you provided. Nextcloud will also ask if you to install recommended apps, which you can choose to do or skip for now. After the installation is complete, you will be redirected to the Nextcloud dashboard where you can start using Nextcloud.
+Once you have filled out all the fields, click on the **Install** button to
+complete the installation. Nextcloud will now set up the database and configure
+itself based on the information you provided. Nextcloud will also ask if you to
+install recommended apps, which you can choose to do or skip for now. After the
+installation is complete, you will be redirected to the Nextcloud dashboard
+where you can start using Nextcloud.
 
 ![Nextcloud Dashboard](./assets/images/nextcloud-homepage.jpg)
 
-## 4. Post-Installation *(optional)*
+## 4. Post-Installation _(optional)_
 
-After you have successfully installed Nextcloud, there are some additional configurations that you can do to optimize and secure your Nextcloud instance. Keep in mind that these configurations are ***optional***, but they can help improve the performance and security of your Nextcloud instance. Check out the [Nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration/index.html) for more information on configuration options. You can also check out [my configuration file](./assets/config.php) for reference.
+After you have successfully installed Nextcloud, there are some additional
+configurations that you can do to optimize and secure your Nextcloud instance.
+Keep in mind that these configurations are **_optional_**, but they can help
+improve the performance and security of your Nextcloud instance. Check out the
+[Nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration/index.html)
+for more information on configuration options. You can also check out
+[my configuration file](./assets/config.php) for reference.
 
 ### 4.1. Caching Configuration
 
-Nextcloud can use caching to improve performance. We will be using **APCu** for local caching and **Redis** for distributed caching. To install these caching modules, run the following command:
+Nextcloud can use caching to improve performance. We will be using **APCu** for
+local caching and **Redis** for distributed caching. To install these caching
+modules, run the following command:
 
 ```bash
 apt install -y redis-server php-{apcu,redis}
@@ -352,14 +449,18 @@ which should return
 PONG
 ```
 
-In this example, we will be using a Unix socket for Redis instead of TCP. Skip this step if you prefer to use TCP. To configure Redis to use a Unix socket, open the Redis configuration file located at `/etc/redis/redis.conf` with your preferred text editor and make the following changes:
+In this example, we will be using a Unix socket for Redis instead of TCP. Skip
+this step if you prefer to use TCP. To configure Redis to use a Unix socket,
+open the Redis configuration file located at `/etc/redis/redis.conf` with your
+preferred text editor and make the following changes:
 
 ```conf
 unixsocket /run/redis/redis-server.sock
 unixsocketperm 770
 ```
 
-Then, add the `www-data` user to the `redis` group to allow PHP-FPM to access the Redis socket:
+Then, add the `www-data` user to the `redis` group to allow PHP-FPM to access
+the Redis socket:
 
 ```bash
 usermod -aG redis www-data
@@ -367,24 +468,31 @@ systemctl restart redis-server
 systemctl restart php8.3-fpm apache2
 ```
 
-Finally, to enable caching in Nextcloud, open the config file `/var/www/nextcloud/config/config.php` with your preferred text editor and add the following lines before the closing `);`
+Finally, to enable caching in Nextcloud, open the config file
+`/var/www/nextcloud/config/config.php` with your preferred text editor and add
+the following lines before the closing `);`
 
 ```php
   'memcache.local' => '\OC\Memcache\APCu',
   'memcache.distributed' => '\OC\Memcache\Redis',
   'memcache.locking' => '\OC\Memcache\Redis',
-  'redis' => 
+  'redis' =>
   array (
     'host' => '/run/redis/redis-server.sock',
     'port' => 0,
   ),
 ```
 
-***Note:*** *You can also use Redis with TCP instead of a Unix socket. However, it will comes with a slight cost in the performance.Check out the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/caching_configuration.html) for more information.*
+**_Note:_** _You can also use Redis with TCP instead of a Unix socket. However,
+it will comes with a slight cost in the performance.Check out the
+[Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/caching_configuration.html)
+for more information._
 
 ### 4.2. Enabling Background Cron
 
-By default, Nextcloud uses AJAX to run background tasks, but it is recommended to use the system cron for better performance and reliability. To enable the system cron, run the following command:
+By default, Nextcloud uses AJAX to run background tasks, but it is recommended
+to use the system cron for better performance and reliability. To enable the
+system cron, run the following command:
 
 ```bash
 crontab -u www-data -e
@@ -399,13 +507,21 @@ and add the following line to the bottom (ignore the comment):
 
 ### 4.3. Hardening System
 
-Nextcloud provides some security recommendations to harden your Nextcloud instance. You can find these recommendations in the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/harden_server.html). The below are some of the recommendations that I have implemented in my Nextcloud instance.
+Nextcloud provides some security recommendations to harden your Nextcloud
+instance. You can find these recommendations in the
+[Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/installation/harden_server.html).
+The below are some of the recommendations that I have implemented in my
+Nextcloud instance.
 
 #### 4.3.1. Logging Configuration
 
-To enhance the security of your Nextcloud instance, it is important to configure logging properly. By default, Nextcloud logs are stored in the `data` directory, which may not be ideal for security reasons. It is recommended to store logs in a separate directory with restricted permissions.
+To enhance the security of your Nextcloud instance, it is important to configure
+logging properly. By default, Nextcloud logs are stored in the `data` directory,
+which may not be ideal for security reasons. It is recommended to store logs in
+a separate directory with restricted permissions.
 
-First, create a new directory dedicated to Nextcloud logs with the correct permissions:
+First, create a new directory dedicated to Nextcloud logs with the correct
+permissions:
 
 ```bash
 mkdir -p /var/log/nextcloud
@@ -413,7 +529,9 @@ chown www-data:www-data /var/log/nextcloud
 chmod 750 /var/log/nextcloud
 ```
 
-Then, to configure Nextcloud to use this new log directory by opening the Nextcloud configuration file `/var/www/nextcloud/config/config.php` with your preferred text editor and add the following lines before the closing `);`
+Then, to configure Nextcloud to use this new log directory by opening the
+Nextcloud configuration file `/var/www/nextcloud/config/config.php` with your
+preferred text editor and add the following lines before the closing `);`
 
 ```php
   'debug' => false,
@@ -428,10 +546,15 @@ Then, to configure Nextcloud to use this new log directory by opening the Nextcl
 
 #### 4.3.2. Restricting Admin Actions
 
-For security purposes, it is recommended to restrict admin actions to a specific IP address or range. This can help prevent unauthorized access to the admin interface and reduce the risk of brute-force attacks. To restrict admin actions, open the Nextcloud configuration file `/var/www/nextcloud/config/config.php` with your preferred text editor and add the following lines before the closing `);`
+For security purposes, it is recommended to restrict admin actions to a specific
+IP address or range. This can help prevent unauthorized access to the admin
+interface and reduce the risk of brute-force attacks. To restrict admin actions,
+open the Nextcloud configuration file `/var/www/nextcloud/config/config.php`
+with your preferred text editor and add the following lines before the closing
+`);`
 
 ```php
-  'allowed_admin_ranges' => 
+  'allowed_admin_ranges' =>
   array (
     0 => '127.0.0.1/8',     # Allow localhost
     1 => '192.168.0.0/24',  # Allow local network (adjust to your actual network range)
@@ -441,9 +564,15 @@ For security purposes, it is recommended to restrict admin actions to a specific
 
 #### 4.3.3. Enabling Security Headers
 
-To enhance the security of your Nextcloud instance, it is recommended to enable security headers in your web server configuration. These headers can help protect against various types of attacks, such as cross-site scripting (XSS) and clickjacking.
+To enhance the security of your Nextcloud instance, it is recommended to enable
+security headers in your web server configuration. These headers can help
+protect against various types of attacks, such as cross-site scripting (XSS) and
+clickjacking.
 
-To enable security headers in Apache2, open the Nextcloud virtual host configuration file located at `/etc/apache2/sites-available/nextcloud.conf` with your preferred text editor and add the following lines inside the `<VirtualHost>` block:
+To enable security headers in Apache2, open the Nextcloud virtual host
+configuration file located at `/etc/apache2/sites-available/nextcloud.conf` with
+your preferred text editor and add the following lines inside the
+`<VirtualHost>` block:
 
 ```conf
     Header always set Referrer-Policy "no-referrer"
@@ -460,10 +589,14 @@ systemctl restart apache2
 
 ### 4.4. Reverse Proxy Configuration
 
-If you want to access your Nextcloud instance using a domain name instead of the container's IP address, you can set up a reverse proxy. This is especially useful if you have multiple services running on the same server and want to access them using different subdomains. Be sure to update the `config.php` file to include the trusted domain:
+If you want to access your Nextcloud instance using a domain name instead of the
+container's IP address, you can set up a reverse proxy. This is especially
+useful if you have multiple services running on the same server and want to
+access them using different subdomains. Be sure to update the `config.php` file
+to include the trusted domain:
 
 ```php
-  'trusted_domains' => 
+  'trusted_domains' =>
   array (
     0 => 'localhost',
     1 => 'nextcloud.example.com', // Replace with your actual domain
@@ -471,7 +604,7 @@ If you want to access your Nextcloud instance using a domain name instead of the
   'overwrite.cli.url' => 'http://nextcloud.example.com', // Replace with your actual domain
   'overwriteprotocol' => 'http', // Change to 'https' if you are using SSL
   'overwritecondaddr' => '^your\.reverse\.proxy\.ip$', // Replace with your reverse proxy IP (if applicable)
-  'trusted_proxies' => 
+  'trusted_proxies' =>
   array (
     0 => '127.0.0.1',
     1 => '::1',
@@ -486,13 +619,21 @@ If you want to access your Nextcloud instance using a domain name instead of the
 
 ### 4.5. Warnings on Admin Page
 
-There are some warnings that may appear on the Nextcloud admin page after installation. These warnings are usually related to security and performance optimizations. It is recommended to address these warnings to ensure that your Nextcloud instance is secure and performs well. You can find more information about these warnings and how to address them in the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/security_setup_warnings.html).
+There are some warnings that may appear on the Nextcloud admin page after
+installation. These warnings are usually related to security and performance
+optimizations. It is recommended to address these warnings to ensure that your
+Nextcloud instance is secure and performs well. You can find more information
+about these warnings and how to address them in the
+[Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/security_setup_warnings.html).
 
-> The below are just some warnings I have encountered on my Nextcloud admin page and how I addressed them.
+> The below are just some warnings I have encountered on my Nextcloud admin page
+> and how I addressed them.
 
 #### Database missing indices
 
-This warning indicates that some database tables are missing indices, which can lead to performance issues. To address this warning, you can run the following command to add the missing indices:
+This warning indicates that some database tables are missing indices, which can
+lead to performance issues. To address this warning, you can run the following
+command to add the missing indices:
 
 ```bash
 sudo -u www-data php /var/www/nextcloud/occ db:add-missing-indices
@@ -500,7 +641,11 @@ sudo -u www-data php /var/www/nextcloud/occ db:add-missing-indices
 
 #### Mimetype migrations available
 
-This warning indicates that there are mimetype migrations available that have not been applied. Mimetype migrations are used to update the mimetype database, which can improve performance when uploading and downloading files. To address this warning, you can run the following command to apply the mimetype migrations:
+This warning indicates that there are mimetype migrations available that have
+not been applied. Mimetype migrations are used to update the mimetype database,
+which can improve performance when uploading and downloading files. To address
+this warning, you can run the following command to apply the mimetype
+migrations:
 
 ```bash
 sudo -u www-data php /var/www/nextcloud/occ maintenance:repair --include-expensive
@@ -508,11 +653,21 @@ sudo -u www-data php /var/www/nextcloud/occ maintenance:repair --include-expensi
 
 #### HTTP Access and URLs
 
-This warning indicates that there are issues with the HTTP access and URLs configuration. This can lead to issues with accessing Nextcloud and can also cause security vulnerabilities. To address this warning, you can check your Apache2 configuration and make sure that the `ServerName` directive is set correctly and that the virtual host is configured properly. You can also check the `config.php` file to make sure that the `trusted_domains` and `overwrite.cli.url` settings are configured correctly.
+This warning indicates that there are issues with the HTTP access and URLs
+configuration. This can lead to issues with accessing Nextcloud and can also
+cause security vulnerabilities. To address this warning, you can check your
+Apache2 configuration and make sure that the `ServerName` directive is set
+correctly and that the virtual host is configured properly. You can also check
+the `config.php` file to make sure that the `trusted_domains` and
+`overwrite.cli.url` settings are configured correctly.
 
 #### Strict-Transport-Security HTTP header is not configured
 
-This warning indicates that the Strict-Transport-Security (HSTS) HTTP header is not configured. HSTS is a security feature that helps protect against man-in-the-middle attacks by enforcing the use of HTTPS. To address this warning, you can add the following line to your Apache2 virtual host configuration file (e.g, `/etc/apache2/sites-available/nextcloud.conf`).
+This warning indicates that the Strict-Transport-Security (HSTS) HTTP header is
+not configured. HSTS is a security feature that helps protect against
+man-in-the-middle attacks by enforcing the use of HTTPS. To address this
+warning, you can add the following line to your Apache2 virtual host
+configuration file (e.g, `/etc/apache2/sites-available/nextcloud.conf`).
 
 ```conf
     ## Add this right above the </VirtualHost> tag
@@ -525,7 +680,11 @@ This warning indicates that the Strict-Transport-Security (HSTS) HTTP header is 
 
 ### 4.6. Antivirus Configuration
 
-Nextcloud server can be configured to use an antivirus software to scan files for malware. This can help protect your Nextcloud instance from malicious files and ensure the security of your data. To configure antivirus scanning in Nextcloud, you can use the ClamAV antivirus software, which is a popular open-source antivirus solution.
+Nextcloud server can be configured to use an antivirus software to scan files
+for malware. This can help protect your Nextcloud instance from malicious files
+and ensure the security of your data. To configure antivirus scanning in
+Nextcloud, you can use the ClamAV antivirus software, which is a popular
+open-source antivirus solution.
 
 To install ClamAV, run the following command:
 
@@ -535,7 +694,8 @@ systemctl start clamav-daemon
 systemctl enable clamav-daemon
 ```
 
-Next, download the latest ClamAV virus definitions by running the following command:
+Next, download the latest ClamAV virus definitions by running the following
+command:
 
 ```bash
 systemctl stop clamav-freshclam
@@ -543,7 +703,8 @@ freshclam
 systemctl start clamav-freshclam
 ```
 
-We will also need to set the correct permissions for the ClamAV socket to allow Nextcloud to communicate with the ClamAV daemon. Run the following command:
+We will also need to set the correct permissions for the ClamAV socket to allow
+Nextcloud to communicate with the ClamAV daemon. Run the following command:
 
 ```bash
 usermod -aG clamav www-data
@@ -551,9 +712,16 @@ systemctl restart apache2 php8.3-fpm
 systemctl restart clamav-daemon
 ```
 
-You may want to make changes to `etc/clamav/freshclam.conf` (the automated datase update service for ClamAV) as well as `etc/clamav/clamd.conf` (the configuration file for the ClamAV daemon) to optimize the antivirus scanning process. Check out the [ClamAV documentation](https://docs.clamav.net/manual/Usage/Configuration.html) for more information on how to configure ClamAV.
+You may want to make changes to `etc/clamav/freshclam.conf` (the automated
+datase update service for ClamAV) as well as `etc/clamav/clamd.conf` (the
+configuration file for the ClamAV daemon) to optimize the antivirus scanning
+process. Check out the
+[ClamAV documentation](https://docs.clamav.net/manual/Usage/Configuration.html)
+for more information on how to configure ClamAV.
 
-It is worth noting that ClamAV can be resource-intensive. Therefore, I would recommend adding the following changes to `etc/clamav/clamd.conf` to optimize the virus scanning process.
+It is worth noting that ClamAV can be resource-intensive. Therefore, I would
+recommend adding the following changes to `etc/clamav/clamd.conf` to optimize
+the virus scanning process.
 
 ```conf
 MaxThreads 10
@@ -562,11 +730,17 @@ MaxScanSize 100M
 MaxFileSize 100M
 ```
 
-After that, navigate to the Nextcloud admin page. Go to **Apps** > **Security**. Find the app named **Antivirus for files** and click on the **Enable** button.
+After that, navigate to the Nextcloud admin page. Go to **Apps** > **Security**.
+Find the app named **Antivirus for files** and click on the **Enable** button.
 
 ![Enabling Antivirus for files App](./assets/images/enabling-av.png)
 
-Now, navigate to **Administration Settings** > **Antivirus for files**. You should see the configuration options for the antivirus app. In this example, we use the `ClamAV Daemon Socket`, with the socket path set to `/var/run/clamav/clamd.ctl`. Make sure to adjust the socket path if your ClamAV configuration uses a different path. You can use the following command to identify the correct path if necessary.
+Now, navigate to **Administration Settings** > **Antivirus for files**. You
+should see the configuration options for the antivirus app. In this example, we
+use the `ClamAV Daemon Socket`, with the socket path set to
+`/var/run/clamav/clamd.ctl`. Make sure to adjust the socket path if your ClamAV
+configuration uses a different path. You can use the following command to
+identify the correct path if necessary.
 
 ```bash
 netstat -a|grep clam    # make sure to have net-tools installed
@@ -578,13 +752,19 @@ You should see something like this:
 unix 2 [ ACC ] STREAM LISTENING 12345 /var/run/clamav/clamd.ctl
 ```
 
-You will also need to adjust some other settings as needed. The below is my example configuration for the Antivirus for files app.
+You will also need to adjust some other settings as needed. The below is my
+example configuration for the Antivirus for files app.
 
 ![Antivirus for files Configuration](./assets/images/example-av-config.png)
 
-Finally, when you've done the configuration, click on the **Save** button. You can download the harmless EICAR test file from the [EICAR website](https://www.eicar.org/download-anti-malware-testfile/) to test if the antivirus scanning is working properly.
+Finally, when you've done the configuration, click on the **Save** button. You
+can download the harmless EICAR test file from the
+[EICAR website](https://www.eicar.org/download-anti-malware-testfile/) to test
+if the antivirus scanning is working properly.
 
-> **Note:** *For resource optimization, you can disable background scanning with occ to only scan files when they are uploaded. To do that, run the following command:*
+> **Note:** _For resource optimization, you can disable background scanning with
+> occ to only scan files when they are uploaded. To do that, run the following
+> command:_
 >
 > ```bash
 > sudo -E -u www-data php occ config:app:set files_antivirus av_background_scan --value="off"
@@ -592,14 +772,23 @@ Finally, when you've done the configuration, click on the **Save** button. You c
 
 ### 4.7. Previews Configuration
 
-Nextcloud can generate previews for various file types, such as images, videos, and documents. This can enhance the user experience by allowing users to see a preview of their files without having to download them. To enable and configure previews in Nextcloud, open the Nextcloud configuration file `/var/www/nextcloud/config/config.php` with your preferred text editor and add the following lines before the closing `);`
+Nextcloud can generate previews for various file types, such as images, videos,
+and documents. This can enhance the user experience by allowing users to see a
+preview of their files without having to download them. To enable and configure
+previews in Nextcloud, open the Nextcloud configuration file
+`/var/www/nextcloud/config/config.php` with your preferred text editor and add
+the following lines before the closing `);`
 
 ```php
   # PREVIEWS
   'enable_previews' => true,
 ```
 
-There are also some additional settings that you can configure for previews, such as the maximum preview size and the types of files that should have previews generated. You can find more information about these settings in the [Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_files/previews_configuration.html). Some of the settings I recommend configuring are:
+There are also some additional settings that you can configure for previews,
+such as the maximum preview size and the types of files that should have
+previews generated. You can find more information about these settings in the
+[Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_files/previews_configuration.html).
+Some of the settings I recommend configuring are:
 
 ```php
   'enable_previews' => true,
@@ -609,10 +798,10 @@ There are also some additional settings that you can configure for previews, suc
   'preview_max_y' => 1024,  // in pixels
   'preview_max_memory' => 256,  // in MB
   'preview_max_filesize_image' => 50,   // in MB
-  
+
   'preview_ffmpeg_path' => '/usr/bin/ffmpeg',
   'preview_ffprobe_path' => '/usr/bin/ffprobe',
-  'enabledPreviewProviders' => 
+  'enabledPreviewProviders' =>
   array (
     0 => 'OC\Preview\PNG',
     1 => 'OC\Preview\JPEG',
@@ -628,6 +817,10 @@ There are also some additional settings that you can configure for previews, suc
 
 ---
 
-Congratulations! You have successfully installed Nextcloud on an LXC container. You can now start uploading files, creating folders, and using all the features Nextcloud offers. Make sure to keep your Nextcloud instance updated and secured by following the best practices outlined in the [Nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/maintenance/index.html).
+Congratulations! You have successfully installed Nextcloud on an LXC container.
+You can now start uploading files, creating folders, and using all the features
+Nextcloud offers. Make sure to keep your Nextcloud instance updated and secured
+by following the best practices outlined in the
+[Nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/maintenance/index.html).
 
 **HAPPY SELF-HOSTING!!!**
