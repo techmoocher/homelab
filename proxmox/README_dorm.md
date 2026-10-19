@@ -6,6 +6,13 @@ with strict rules and limited access. This guide will help you set up a Proxmox
 server that can be accessed from within the dorm network and provide a secure
 environment for running virtual machines.
 
+> **Disclaimer:** This guide is for educational purposes only. It is not a
+> guarantee that your university will allow this configuration. Always check with
+> your university's IT department before proceeding. Misuse of this guide may
+> result in disciplinary action or loss of network access. The author is not
+> responsible for any consequences resulting from the misuse of this guide.
+> Use at your own risk.
+
 ---
 
 ## Table of Contents
@@ -20,9 +27,12 @@ environment for running virtual machines.
 - [7. Securing the host and guest network](#7-securing-the-host-and-guest-network)
 - [8. Testing with a container](#8-testing-with-a-container)
 - [9. Verifying persistence and reliability](#9-verifying-persistence-and-reliability)
-- [10. *(Optional)* Application ingress](#10-optional-application-ingress)
+- [10. *(Optional)* Ingress](#10-optional-ingress)
 - [Troubleshooting quick reference](#troubleshooting-quick-reference)
-- [Disclaimer](#disclaimer)
+- [Note](#note)
+
+> **Note:** You can check out the other [Proxmox guide](./README.md) for further
+> configuration options.
 
 ## Overview
 
@@ -396,7 +406,7 @@ policy.
 | Dashboard works locally but not remotely         | NetBird peer status, policies, service status, host firewall.                    |
 | Networking fails after reboot                    | vmbr0 startup, DHCP, forwarding, NAT script, service order, firewall rule order. |
 
-## Disclaimer
+## Note
 
 This is a guide for setting up a homelab, not a claim that every university
 network permits or supports the same configuration. Adapt it to your school's
