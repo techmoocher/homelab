@@ -1,7 +1,5 @@
 # Nextcloud Installation and Configuration Guide
 
----
-
 [Nextcloud](https://nextcloud.com) is a popular open-source self-hosted cloud
 storage solution. It allows you to store and access your files, calendars,
 contacts, and more from any device.
