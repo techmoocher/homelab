@@ -707,7 +707,7 @@ Nextcloud to communicate with the ClamAV daemon. Run the following command:
 
 ```bash
 usermod -aG clamav www-data
-systemctl restart apache2 php8.3-fpm
+systemctl restart apache2 php8.4-fpm
 systemctl restart clamav-daemon
 ```
 
@@ -723,7 +723,7 @@ recommend adding the following changes to `etc/clamav/clamd.conf` to optimize
 the virus scanning process.
 
 ```conf
-MaxThreads 10
+MaxThreads 12
 MaxConnectionQueueLength 15
 MaxScanSize 100M
 MaxFileSize 100M
@@ -761,9 +761,9 @@ can download the harmless EICAR test file from the
 [EICAR website](https://www.eicar.org/download-anti-malware-testfile/) to test
 if the antivirus scanning is working properly.
 
-> **Note:** _For resource optimization, you can disable background scanning with
+> **Note:** For resource optimization, you can disable background scanning with
 > occ to only scan files when they are uploaded. To do that, run the following
-> command:_
+> command:
 >
 > ```bash
 > sudo -E -u www-data php occ config:app:set files_antivirus av_background_scan --value="off"

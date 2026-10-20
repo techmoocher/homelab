@@ -1,19 +1,18 @@
-### PHP CONFIGURATION FILE FOR NEXTCLOUD
-#
+<?php
+
 ### This is a sample configuration file for Nextcloud. You should copy this file to
 ### /var/www/nextcloud/config/config.php and adjust the settings according to
 ### your environment.
 #
 ### /var/www/nextcloud/config/config.php
 
-<?php
 $CONFIG = array (
   'instanceid' => 'instance_id',
   'passwordsalt' => 'password_salt',
   'secret' => 'secret',
   
   ### NETWORK ###
-  'trusted_domains' => 
+  'trusted_domains' =>
   array (
     0 => 'your-container-ip',
     1 => 'nextcloud.example.com',
@@ -23,7 +22,7 @@ $CONFIG = array (
   // 'overwritecondaddr' => '^your\.reverse\.proxy\.ip$',
   // 'overwriteprotocol' => 'https',
   // 'overwrite.cli.url' => 'https://nextcloud.example.com',
-  'trusted_proxies' => 
+  'trusted_proxies' =>
   array (
     0 => '127.0.0.1',
     1 => '::1',
@@ -31,7 +30,7 @@ $CONFIG = array (
     ## according to your reverse proxy setup (if applicable)
     // 2 => 'your-reverse-proxy-ip',
   ),
-  'forwarded_for_headers' => 
+  'forwarded_for_headers' =>
   array (
     0 => 'HTTP_X_FORWARDED_FOR',
     ## Add additional headers according to your reverse proxy setup (if applicable)
@@ -61,11 +60,12 @@ $CONFIG = array (
   'memcache.local' => '\OC\Memcache\APCu',
   'memcache.distributed' => '\OC\Memcache\Redis',
   'memcache.locking' => '\OC\Memcache\Redis',
-  'redis' => 
+  'redis' =>
   array (
     'host' => '/run/redis/redis-server.sock',
     'port' => 0,
   ),
+
   ## If you are using Redis with TCP instead of a Unix socket,
   ## use the following configuration instead (uncomment and adjust accordingly).
   ## Make sure to comment out the previous 'redis' configuration if you do this.
@@ -98,7 +98,7 @@ $CONFIG = array (
   
   'preview_ffmpeg_path' => '/usr/bin/ffmpeg',
   'preview_ffprobe_path' => '/usr/bin/ffprobe',
-  'enabledPreviewProviders' => 
+  'enabledPreviewProviders' =>
   array (
     0 => 'OC\Preview\PNG',
     1 => 'OC\Preview\JPEG',
