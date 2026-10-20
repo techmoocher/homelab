@@ -1,15 +1,22 @@
-# My Glance Dashboard
+# Glance Installation and Configuration Guide
 
-This is my setup for Glance Dashboard in my Proxmox server.
+[Glance](https://glanceapp.io/) is a modern, open-source dashboard application
+that allows you to create customizable dashboards for monitoring and managing
+your systems. It provides a user-friendly interface and supports various widgets
+and integrations.
 
-## Preview
-![](preview.png)
+![My dashboard preview](preview.png)
 
-## Installation
+---
 
-You can refer to <a href="https://github.com/glanceapp/glance" target="_blank">Glance official repo</a> for the official installation guide.
+## 1. Installation
 
-Alternatively, you can use my setup. If you choose this option, follow the steps below
+You can install Glance using Docker, which is the recommended method for most
+users. Make sure you have Docker and Docker Compose installed on your system
+before proceeding. To learn more about Glance installation, you can refer to
+the [official documentation](https://glanceapp.io/docs).
+
+First, make a directory for your Glance installation and navigate into it:
 
 1. **Make a directory for your file**
 ```bash
