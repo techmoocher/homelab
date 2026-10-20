@@ -1,0 +1,14 @@
+# Example:
+# HTTP listener behind a Cloudflare Tunnel on this SAME host.
+# Cloudflare provides browser-facing HTTPS; local HTTP is only on loopback.
+
+{
+    servers {
+        # Only trust cloudflared on local loopback.
+        trusted_proxies static 127.0.0.1/32
+        client_ip_headers CF-Connecting-IP
+        trusted_proxies_strict
+    }
+}
+
+import /sites/*.caddy

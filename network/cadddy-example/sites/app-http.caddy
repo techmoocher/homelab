@@ -1,0 +1,11 @@
+# Example A
+# Internal HTTP to a backend on a restricted private network.
+# Replace 192.0.2.20 with your actual host address.
+
+http://vault.example.com:8080 {
+    bind 127.0.0.1
+
+    reverse_proxy 192.0.2.20:8080 {
+        header_up X-Forwarded-Proto https
+    }
+}

@@ -1,0 +1,19 @@
+# Example B:
+# Upstream Caddy sidecar serving verified internal HTTPS.
+# Replace 192.0.2.20 with your actual host address.
+
+http://vault.example.com:8080 {
+    bind 127.0.0.1
+
+    reverse_proxy https://192.0.2.20:8443 {
+        # Matches the site name configured on the internal Caddy sidecar.
+        header_up Host vaultwarden.internal
+        header_up X-Forwarded-Host vault.example.com
+        header_up X-Forwarded-Proto https
+
+        transport http {
+            tls_server_name vaultwarden.internal
+            tls_trust_pool file /sites/certs/app-root.crt
+        }
+    }
+}
