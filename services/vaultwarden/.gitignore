@@ -1,0 +1,11 @@
+# Real credentials, personal vault data and Caddy's private certificate authority
+.env
+data/
+caddy-data/
+caddy-config/
+*.key
+*.pem
+*.crt
+*.sqlite3*
+*.db
+backup*/

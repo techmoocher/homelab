@@ -1,0 +1,20 @@
+# Example A: Vaultwarden behind an existing reverse proxy, using HTTP privately.
+# Publish only to localhost when the proxy runs on this Docker host.
+# When the proxy runs on a separate host/CT, use this host's PRIVATE IP
+# for BIND_IP and restrict incoming traffic to the reverse proxy.
+name: vaultwarden
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest # Pin a tested version/digest for production.
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?Set DOMAIN in .env to your external HTTPS URL}
+      SIGNUPS_ALLOWED: ${SIGNUPS_ALLOWED:-false}
+      INVITATIONS_ALLOWED: "false"
+    volumes:
+      - ./data:/data
+    ports:
+      - "${BIND_IP:-127.0.0.1}:${HTTP_PORT:-8080}:80"
+    security_opt:
+      - no-new-privileges:true

@@ -1,0 +1,6 @@
+# Internal TLS endpoint. This name is NOT the external public hostname.
+# Caddy creates a private CA and issues a cert for vaultwarden.internal.
+vaultwarden.internal:8443 {
+    tls internal
+    reverse_proxy vaultwarden:80
+}

@@ -1,0 +1,38 @@
+# Example B: independent HTTPS at the application host using a Caddy sidecar.
+# Run INSTEAD OF compose.yaml: docker compose -f compose.internal-tls.yaml up -d
+# This example has no externally published Vaultwarden HTTP port.
+name: vaultwarden
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest # Pin a tested version/digest for production.
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?Set DOMAIN in .env to your external HTTPS URL}
+      SIGNUPS_ALLOWED: ${SIGNUPS_ALLOWED:-false}
+      INVITATIONS_ALLOWED: "false"
+    volumes:
+      - ./data:/data
+    networks:
+      - backend
+    security_opt:
+      - no-new-privileges:true
+
+  caddy:
+    image: caddy:2-alpine # Pin a tested version/digest for production.
+    restart: unless-stopped
+    depends_on:
+      - vaultwarden
+    ports:
+      - "${BIND_IP:-127.0.0.1}:${TLS_PORT:-8443}:8443"
+    volumes:
+      - ./caddy-internal/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy-data:/data
+      - ./caddy-config:/config
+    networks:
+      - backend
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  backend: {}
