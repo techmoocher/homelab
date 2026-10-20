@@ -225,6 +225,7 @@ your preferred text editor and make the following changes:
 [mysqld]
 innodb_file_per_table=1
 innodb_default_row_format=dynamic
+innodb_log_file_size = 256M
 innodb_buffer_pool_size=512M
 
 character-set-server=utf8mb4
@@ -247,7 +248,7 @@ widely used to develop web applications. Nextcloud is operated using PHP, so we
 need to install it along with the necessary PHP modules to run Nextcloud
 smoothly.
 
-For the simplicity of this guide, we will use **PHP 8.5**, which is the version
+For the simplicity of this guide, we will use **PHP 8.4**, which is the version
 recommended by Nextcloud at the time of writing. You can install other versions
 of PHP if you prefer. Check out the
 [System Requirements](https://docs.nextcloud.com/server/latest/admin_manual/installation/system_requirements.html)
@@ -259,16 +260,16 @@ To install PHP and necessary modules, run the following command:
 
 ```bash
 apt install -y \
- php8.5 php8.5-fpm php8.5-cli php-json php-intl php-imagick \
- php8.5-{common,curl,gd,mbstring,xml,zip,mysql,imap,opcache,ldap,gmp,bcmath,bz2}
+ php php-fpm php-cli php-json php-intl php-imagick \
+ php-{common,curl,gd,mbstring,xml,zip,mysql,imap,opcache,ldap,gmp,bcmath,bz2}
 ```
 
 #### 2.3.2. PHP Configuration
 
 By default, the configuration files for PHP are located in the `/etc/php/X.x/`
-directory _(`X.x` is the PHP version which, in this case, is `8.5`)_. The
+directory _(`X.x` is the PHP version which, in this case, is `8.4`)_. The
 configuration for the web server (in this case, Apache2 + php-fpm) lives in
-`/etc/php/8.5/fpm/php.ini`.
+`/etc/php/8.4/fpm/php.ini`.
 
 Open the `php.ini` file with your preferred text editor and make the following
 changes:
@@ -293,7 +294,7 @@ opcache.save_comments=1
 #### 2.3.3. Tuning PHP-FPM Pool _(optional)_
 
 To optimize PHP-FPM for Nextcloud, we can make some changes to the pool
-configuration file, which is `/etc/php/8.5/fpm/pool.d/www.conf`. Open the file
+configuration file, which is `/etc/php/8.4/fpm/pool.d/www.conf`. Open the file
 with your preferred text editor and make the following changes:
 
 ```conf
@@ -308,8 +309,8 @@ pm.max_requests = 500
 For the changes to take effect, restart the PHP-FPM service:
 
 ```bash
-a2enconf php8.3-fpm
-systemctl restart php8.3-fpm apache2
+a2enconf php8.4-fpm
+systemctl restart php8.4-fpm apache2
 ```
 
 ## 3. Installing Nextcloud
@@ -463,7 +464,7 @@ the Redis socket:
 ```bash
 usermod -aG redis www-data
 systemctl restart redis-server
-systemctl restart php8.3-fpm apache2
+systemctl restart php8.4-fpm apache2
 ```
 
 Finally, to enable caching in Nextcloud, open the config file
@@ -481,10 +482,10 @@ the following lines before the closing `);`
   ),
 ```
 
-**_Note:_** _You can also use Redis with TCP instead of a Unix socket. However,
-it will comes with a slight cost in the performance.Check out the
-[Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/caching_configuration.html)
-for more information._
+**_Note:_** _You can also use Redis with TCP instead of a Unix socket. However,_
+_it will comes with a slight cost in the performance. Check out the_
+_[Nextcloud documentation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/caching_configuration.html)_
+_for more information._
 
 ### 4.2. Enabling Background Cron
 
